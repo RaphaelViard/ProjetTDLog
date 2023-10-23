@@ -3,5 +3,5 @@ from django.http import HttpResponse
 
 def ma_vue(request):
     # Votre logique de traitement ici
-    contenu = "Bienvenue dans ma première vue Django !"
+    contenu = "Ouais le gabzz"
     return HttpResponse(contenu)
