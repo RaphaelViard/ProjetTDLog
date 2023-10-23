@@ -1,3 +1,7 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 
-# Create your views here.
+def ma_vue(request):
+    # Votre logique de traitement ici
+    contenu = "Bienvenue dans ma première vue Django !"
+    return HttpResponse(contenu)
