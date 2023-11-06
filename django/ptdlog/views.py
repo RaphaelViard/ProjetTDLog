@@ -9,4 +9,3 @@ def test_view(request):
 def template_view(request):
     # Logique de traitement ici
     return render(request, 'templates/base.html')
-
