@@ -17,8 +17,8 @@ Including another URLconf
 
 from django.urls import include, path
 from django.views.generic import TemplateView
-from . import views
 from django.contrib import admin
+from ..appDjango_test import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
