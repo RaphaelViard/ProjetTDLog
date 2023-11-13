@@ -3,6 +3,7 @@ from Ticket import Ticket
 
 Colors = Literal["RED", "BLUE", "ORANGE", "BROWN", "PURPLE ", "YELLOW", "WHITE", "BLACK"]
 
+
 class User:
     def __init__(self : str,password : str,username : str,email : str,ticketstosale : list[Ticket],ticketowned : list[Ticket], money : float, color : Colors):
         self._password = password
@@ -13,8 +14,12 @@ class User:
         self.money = money #Money the user has on his account
         self.color = color
 
-    @property.setter
+
+    @password.setter
     def password(self,newpassword):
         self._password = newpassword
 
+    @property
+    def password(self):
+        return self._password
 
