@@ -5,7 +5,7 @@ from Transac import Transaction
 Colors = Literal["RED", "BLUE", "ORANGE", "BROWN", "PURPLE ", "YELLOW", "WHITE", "BLACK"]
 
 class User:
-    def __init__(self : str,password : str,username : str,email : str,ticketstosale : list[Ticket],ticketowned : list[Ticket], solde : float, color : Colors):
+    def __init__(self : str,password : str,username : str,email : str,ticketstosale : list[Ticket],ticketowned : list[Ticket], money : float, color : Colors):
         self._password = password
         self.username = username
         self.email = email
@@ -52,7 +52,6 @@ class User:
             print(f" - {ticket.event_name} ({ticket.price} €)")
         else:
             print(f"{self.username} ne possède aucun ticket.")
-
 
 
 
