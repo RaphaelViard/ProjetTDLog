@@ -14,12 +14,12 @@ class User:
         self.solde = solde #Money the user has on his account
         self.color = color
 
-    def password(self,newpassword):
-        self._password = newpassword
-
     @property
     def password(self):
         return self._password
+    @password.setter
+    def password(self, newpassword):
+        self._password = newpassword
 
     def acheter_ticket(self, ticket):
         if self.solde >= ticket.prix and ticket.disponibilite:

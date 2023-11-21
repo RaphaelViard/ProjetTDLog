@@ -3,7 +3,7 @@ class Transaction:
         self.acheteur = acheteur
         self.vendeur = vendeur
         self.montant = montant
-        self.produit = produit  # Le produit associé à la transaction (par exemple, un ticket)
+        self.produit = produit
 
     def afficher_details(self):
         print(f"Transaction: {self.acheteur.username} a payé {self.montant} à {self.vendeur.username} pour {self.produit}.")
