@@ -7,3 +7,6 @@ class Transaction:
 
     def afficher_details(self):
         print(f"Transaction: {self.acheteur.username} a payé {self.montant} à {self.vendeur.username} pour {self.produit}.")
+
+
+#Ajouter fctn transaction possible ? 
