@@ -33,12 +33,12 @@ class User:
 
     def vendre_ticket(self, ticket, acheteur, prix):
         if ticket in self.ticketowned and ticket.owner == self:
-            transaction = Transaction(acheteur, self, prix, ticket.nom)
+            transaction = Transaction(acheteur, self, prix, ticket.nom)  #On ne verifie pas que le solde est suffisant
             acheteur.solde -= prix
             self.solde += prix
             ticket.owner = acheteur
             acheteur.ticketowned.append(ticket)
-            self.ticketowned.remove(ticket)
+            self.ticketstosale.remove(ticket)
             print(f"{self.username} a vendu le ticket {ticket.id} à {acheteur.username} pour {prix}.")
             return transaction
         else:
