@@ -11,3 +11,5 @@ class Evenement:
         nouveau_ticket = Ticket(ticket_id, self.nom, prix)
         self.tickets_disponibles.append(nouveau_ticket)
         return nouveau_ticket
+    
+    #Aller chercher tous les tickets a vendre sur le site pour un seul évnènement (liste de l'ensemble des tickets a vendre pour chaque event ?)

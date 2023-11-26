@@ -25,3 +25,5 @@ class Ticket:
     def add_comment(self, comment):
         self.comments.append(comment)
         print("Commentaire ajouté avec succès.")
+
+        #Changer le prix dun ticket ?
