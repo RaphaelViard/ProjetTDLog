@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('react/', TemplateView.as_view(template_name='appreact/build/index.html')),
     path('', include('appDango_test.urls')),
+    path('api/', include('echTicket.urls')),
 ]
 
 
