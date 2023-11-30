@@ -1,6 +1,8 @@
 import json
 from datetime import datetime
 
+from Date import Date
+
 class Comment:
     def __init__(self, author, rating, title, content, date, replies, statereply, likes=0,):
         self._author = author
@@ -104,8 +106,9 @@ class Comment:
 
     def time_since_creation(self):
         """Returns the time difference since the comment's creation."""
-        time_difference = datetime.now() - self.date
+        time_difference = datetime.now() - self.date.to_datetime()
         return time_difference
+
 
     ## update / clone
 
@@ -135,7 +138,7 @@ class Comment:
     def display_details(self):
         """Displays all comment details."""
         print(f"Author: {self._author}")
-        print(f"Date: {self._date}")
+        print(f"Date: {self._date.to_string()}")  # Using the to_string method from the Date class
         print(f"Title: {self._title}")
         print(f"Content: {self._content}")
         print(f"Rating: {self._rating}")
@@ -153,7 +156,7 @@ class Comment:
         """Returns a JSON representation of the comment."""
         comment_json = {
             "author": self._author,
-            "date": str(self._date),
+            "date": self._date.to_string(),
             "title": self._title,
             "content": self._content,
             "rating": self._rating,
@@ -167,7 +170,7 @@ class Comment:
         """Compares two comments based on the date."""
         if not isinstance(other_comment, Comment):
             raise ValueError("Comparison must be done with another Comment object.")
-        return self.date > other_comment.date
+        return self.date.to_datetime() > other_comment.date.to_datetime()
 
     ## popularity
 
@@ -193,3 +196,4 @@ class Comment:
         if reply_comment in self._replies:
             self._replies.remove(reply_comment
 
+    ### °°° other functions °°°
