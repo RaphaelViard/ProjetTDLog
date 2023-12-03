@@ -1,15 +1,21 @@
+from Date import Date
+from Place import Place
+from Com import Comment
+from Ticket import Ticket
+from typing import List
+
 class Event:
-    def __init__(self, name, date, place, image, info, hour, category, duration):
+    def __init__(self, name : str, date :str, place : Place, image, info :str, tickets : List[Ticket], hour : str, comments : List[Comment], category : str, duration : float):
         self._name = name
         self._date = date
         self._place = place
         self._image = image
         self._info = info
         self._hour = hour
+        self._tickets = tickets  # List of Ticket objects
+        self._comments = comments  # List of Comment objects
         self._category = category
         self._duration = duration
-        self._tickets = []  # List of Ticket objects
-        self._comments = []  # List of Comment objects
 
     ## property / setter
 
@@ -117,22 +123,6 @@ class Event:
         if comment_to_remove in self._comments:
             self._comments.remove(comment_to_remove)
 
-    def display_comments(self):
-        if not self._comments:
-            print("No comments available for this event.")
-        else:
-            print(f"Comments for Event: {self._name}")
-            for comment in self._comments:
-                print(f"\n--- Comment by {comment.author} on {comment.date} ---")
-                comment.display_details()
-                print("\nReplies:")
-                if comment.replies:
-                    for reply in comment.replies:
-                        print(f"  - Reply by {reply.author} on {reply.date}")
-                        reply.display_details()
-                else:
-                    print("  No replies for this comment.")
-
     def get_total_comments(self):
         return len(self._comments)
 
@@ -230,3 +220,7 @@ class Event:
     ### °°° other functions °°°
 
     # une idée -> donner category, date, place, comments ... aux tickets ?
+
+
+
+

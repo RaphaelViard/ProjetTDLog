@@ -136,3 +136,12 @@ class Date:
         return self.get_year() == other_date.get_year()
 
     ### °°° other functions °°°
+    def display_date(self):
+       print(self._date)
+
+    def display_events_date(self):
+        if len(self._event) == 0:
+            print(f"The list of events in '{self._date}' is empty")
+        else:
+            events_list = ", ".join([event.name() for event in self._event])
+            print(f"The list of events in '{self._date}' is: {events_list}")
