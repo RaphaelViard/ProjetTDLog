@@ -1,7 +1,5 @@
 from datetime import datetime
 
-from Event import Event
-
 class Place:
     def __init__(self, place, event):
         self._place = place # country-city
@@ -238,6 +236,3 @@ class Place:
         return location_events
 
     ### °°° other functions °°°
-
-
-

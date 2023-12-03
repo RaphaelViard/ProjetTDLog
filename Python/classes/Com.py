@@ -1,18 +1,16 @@
 import json
 from datetime import datetime
 
-from Date import Date
-
 class Comment:
-    def __init__(self, author, rating, title, content, date, replies, statereply, likes=0,):
-        self._author = author
+    def __init__(self, rating,author, title, content, date, statereply=0, likes=0,):
         self._rating = rating
         self._title = title
         self._content = content
-        self._date = date
         self._likes = likes
-        self._replies = replies
+        self._replies = []
         self._statereply = statereply
+        self._author = author
+        self._date = date
 
     ## property / setter
 
@@ -138,7 +136,7 @@ class Comment:
     def display_details(self):
         """Displays all comment details."""
         print(f"Author: {self._author}")
-        print(f"Date: {self._date.to_string()}")  # Using the to_string method from the Date class
+        print(f"Date: {self._date._date}")  # Using the to_string method from the Date class
         print(f"Title: {self._title}")
         print(f"Content: {self._content}")
         print(f"Rating: {self._rating}")
@@ -194,6 +192,6 @@ class Comment:
     def remove_reply(self, reply_comment):
         """Removes a specific reply to a comment."""
         if reply_comment in self._replies:
-            self._replies.remove(reply_comment
+            self._replies.remove(reply_comment)
 
     ### °°° other functions °°°

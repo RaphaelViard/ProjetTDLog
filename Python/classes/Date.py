@@ -1,7 +1,5 @@
 from datetime import datetime, timedelta
 
-from Event import Event
-
 class Date:
     def __init__(self, date):
         self._date = date # DD-MM-YYYY (day-month-year) - monday is 0, january is 0
@@ -38,7 +36,7 @@ class Date:
     ## display / conversion
 
     def __str__(self):
-        event_names = [event.name for event in self._events]
+        event_names = [event.name for event in self._event]
         return f"Date: {self._date}, Events: {', '.join(event_names) if event_names else 'None'}"
 
     def to_datetime(self):
@@ -138,6 +136,3 @@ class Date:
         return self.get_year() == other_date.get_year()
 
     ### °°° other functions °°°
-
-
-
