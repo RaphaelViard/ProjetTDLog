@@ -1,15 +1,11 @@
-from typing import List, Literal
-from Ticket import Ticket
-from Transac import Transaction
-from Event import Event
-from Com import Comment
+from typing import Literal,List
 
 Colors = Literal["RED", "BLUE", "ORANGE", "BROWN", "PURPLE", "YELLOW", "WHITE", "BLACK"]
 
 class User:
-    def __init__(self, password: str, username: str, email: str, tickets_to_sale: List[Ticket],
-                 tickets_owned: List[Ticket], solde: float, color: Colors, comments: List[Comment], image: str, bio: str,
-                 event_interested: List[Event], purchase_history: List[Transaction], followers: List[str],
+    def __init__(self, password:str, username:str, email:str, tickets_to_sale,
+                 tickets_owned, solde:float, color: Colors, comments, image: str, bio: str,
+                 event_interested, purchase_history, followers,
                  following: List[str]):
         self._password: str = password
         self._username: str = username
@@ -18,68 +14,68 @@ class User:
         self._color: Colors = color
         self._image: str = image
         self._bio: str = bio
-        self._tickets_to_sale: List[Ticket] = []
-        self._comments: List[Comment] = []
-        self._followers: List[str] = []
-        self._following: List[str] = []
-        self._tickets_owned: List[Ticket] = []  #
-        self._event_interested: List[Event] = []  #
-        self._purchase_history: List[Transaction] = []  #
+        self._tickets_to_sale = []
+        self._comments = []
+        self._followers = []
+        self._following = []
+        self._tickets_owned = []  #
+        self._event_interested = []  #
+        self._purchase_history = []  #
 
         @property
-        def password(self) -> str:
+        def password(self):
             return self._password
 
         @property
-        def username(self) -> str:
+        def username(self):
             return self._username
 
         @property
-        def email(self) -> str:
+        def email(self):
             return self._email
 
         @property
-        def tickets_to_sale(self) -> List[Ticket]:
+        def tickets_to_sale(self):
             return self._tickets_to_sale
 
         @property
-        def tickets_owned(self) -> List[Ticket]:
+        def tickets_owned(self):
             return self._tickets_owned
 
         @property
-        def solde(self) -> float:
+        def solde(self):
             return self._solde
 
         @property
-        def color(self) -> Colors:
+        def color(self):
             return self._color
 
         @property
-        def comments(self) -> List[Comment]:
+        def comments(self):
             return self._comments
 
         @property
-        def image(self) -> str:
+        def image(self):
             return self._image
 
         @property
-        def bio(self) -> str:
+        def bio(self):
             return self._bio
 
         @property
-        def event_interested(self) -> List[Event]:
+        def event_interested(self):
             return self._event_interested
 
         @property
-        def purchase_history(self) -> List[Transaction]:
+        def purchase_history(self):
             return self._purchase_history
 
         @property
-        def followers(self) -> List[str]:
+        def followers(self):
             return self._followers
 
         @property
-        def following(self) -> List[str]:
+        def following(self):
             return self._following
 
         # Setters
@@ -140,58 +136,59 @@ class User:
         def following(self, new_following):
             self._following = new_following
 
-        def add_ticket_to_sale(self, new_ticket: Ticket):
+        def add_ticket_to_sale(self, new_ticket):
             self._tickets_to_sale.append(new_ticket)
 
-        def remove_ticket_to_sale(self, ticket_to_remove: Ticket):
+        def remove_ticket_to_sale(self, ticket_to_remove):
             if ticket_to_remove in self._tickets_to_sale:
                 self._tickets_to_sale.remove(ticket_to_remove)
 
-        def add_ticket_owned(self, new_ticket: Ticket):
+        def add_ticket_owned(self, new_ticket):
             self._tickets_owned.append(new_ticket)
 
-        def remove_ticket_owned(self, ticket_to_remove: Ticket):
+        def remove_ticket_owned(self, ticket_to_remove):
             if ticket_to_remove in self._tickets_owned:
                 self._tickets_owned.remove(ticket_to_remove)
 
-        def add_comment(self, new_comment: Comment):
+        def add_comment(self, new_comment):
             self._comments.append(new_comment)
 
-        def remove_comment(self, comment_to_remove: Comment):
+        def remove_comment(self, comment_to_remove):
             if comment_to_remove in self._comments:
                 self._comments.remove(comment_to_remove)
 
-        def add_event_interested(self, new_event: Event):
+        def add_event_interested(self, new_event):
             self._event_interested.append(new_event)
 
-        def remove_event_interested(self, event_to_remove: Event):
+        def remove_event_interested(self, event_to_remove):
             if event_to_remove in self._event_interested:
                 self._event_interested.remove(event_to_remove)
 
-        def add_purchase_history(self, new_transaction: Transaction):
+        def add_purchase_history(self, new_transaction):
             self._purchase_history.append(new_transaction)
 
-        def remove_purchase_history(self, transaction_to_remove: Transaction):
+        def remove_purchase_history(self, transaction_to_remove):
             if transaction_to_remove in self._purchase_history:
                 self._purchase_history.remove(transaction_to_remove)
 
-        def add_follower(self, new_follower: str):
+        def add_follower(self, new_follower):
             self._followers.append(new_follower)
 
-        def remove_follower(self, follower_to_remove: str):
+        def remove_follower(self, follower_to_remove):
             if follower_to_remove in self._followers:
                 self._followers.remove(follower_to_remove)
 
-        def add_following(self, new_following: str):
+        def add_following(self, new_following):
             self._following.append(new_following)
 
-        def remove_following(self, following_to_remove: str):
+        def remove_following(self, following_to_remove):
             if following_to_remove in self._following:
                 self._following.remove(following_to_remove)
 
         ## functions
 
         def sell_ticket(self, ticket, buyer, price):
+            from Transac import Transaction
             if ticket in self.tickets_owned and ticket.owner == self:
                 transaction = Transaction(buyer, self, price, ticket.event_name)  # No check for sufficient balance
                 buyer.solde -= price
@@ -266,7 +263,7 @@ class User:
             self._image = new_image
             print(f"The profile image of {self._username} has been updated.")
 
-        def add_comment_to_event(self, event: Event, new_comment: Comment):
+        def add_comment_to_event(self, event, new_comment):
             """
             Add a comment to a specific event.
             """
@@ -288,10 +285,10 @@ class User:
                 print(f"{self._username} has not made any comments on events.")
 
 class IndividualUser(User):
-    def __init__(self, password: str, username: str, email: str, tickets_to_sale: List[Ticket],
-                 tickets_owned: List[Ticket], solde: float, color: Colors, comments: List[Comment], image: str, bio: str,
-                 event_interested: List[Event], purchase_history: List[Transaction], followers: List[str],
-                 following: List[str], date_of_birth: str, address: str):
+    def __init__(self, password: str, username: str, email: str, tickets_to_sale,
+                 tickets_owned, solde: float, color: Colors, comments, image: str, bio: str,
+                 event_interested, purchase_history, followers,
+                 following: List[str], date_of_birth, address):
         super().__init__(password, username, email, tickets_to_sale, tickets_owned, solde, color,
                          comments, image, bio, event_interested, purchase_history, followers, following)
         self._date_of_birth: str = date_of_birth
@@ -326,32 +323,32 @@ class IndividualUser(User):
         else:
             print(f"{self._username} has no purchase history.")
 
-    def buy_ticket(self, ticket):  #
-        if self.solde >= ticket.price and ticket.availability:
-            self.solde -= ticket.price
+    def buy_ticket(self, ticket):
+        if self._solde >= ticket.price and ticket.availability:
+            self._solde -= ticket.price
             ticket.availability = False
             ticket.owner = self
-            self.tickets_owned.append(ticket)
-            print(f"{self.username} has bought ticket {ticket.id} for the event {ticket.event_name}.")
+            self._tickets_owned.append(ticket)
+            print(f"{self._username} has bought ticket {ticket.id} for the event {ticket.event_name}.")
         else:
             print("Purchase impossible. Insufficient balance or ticket not available.")
 
-    def display_tickets_owned(self):  #
-        if self.tickets_owned:
-            print(f"{self.username} owns the following tickets:")
-        for ticket in self.tickets_owned:
+    def display_tickets_owned(self):
+        if self._tickets_owned:
+            print(f"{self._username} owns the following tickets:")
+        for ticket in self._tickets_owned:
             print(f" - {ticket.event_name} ({ticket.price} €)")
         else:
-            print(f"{self.username} owns no tickets.")
+            print(f"{self._username} owns no tickets.")
 
-    def add_event_interest(self, new_event: Event):  #
+    def add_event_interest(self, new_event):
         """
         Add an event to the user's list of interests.
         """
         self._event_interested.append(new_event)
         print(f"{self._username} is now interested in the event: {new_event.name}")
 
-    def remove_event_interest(self, event_to_remove: Event):  #
+    def remove_event_interest(self, event_to_remove):
         """
         Remove an event from the user's list of interests.
         """
@@ -371,10 +368,10 @@ class IndividualUser(User):
             print(f"{self._username} has no specific event interests.")
 
 class OrganizationUser(User):
-    def __init__(self, password: str, username: str, email: str, tickets_to_sale: List[Ticket],
-                 solde: float, color: Colors, comments: List[Comment], image: str, bio: str,
+    def __init__(self, password: str, username: str, email: str, tickets_to_sale,
+                 solde: float, color: Colors, comments, image: str, bio: str,
                  followers: List[str], following: List[str], organization_name: str, registration_number: str):
-        super().__init__(password, username, email, tickets_to_sale, [], solde, color,
+        super().__init__(username, password , email, tickets_to_sale, [], color, solde,
                          comments, image, bio, [], [], followers, following)
         self._organization_name: str = organization_name
         self._registration_number: str = registration_number
@@ -382,23 +379,19 @@ class OrganizationUser(User):
     # Additional property and setter for OrganizationUser
 
     @property
-    def organization_name(self) -> str:
+    def organization_name(self):
         return self._organization_name
 
     @property
-    def registration_number(self) -> str:
+    def registration_number(self):
         return self._registration_number
 
     @organization_name.setter
-    def organization_name(self, new_organization_name: str):
+    def organization_name(self, new_organization_name):
         self._organization_name = new_organization_name
 
     @registration_number.setter
-    def registration_number(self, new_registration_number: str):
+    def registration_number(self, new_registration_number):
         self._registration_number = new_registration_number
 
     ### °°° other functions °°°
-
-
-
-

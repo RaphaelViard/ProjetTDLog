@@ -1,18 +1,14 @@
-#  il peut être judicieux de retourner des copies pour les listes
-# attention à ne pas faire de répétition entre les get et les property
-# ajouter toutes les vérifications nécessaires, d'existence par exemple
-# documenter
-
 # Import des classes depuis les fichiers correspondants
-from classes.Ticket import Ticket
-from classes.Transac import Transaction
-from classes.Event import Event
-from classes.Com import Comment
-from classes.User import User, IndividualUser, OrganizationUser
+from Ticket import Ticket
+from Transac import Transaction
+from Event import Event
+from Date import Date
+from Com import Comment
+from User import User, IndividualUser, OrganizationUser
 
 # Création d'instances d'événements
-event1 = Event(1, "Concert", "2023-12-31", "Stadium", "City", "Description for Concert")
-event2 = Event(2, "Festival", "2023-11-15", "Park", "City", "Description for Festival")
+event1 = Event(1, "Concert", "2023-12-31", "Stadium", "City", "Description for Concert","Rock",2)
+event2 = Event(2, "Festival", "2023-11-15", "Park", "City", "Description for Festival","Pop",3)
 
 # Création d'instances d'utilisateurs individuels
 user1 = IndividualUser("pass1", "user1", "user1@example.com", [], [], 100.0, "BLUE", [], "image1.jpg", "Bio for User 1",
@@ -26,12 +22,12 @@ org_user = OrganizationUser("orgpass", "orguser", "orguser@example.com", [], 200
                              "Description for Organization User", [], [], "Music Org", "ORG12345")
 
 # Création d'instances de tickets
-ticket1 = Ticket(101, event1, 20.0)
-ticket2 = Ticket(102, event2, 30.0)
+ticket1 = Ticket(101, event1, 20.0,user1)
+ticket2 = Ticket(102, event2, 30.0,user2)
 
 # Utilisation des méthodes pour vendre et acheter des tickets
-transaction = user1.sell_ticket(ticket1, user2, 25.0)
-user2.buy_ticket(ticket1)
+transaction = Transaction(user1, user2, 25.0,ticket1)
+transaction.execute_transaction()
 
 # Affichage des informations des utilisateurs
 user1.display_tickets_owned()
@@ -42,8 +38,8 @@ print("Transaction Summary:")
 print(transaction.get_transaction_summary())
 
 # Affichage des commentaires sur les événements
-comment1 = Comment(user1, "Great concert!")
-comment2 = Comment(user2, "Exciting festival!")
+comment1 = Comment(10,user1, "wow","Great concert!", Date("june"))
+comment2 = Comment(10,user2, "wow","Exciting festival!",Date("june"))
 event1.add_comment(comment1)
 event2.add_comment(comment2)
 

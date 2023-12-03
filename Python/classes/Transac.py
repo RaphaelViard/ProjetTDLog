@@ -1,8 +1,5 @@
-from User import User
-from Ticket import Ticket
-
 class Transaction:
-    def __init__(self, seller: User, buyer: User, amount: float, ticket: Ticket):
+    def __init__(self, seller, buyer, amount: float, ticket):
         self._seller = seller
         self._buyer = buyer
         self._amount = amount
@@ -45,10 +42,10 @@ class Transaction:
     def get_transaction_summary(self):
         return {
             "Transaction ID": id(self),
-            "Seller": self.seller.username,
-            "Buyer": self.buyer.username,
+            "Seller": self.seller._username,
+            "Buyer": self.buyer._username,
             "Amount": self.amount,
-            "Ticket ID": self.ticket.ticket_id,
+            "Ticket ID": self.ticket.id,
             "Event Name": self.ticket.event.name,
             "Status": "Successful" if self.is_successful_purchase() else "Pending"
         }
@@ -59,16 +56,16 @@ class Transaction:
         self.amount = new_amount
         print("Transaction amount updated.")
 
-    def update_transaction_ticket(self, new_ticket: Ticket):
+    def update_transaction_ticket(self, new_ticket):
         print(f"Transaction {self} ticket updated.")
         self.ticket = new_ticket
 
     ## operation
 
     def execute_transaction(self):
-        if self.buyer.solde >= self.amount:
-            self.seller.solde += self.amount
-            self.buyer.solde -= self.amount
+        if self.buyer._solde >= self.amount:
+            self.seller._solde += self.amount
+            self.buyer._solde -= self.amount
             self.ticket.owner = self.buyer
             print("Transaction successful.")
         else:
@@ -80,7 +77,7 @@ class Transaction:
         self.ticket.owner = self.seller
         print("Transaction refunded.")
 
-    def transfer_ticket_ownership(self, new_owner: User):
+    def transfer_ticket_ownership(self, new_owner):
         if self.ticket.availability and self.is_valid_transaction():
             self.ticket.owner = new_owner
             self.buyer.solde -= self.amount
@@ -149,7 +146,7 @@ class Transaction:
     def check_transaction_balance(self):
         return self.seller.solde >= self.amount
 
-    def check_transaction_participation(self, user: User):
+    def check_transaction_participation(self, user):
         return user == self.seller or user == self.buyer
 
     def is_successful_purchase(self):
