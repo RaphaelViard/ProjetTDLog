@@ -144,8 +144,10 @@ print(ListEvents[5]._tickets[0].event.name)
 #Ici, les 3 tickets sont a User3, User1 va en acheter 2.
 #sell_ticket : change les solde, les owners
 
-Transaction1 = User3.sell_ticket(Ticket1,User1,Ticket.price)
-Ticket1.event.remove_ticket(Ticket1)
-User3.add_transaction_history(Transaction1)
-User1.add_transaction_history(Transaction1) #But : mettre tout ca dans sell_ticket
+Transaction1 = User3.sell_ticket(Ticket1,User1)
 
+User1.solde += 50
+
+Transaction2 = User3.sell_ticket(Ticket2,User1)
+
+print(len(User1.tickets_owned))

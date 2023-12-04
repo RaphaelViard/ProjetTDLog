@@ -175,18 +175,18 @@ class User:
 
     ## functions
 
-    def sell_ticket(self, ticket, buyer, price):
+    def sell_ticket(self, ticket, buyer):
         if (buyer.solde<ticket.price):
             print("Solde Insuffisant")
         elif ticket in self.tickets_to_sale and ticket.owner == self:
-            transaction = Transaction(self, buyer, price, ticket)  # No check for sufficient balance
-            buyer.solde -= price
-            self.solde += price
+            transaction = Transaction(self, buyer, ticket.price, ticket)  # No check for sufficient balance
+            buyer.solde -= ticket.price
+            self.solde += ticket.price
             ticket.owner = buyer
             buyer.tickets_owned.append(ticket)
             self.tickets_to_sale.remove(ticket)
             ticket.availability = False
-            print(f"{self.username} sold ticket {ticket.id} to {buyer.username} for {price}$.")
+            print(f"{self.username} sold ticket {ticket.id} to {buyer.username} for {ticket.price}$.")
             return transaction
         else:
             print("Sale impossible. User does not own the ticket or invalid transaction.")
