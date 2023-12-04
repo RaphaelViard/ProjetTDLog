@@ -93,10 +93,12 @@ User3 = OrganizationUser("AGoodPassword","AccorArena","Accor@arena.fr",[],0,"ORA
 
 #Trucs a chaner pour les users : Orga n'a pas de ticket_owned, difference orga_name et username ? EventInterested ne devrait exister que pour individual
 
-Ticket1 = Ticket("01",ListEvents[5],30,True)
-Ticket2 = Ticket("02",ListEvents[6],40,True)
-Ticket3 = Ticket("03",ListEvents[3],50,True)
+Ticket1 = Ticket("01",ListEvents[5],30,User3)
+Ticket2 = Ticket("02",ListEvents[6],40,User3)
+Ticket3 = Ticket("03",ListEvents[3],50,User3)
 Tickets = [Ticket1,Ticket2,Ticket3]
+for Tick in Tickets:
+    User3.add_ticket_to_sale(Tick)
 #Rajouter dans un ticket : Event : pour un ticket, on est "obligés" de rjaouter l'attribut Event pour avoir toutes les infos du concert 
 #Ajouter les events dans les dates, les events dans les Places, et les tickets dans les bons events
 k=0
@@ -135,9 +137,15 @@ User1.add_event_interest(ListEvents[5])
 User1.display_event_interests()
 print(ListEvents[5]._tickets[0].event.name)
 
-#Quand quelqu'un devient possesseur d'un ticket : Changer le owner dans ticket, enlever le ticket si il est dans une liste spéciale (Event si il n'est plus a vendre) et le rajouter dans la bonne liste, changer son availability, Ajouter transaction dans purchase History
-User3.add_ticket_to_sale(Ticket1)
-User3.add_ticket_to_sale(Ticket2)
-User3.add_ticket_to_sale(Ticket3)
+#Quand quelqu'un devient possesseur d'un ticket : Changer le owner dans ticket,
+#  enlever le ticket si il est dans une liste spéciale (Event si il n'est plus a vendre)
+#  et le rajouter dans la bonne liste, changer son availability,
+#  Ajouter transaction dans purchase History
+#Ici, les 3 tickets sont a User3, User1 va en acheter 2.
+#sell_ticket : change les solde, les owners
 
-print(Ticket1.owner)
+Transaction1 = User3.sell_ticket(Ticket1,User1,Ticket.price)
+Ticket1.event.remove_ticket(Ticket1)
+User3.add_transaction_history(Transaction1)
+User1.add_transaction_history(Transaction1) #But : mettre tout ca dans sell_ticket
+

@@ -152,12 +152,12 @@ class User:
             self._comments.remove(comment_to_remove)
 
 
-    def add_purchase_history(self, new_transaction: Transaction):
-        self._purchase_history.append(new_transaction)
+    def add_transaction_history(self, new_transaction: Transaction):
+        self._transaction_history.append(new_transaction)
 
-    def remove_purchase_history(self, transaction_to_remove: Transaction):
+    def remove_transaction_history(self, transaction_to_remove: Transaction):
         if transaction_to_remove in self._purchase_history:
-            self._purchase_history.remove(transaction_to_remove)
+            self._transaction_history.remove(transaction_to_remove)
 
     def add_follower(self, new_follower: str):
         self._followers.append(new_follower)
@@ -176,13 +176,16 @@ class User:
     ## functions
 
     def sell_ticket(self, ticket, buyer, price):
-        if ticket in self.tickets_owned and ticket.owner == self:
-            transaction = Transaction(buyer, self, price, ticket.event_name)  # No check for sufficient balance
+        if (buyer.solde<ticket.price):
+            print("Solde Insuffisant")
+        elif ticket in self.tickets_to_sale and ticket.owner == self:
+            transaction = Transaction(self, buyer, price, ticket)  # No check for sufficient balance
             buyer.solde -= price
             self.solde += price
             ticket.owner = buyer
             buyer.tickets_owned.append(ticket)
             self.tickets_to_sale.remove(ticket)
+            ticket.availability = False
             print(f"{self.username} sold ticket {ticket.id} to {buyer.username} for {price}$.")
             return transaction
         else:

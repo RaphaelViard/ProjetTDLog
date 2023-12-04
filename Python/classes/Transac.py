@@ -1,8 +1,8 @@
 class Transaction:
-    def __init__(self, seller, buyer, amount: float, ticket):
+    def __init__(self, seller, buyer, price, ticket):
         self._seller = seller
         self._buyer = buyer
-        self._amount = amount
+        self._price = price
         self._ticket = ticket
 
     @property
@@ -14,8 +14,8 @@ class Transaction:
         return self._buyer
 
     @property
-    def amount(self):
-        return self._amount
+    def price(self):
+        return self._price
 
     @property
     def ticket(self):
@@ -29,9 +29,9 @@ class Transaction:
     def buyer(self, new_buyer):
         self._buyer = new_buyer
 
-    @amount.setter
-    def amount(self, new_amount):
-        self._amount = new_amount
+    @price.setter
+    def price(self, new_price):
+        self._price = new_price
 
     @ticket.setter
     def ticket(self, new_ticket):
@@ -44,7 +44,7 @@ class Transaction:
             "Transaction ID": id(self),
             "Seller": self.seller._username,
             "Buyer": self.buyer._username,
-            "Amount": self.amount,
+            "Amount": self.price,
             "Ticket ID": self.ticket.id,
             "Event Name": self.ticket.event.name,
             "Status": "Successful" if self.is_successful_purchase() else "Pending"
@@ -52,8 +52,8 @@ class Transaction:
 
     ## update
 
-    def update_transaction_amount(self, new_amount):
-        self.amount = new_amount
+    def update_transaction_amount(self, new_price):
+        self.price = new_price
         print("Transaction amount updated.")
 
     def update_transaction_ticket(self, new_ticket):
@@ -63,25 +63,25 @@ class Transaction:
     ## operation
 
     def execute_transaction(self):
-        if self.buyer._solde >= self.amount:
-            self.seller._solde += self.amount
-            self.buyer._solde -= self.amount
+        if self.buyer._solde >= self.price:
+            self.seller._solde += self.price
+            self.buyer._solde -= self.price
             self.ticket.owner = self.buyer
             print("Transaction successful.")
         else:
             print("Transaction failed. Insufficient funds.")
 
     def refund_transaction(self):
-        self.seller.solde -= self.amount
-        self.buyer.solde += self.amount
+        self.seller.solde -= self.price
+        self.buyer.solde += self.price
         self.ticket.owner = self.seller
         print("Transaction refunded.")
 
     def transfer_ticket_ownership(self, new_owner):
         if self.ticket.availability and self.is_valid_transaction():
             self.ticket.owner = new_owner
-            self.buyer.solde -= self.amount
-            new_owner.solde += self.amount
+            self.buyer.solde -= self.price
+            new_owner.solde += self.price
             print(f"Ticket ownership transferred to {new_owner.username}.")
         else:
             print("Ticket transfer failed. Either the ticket is not available or the transaction is invalid.")
@@ -98,7 +98,7 @@ class Transaction:
 
     def combine_transactions(self, transaction2):
         if self.is_valid_transaction() and transaction2.is_valid_transaction():
-            combined_amount = self.amount + transaction2.amount
+            combined_amount = self.price + transaction2.price
             combined_transaction = Transaction(self.seller, self.buyer, combined_amount, self.ticket)
             print(
                 f"Transactions {self} and {transaction2} have been combined into a new transaction: {combined_transaction}.")
@@ -108,14 +108,14 @@ class Transaction:
             return None
 
     def apply_transaction_fee(self, fee_percentage: float):
-        fee_amount = self.amount * (fee_percentage / 100)
-        self.amount -= fee_amount
+        fee_amount = self.price * (fee_percentage / 100)
+        self.price -= fee_amount
         print(f"A transaction fee of {fee_percentage}% has been applied to Transaction {self}.")
-        print(f"New transaction amount: {self.amount} €")
+        print(f"New transaction amount: {self.price} €")
 
     def reverse_transaction(self):
-        self.seller.solde -= self.amount
-        self.buyer.solde += self.amount
+        self.seller.solde -= self.price
+        self.buyer.solde += self.price
         self.ticket.owner = self.seller
         print("Transaction reversed.")
 
@@ -132,7 +132,7 @@ class Transaction:
     ## verification
 
     def is_valid_transaction(self):
-        return self.buyer.solde >= self.amount
+        return self.buyer.solde >= self.price
 
     def is_ticket_owned_by_buyer(self):
         return self.ticket.owner == self.buyer
@@ -144,7 +144,7 @@ class Transaction:
         return self.ticket.availability
 
     def check_transaction_balance(self):
-        return self.seller.solde >= self.amount
+        return self.seller.solde >= self.price
 
     def check_transaction_participation(self, user):
         return user == self.seller or user == self.buyer
