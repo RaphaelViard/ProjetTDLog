@@ -150,4 +150,3 @@ User1.solde += 50
 
 Transaction2 = User3.sell_ticket(Ticket2,User1)
 
-print(len(User1.tickets_owned))
