@@ -1,9 +1,12 @@
-from datetime import datetime, timedelta
+from datetime import datetime
+
+date_format = "%d-%m-%Y"
 
 class Date:
-    def __init__(self, date):
-        self._date = date # DD-MM-YYYY (day-month-year) - monday is 0, january is 0
-        self._event = [] ## list of Event
+    def __init__(self, date, hour="24:60",listev=[]):
+        self._date = date # see date_format for format
+        self._hour = hour
+        self.event = listev # list of Event
 
     ## property / setter
 
@@ -12,16 +15,16 @@ class Date:
         return self._date
 
     @property
-    def event(self):
-        return self._event
+    def hour(self):
+        return self._hour
 
     @date.setter
-    def set_date(self, new_date):
+    def setdate(self, new_date):
         self._date = new_date
 
-    @event.setter
-    def set_event(self, new_event):
-        self._event = new_event
+    @date.setter
+    def hour(self, new_hour):
+        self._hour = new_hour
 
     def check_event(self, event_to_check):
         return event_to_check in self._event
@@ -37,24 +40,21 @@ class Date:
 
     def __str__(self):
         event_names = [event.name for event in self._event]
-        return f"Date: {self._date}, Events: {', '.join(event_names) if event_names else 'None'}"
+        return f"Date: {self.date}, Events: {', '.join(event_names) if event_names else 'None'}"
 
     def to_datetime(self):
-        day, month, year = map(int, self._date.split('-'))
+        day, month, year = map(int, self.date.split('-'))
         return datetime(year, month, day)
-
-    def to_string(self):
-        return self._date
 
     ## get
 
     def get_day(self):
         # Extract and return the day from the date
-        return int(self._date.split('-')[0])
+        return int(self.date.split('-')[0])
 
     def get_month(self):
         # Extract and return the month from the date
-        return int(self._date.split('-')[1])
+        return int(self.date.split('-')[1])
 
     def get_year(self):
         # Extract and return the year from the date

@@ -2,7 +2,7 @@ from datetime import datetime
 
 class Place:
     def __init__(self, place, event):
-        self._place = place # country-city
+        self._place = place # country-city-adress
         self._event = []
 
     ## property / setter

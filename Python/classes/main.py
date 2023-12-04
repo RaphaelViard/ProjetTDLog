@@ -86,7 +86,7 @@ for i in range(10):
     nouvel_event = Event(name, date, place, image, info, tickets, hour, comments, category, duration)
     ListEvents.append(nouvel_event)
 
-ListEvents[5].display_event_info()
+# ListEvents[5].display_event_info()
 
 User1 = IndividualUser("azerty","Pingouin06","Pingouin@gmail.com",[],[],50,"BLUE",[],"image1.jpg","J'aime le Rap et les match du PSG",[],[],[],[],"15-04-1998","Rue Victor Hugo Paris")
 User2 = IndividualUser("12345","Serpent27","Serpent@gmail.com",[],[],80,"RED",[],"image2.jpg","J'aime le raggae et les match du Racing95",[],[],[],[],"15-08-1996","Rue Voltaire Marseille")
@@ -123,3 +123,8 @@ for P in ListPlaces:
             l += 1
             P.add_event(ListEvents[i])
 print(l)
+
+##
+
+date_test = Date("04-12-2023","15:30",ListEvents[:2])
+print(date_test.__str__())

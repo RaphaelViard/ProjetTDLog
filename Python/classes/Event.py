@@ -11,7 +11,6 @@ class Event:
         self._place = place
         self._image = image
         self._info = info
-        self._hour = hour
         self._tickets = tickets  # List of Ticket objects
         self._comments = comments  # List of Comment objects
         self._category = category
