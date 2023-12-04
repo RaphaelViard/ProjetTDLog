@@ -60,12 +60,12 @@ for i in range(1, 367):  # L'année 2024 a 366 jours car c'est une année bissex
 # Affichage des dix premières dates pour exemple
 
 for i in range(10):
-    ListDates[i].display_events_date()
+    ListDates[i].__str__()
 
 # Création de 20 Places différentes
 ListPlaces = []
 for i in range(50):
-    place_name = f"Country_{i}-City_{i}"
+    place_name = f"Country_{i}%City_{i}%Adress_{i}"
     nouvelle_place = Place(place_name, [])
     ListPlaces.append(nouvelle_place)
 
@@ -127,3 +127,10 @@ print(l)
 
 date_test = Date("04-12-2023","15:30",ListEvents[:2])
 print(date_test.__str__())
+
+#On donne les 3 tickets a OrganizationUser(user3)
+
+User1.display_event_interests()
+User1.add_event_interest(ListEvents[5])
+User1.display_event_interests()
+print(ListEvents[5]._tickets[0].event.name)

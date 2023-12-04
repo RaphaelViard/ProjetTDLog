@@ -8,9 +8,8 @@ Colors = Literal["RED", "BLUE", "ORANGE", "BROWN", "PURPLE", "YELLOW", "WHITE", 
 
 class User:
     def __init__(self, password: str, username: str, email: str, tickets_to_sale: List[Ticket],
-                 tickets_owned: List[Ticket], solde: float, color: Colors, comments: List[Comment], image: str, bio: str,
-                 event_interested: List[Event], purchase_history: List[Transaction], followers: List[str],
-                 following: List[str]):
+                solde: float, color: Colors, comments: List[Comment], image: str, bio: str, transaction_history: List[Transaction], followers: List[str],
+                following: List[str]):
         self._password: str = password
         self._username: str = username
         self._email: str = email
@@ -18,13 +17,11 @@ class User:
         self._color: Colors = color
         self._image: str = image
         self._bio: str = bio
-        self._tickets_to_sale: List[Ticket] = []
-        self._comments: List[Comment] = []
-        self._followers: List[str] = []
-        self._following: List[str] = []
-        self._tickets_owned: List[Ticket] = []  #
-        self._event_interested: List[Event] = []  #
-        self._purchase_history: List[Transaction] = []  #
+        self._tickets_to_sale: List[Ticket] = tickets_to_sale
+        self._comments: List[Comment] = comments
+        self._followers: List[str] = followers
+        self._following: List[str] = following
+        self._transaction_history: List[Transaction] = transaction_history
 
         @property
         def password(self) -> str:
@@ -42,9 +39,6 @@ class User:
         def tickets_to_sale(self) -> List[Ticket]:
             return self._tickets_to_sale
 
-        @property
-        def tickets_owned(self) -> List[Ticket]:
-            return self._tickets_owned
 
         @property
         def solde(self) -> float:
@@ -99,10 +93,6 @@ class User:
         @tickets_to_sale.setter
         def tickets_to_sale(self, new_tickets_to_sale):
             self._tickets_to_sale = new_tickets_to_sale
-
-        @tickets_owned.setter
-        def tickets_owned(self, new_tickets_owned):
-            self._tickets_owned = new_tickets_owned
 
         @solde.setter
         def solde(self, new_solde):
@@ -161,12 +151,6 @@ class User:
             if comment_to_remove in self._comments:
                 self._comments.remove(comment_to_remove)
 
-        def add_event_interested(self, new_event: Event):
-            self._event_interested.append(new_event)
-
-        def remove_event_interested(self, event_to_remove: Event):
-            if event_to_remove in self._event_interested:
-                self._event_interested.remove(event_to_remove)
 
         def add_purchase_history(self, new_transaction: Transaction):
             self._purchase_history.append(new_transaction)
@@ -256,8 +240,10 @@ class IndividualUser(User):
                  tickets_owned: List[Ticket], solde: float, color: Colors, comments: List[Comment], image: str, bio: str,
                  event_interested: List[Event], purchase_history: List[Transaction], followers: List[str],
                  following: List[str], date_of_birth: str, address: str):
-        super().__init__(password, username, email, tickets_to_sale, tickets_owned, solde, color,
-                         comments, image, bio, event_interested, purchase_history, followers, following)
+        super().__init__(password, username, email, tickets_to_sale, solde, color,
+                         comments, image, bio, purchase_history, followers, following)
+        self._event_interested: List[Event] = event_interested
+        self._tickets_owned: List[Ticket] = tickets_owned 
         self._date_of_birth: str = date_of_birth
         self._address: str = address
 
@@ -271,13 +257,29 @@ class IndividualUser(User):
     def address(self) -> str:
         return self._address
 
+    @property
+    def tickets_owned(self) -> List[Ticket]:
+        return self._tickets_owned
+
     @date_of_birth.setter
     def date_of_birth(self, new_date_of_birth: str):
         self._date_of_birth = new_date_of_birth
 
+    def add_event_interested(self, new_event: Event):
+        self._event_interested.append(new_event)
+
+    def remove_event_interested(self, event_to_remove: Event):
+        if event_to_remove in self._event_interested:
+            self._event_interested.remove(event_to_remove)
+
     @address.setter
     def address(self, new_address: str):
         self._address = new_address
+    
+    @tickets_owned.setter
+    def tickets_owned(self, new_tickets_owned):
+        self._tickets_owned = new_tickets_owned
+
 
     def display_purchase_history(self):  #
         """
@@ -338,8 +340,8 @@ class OrganizationUser(User):
     def __init__(self, password: str, username: str, email: str, tickets_to_sale: List[Ticket],
                  solde: float, color: Colors, comments: List[Comment], image: str, bio: str,
                  followers: List[str], following: List[str], organization_name: str, registration_number: str):
-        super().__init__(password, username, email, tickets_to_sale, [], solde, color,
-                         comments, image, bio, [], [], followers, following)
+        super().__init__(password, username, email, tickets_to_sale, solde, color,
+                         comments, image, bio, [], followers, following)
         self._organization_name: str = organization_name
         self._registration_number: str = registration_number
 
