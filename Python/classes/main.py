@@ -78,12 +78,11 @@ for i in range(10):
     place = ListPlaces[2*i]
     image = f"image_{i}.jpg"
     info = f"Information about Event_{i}"
-    hour = f"18:00"  # Heure fictive pour tous les événements
     tickets = []  # Liste de Ticket fictive
     comments = []  # Liste de Comment fictive
     category = "Concert" if i % 2 == 0 else "Match"
     duration = i/5  # Durée fictive pour tous les événements en heure
-    nouvel_event = Event(name, date, place, image, info, tickets, hour, comments, category, duration)
+    nouvel_event = Event(name, date, place, image, info, tickets, comments, category, duration)
     ListEvents.append(nouvel_event)
 
 # ListEvents[5].display_event_info()

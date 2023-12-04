@@ -5,7 +5,7 @@ from Ticket import Ticket
 from typing import List
 
 class Event:
-    def __init__(self, name : str, date :str, place : Place, image, info :str, tickets : List[Ticket], hour : str, comments : List[Comment], category : str, duration : float):
+    def __init__(self, name : str, date :str, place : Place, image, info :str, tickets : List[Ticket], comments : List[Comment], category : str, duration : float):
         self._name = name
         self._date = date
         self._place = place
@@ -46,9 +46,6 @@ class Event:
     def info(self):
         return self._info
 
-    @property
-    def hour(self):
-        return self._hour
 
     @property
     def tickets(self):
@@ -86,10 +83,6 @@ class Event:
     def set_info(self, new_info):
         self._info = new_info
 
-    @hour.setter
-    def set_hour(self, new_hour):
-        self._hour = new_hour
-
     @tickets.setter
     def set_tickets(self, new_tickets):
         self._tickets = new_tickets
@@ -104,7 +97,6 @@ class Event:
         print(f"Event: {self._name}")
         print(f"Date: {self._date.to_string()}")
         print(f"Place: {self._place.place}")
-        print(f"Hour: {self._hour}")
         print(f"Available Tickets: {len(self._tickets)}")
         print(f"Comments: {len(self._comments)}")
 

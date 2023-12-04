@@ -6,7 +6,7 @@ class Date:
     def __init__(self, date, hour="24:60",listev=[]):
         self._date = date # see date_format for format
         self._hour = hour
-        self.event = listev # list of Event
+        self._event = listev # list of Event
 
     ## property / setter
 
