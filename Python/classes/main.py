@@ -134,3 +134,10 @@ User1.display_event_interests()
 User1.add_event_interest(ListEvents[5])
 User1.display_event_interests()
 print(ListEvents[5]._tickets[0].event.name)
+
+#Quand quelqu'un devient possesseur d'un ticket : Changer le owner dans ticket, enlever le ticket si il est dans une liste spéciale (Event si il n'est plus a vendre) et le rajouter dans la bonne liste, changer son availability, Ajouter transaction dans purchase History
+User3.add_ticket_to_sale(Ticket1)
+User3.add_ticket_to_sale(Ticket2)
+User3.add_ticket_to_sale(Ticket3)
+
+print(Ticket1.owner)
