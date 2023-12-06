@@ -60,12 +60,12 @@ for i in range(1, 367):  # L'année 2024 a 366 jours car c'est une année bissex
 # Affichage des dix premières dates pour exemple
 
 for i in range(10):
-    ListDates[i].display_events_date()
+    ListDates[i].__str__()
 
 # Création de 20 Places différentes
 ListPlaces = []
 for i in range(50):
-    place_name = f"Country_{i}-City_{i}"
+    place_name = f"Country_{i}%City_{i}%Adress_{i}"
     nouvelle_place = Place(place_name, [])
     ListPlaces.append(nouvelle_place)
 
@@ -78,12 +78,11 @@ for i in range(10):
     place = ListPlaces[2*i]
     image = f"image_{i}.jpg"
     info = f"Information about Event_{i}"
-    hour = f"18:00"  # Heure fictive pour tous les événements
     tickets = []  # Liste de Ticket fictive
     comments = []  # Liste de Comment fictive
     category = "Concert" if i % 2 == 0 else "Match"
     duration = i/5  # Durée fictive pour tous les événements en heure
-    nouvel_event = Event(name, date, place, image, info, tickets, hour, comments, category, duration)
+    nouvel_event = Event(name, date, place, image, info, tickets, comments, category, duration)
     ListEvents.append(nouvel_event)
 
 # ListEvents[5].display_event_info()
@@ -94,18 +93,20 @@ User3 = OrganizationUser("AGoodPassword","AccorArena","Accor@arena.fr",[],0,"ORA
 
 #Trucs a chaner pour les users : Orga n'a pas de ticket_owned, difference orga_name et username ? EventInterested ne devrait exister que pour individual
 
-Ticket1 = Ticket("01",ListEvents[5],30,True)
-Ticket2 = Ticket("02",ListEvents[6],40,True)
-Ticket3 = Ticket("03",ListEvents[3],50,True)
+Ticket1 = Ticket("01",ListEvents[5],30,User3)
+Ticket2 = Ticket("02",ListEvents[6],40,User3)
+Ticket3 = Ticket("03",ListEvents[3],50,User3)
 Tickets = [Ticket1,Ticket2,Ticket3]
-#Rajouter dans un ticket : Event : pour un ticket, on est "obligés" de rjaouter l'attribut Event pour avoir toutes les infos du concert 
+for Tick in Tickets:
+    User3.add_ticket_to_sale(Tick)
+#Rajouter dans un ticket : Event : pour un ticket, on est "obligés" de rjaouter l'attribut Event pour avoir toutes les infos du concert
 #Ajouter les events dans les dates, les events dans les Places, et les tickets dans les bons events
 k=0
 for Ev in ListEvents:
     for Tick in Tickets:
         if Ev==Tick.event:
             Ev.add_ticket(Tick) #ON rajoute les tickets dans les bons Events
-            k +=1 
+            k +=1
 
 print(k)
 j=0
@@ -129,9 +130,22 @@ print(l)
 date_test = Date("04-12-2023","15:30",ListEvents[:2])
 print(date_test.__str__())
 
-# -> Postman <- (visualisation des API)
-# Graph Pro L
+#On donne les 3 tickets a OrganizationUser(user3)
 
+User1.display_event_interests()
+User1.add_event_interest(ListEvents[5])
+User1.display_event_interests()
+print(ListEvents[5]._tickets[0].event.name)
 
+#Quand quelqu'un devient possesseur d'un ticket : Changer le owner dans ticket,
+#  enlever le ticket si il est dans une liste spéciale (Event si il n'est plus a vendre)
+#  et le rajouter dans la bonne liste, changer son availability,
+#  Ajouter transaction dans purchase History
+#Ici, les 3 tickets sont a User3, User1 va en acheter 2.
+#sell_ticket : change les solde, les owners
 
+Transaction1 = User3.sell_ticket(Ticket1,User1)
 
+User1.solde += 50
+
+Transaction2 = User3.sell_ticket(Ticket2,User1)
