@@ -42,8 +42,13 @@ class Transaction:
     def get_transaction_summary(self):
         return {
             "Transaction ID": id(self),
+<<<<<<< HEAD
             "Seller": self.seller.username,
             "Buyer": self.buyer.username,
+=======
+            "Seller": self.seller._username,
+            "Buyer": self.buyer._username,
+>>>>>>> faff86e85f2b86df828a8276360025f458c5acf3
             "Amount": self.price,
             "Ticket ID": self.ticket.id,
             "Event Name": self.ticket.event.name,
@@ -63,9 +68,15 @@ class Transaction:
     ## operation
 
     def execute_transaction(self):
+<<<<<<< HEAD
         if self.buyer.solde >= self.price:
             self.seller.solde += self.price
             self.buyer.solde -= self.price
+=======
+        if self.buyer._solde >= self.price:
+            self.seller._solde += self.price
+            self.buyer._solde -= self.price
+>>>>>>> faff86e85f2b86df828a8276360025f458c5acf3
             self.ticket.owner = self.buyer
             print("Transaction successful.")
         else:

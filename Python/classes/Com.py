@@ -191,4 +191,8 @@ class Comment:
         """Checks if the comment is popular based on a likes threshold."""
         return self.likes >= threshold
 
+<<<<<<< HEAD
     ### °°° other functions °°°
+=======
+    ### °°° other functions °°°
+>>>>>>> faff86e85f2b86df828a8276360025f458c5acf3
