@@ -1,12 +1,16 @@
-from datetime import datetime
+from datetime import datetime, time, timedelta
 
-date_format = "%d-%m-%Y"
+date_format = "%Y-%m-%d"
+hour_format = "%H:%M" # ne pas mettre les % en pratique
+# -> date_string = date_object.strftime(date_format)
+# -> date_object = datetime.strptime(date_string, date_format)
+
+# créer une sous classe datevent
 
 class Date:
-    def __init__(self, date, hour="24:60",listev=[]):
+    def __init__(self, date, hour="24:60"):
         self._date = date # see date_format for format
-        self._hour = hour
-        self._event = listev # list of Event
+        self._hour = hour # see hour_format for format
 
     ## property / setter
 
@@ -19,38 +23,35 @@ class Date:
         return self._hour
 
     @date.setter
-    def setdate(self, new_date):
-        self._date = new_date
+    def date(self, new_date):
+        try:
+            date_object = datetime.strptime(new_date, "%Y-%m-%d")
+            self._date = new_date
+        except ValueError:
+            print("Invalid date format.")
 
-    @date.setter
+    @hour.setter
     def hour(self, new_hour):
-        self._hour = new_hour
-
-    def check_event(self, event_to_check):
-        return event_to_check in self._event
-
-    def withdraw_event(self, event_to_withdraw):
-        if event_to_withdraw in self._event:
-            self._event.remove(event_to_withdraw)
-
-    def add_event(self, event_to_add):
-        self._event.append(event_to_add)
+        try:
+            date_object = datetime.strptime(new_hour, "%H:%M")
+            self._date = new_hour
+        except ValueError:
+            print("Invalid hour format.")
 
     ## display / conversion
-
-    def __str__(self):
-        event_names = [event.name for event in self._event]
-        return f"Date: {self.date}, Events: {', '.join(event_names) if event_names else 'None'}"
 
     def to_datetime(self):
         day, month, year = map(int, self.date.split('-'))
         return datetime(year, month, day)
 
+    def display_date(self):
+       print(self.date)
+
     ## get
 
     def get_day(self):
         # Extract and return the day from the date
-        return int(self.date.split('-')[0])
+        return int(self.date.split('-')[2])
 
     def get_month(self):
         # Extract and return the month from the date
@@ -58,7 +59,7 @@ class Date:
 
     def get_year(self):
         # Extract and return the year from the date
-        return int(self._date.split('-')[2])
+        return int(self._date.split('-')[0])
 
     def get_weekday(self):
         # Return the weekday of the date (Monday is 0 and Sunday is 6)
@@ -77,14 +78,14 @@ class Date:
 
     def difference_in_days(self, other_date):
         # Calculate the difference in days between two dates
-        date1 = datetime.strptime(self._date, "%d-%m-%Y")
-        date2 = datetime.strptime(other_date._date, "%d-%m-%Y")
+        date1 = datetime.strptime(self._date, date_format)
+        date2 = datetime.strptime(other_date._date, date_format)
         return abs((date1 - date2).days)
 
     def days_until(self, future_date):
         # Calculate the number of days until a future date
         current_date = datetime.now()
-        target_date = datetime.strptime(future_date._date, "%d-%m-%Y")
+        target_date = datetime.strptime(future_date._date, date_format)
         return max(0, (target_date - current_date).days)
 
     def months_until(self, future_date):
@@ -111,11 +112,10 @@ class Date:
         year = self.get_year()
         return (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)
 
-
     def is_future(self):
         # Check if the date is in the future
         current_date = datetime.now()
-        target_date = datetime.strptime(self._date, "%d-%m-%Y")
+        target_date = datetime.strptime(self._date, date_format)
         return target_date > current_date
 
     def is_weekend(self):
@@ -135,13 +135,29 @@ class Date:
         # Check if two dates are in the same year
         return self.get_year() == other_date.get_year()
 
-    ### °°° other functions °°°
-    def display_date(self):
-       print(self._date)
+class DateEvent(Date):
+        def __init__(self, date, hour="24:60", listev=[]):
+            super().__init__(date, hour)
+            self._event = listev
 
-    def display_events_date(self):
-        if len(self._event) == 0:
-            print(f"The list of events in '{self._date}' is empty")
-        else:
-            events_list = ", ".join([event.name() for event in self._event])
-            print(f"The list of events in '{self._date}' is: {events_list}")
+        @property
+        def event(self):
+            return self._event
+
+        def check_event(self, event_to_check):
+            return event_to_check in self._event
+
+        def remove_event(self, event_to_remove):
+            if event_to_remove in self._event:
+                self._event.remove(event_to_remove)
+
+        def add_event(self, event_to_add):
+            self._event.append(event_to_add)
+
+        ## Display
+
+        def __str__(self):
+            event_names = [event.name for event in self.event]
+            return f"Date: {self.date}, Events: {', '.join(event_names) if event_names else 'None'}"
+
+    ### °°° other functions °°°
