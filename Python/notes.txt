@@ -1,0 +1,5 @@
+Notes concernant le projet :
+
+Event -> idée - donner category, date, place, comments ... aux tickets ?
+Transac ->  idée - appliquer transaction fees ?
+Général -> spécification des types des arguments des méthodes comme test ? + mettre "_" ou non lors de l'appel des attributs ?

@@ -8,7 +8,7 @@ hour_format = "%H:%M" # ne pas mettre les % en pratique
 # créer une sous classe datevent
 
 class Date:
-    def __init__(self, date, hour="24:60"):
+    def __init__(self, date, hour=None):
         self._date = date # see date_format for format
         self._hour = hour # see hour_format for format
 
@@ -136,7 +136,7 @@ class Date:
         return self.get_year() == other_date.get_year()
 
 class DateEvent(Date):
-        def __init__(self, date, hour="24:60", listev=[]):
+        def __init__(self, date, hour=None, listev=[]):
             super().__init__(date, hour)
             self._event = listev
 

@@ -1,6 +1,6 @@
 class Ticket:
 
-    def __init__(self, id, event, price: float, owner, availability=True):
+    def __init__(self, id, event, price, owner, availability=True):
         self._id = id
         self._price = price
         self._availability = availability

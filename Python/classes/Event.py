@@ -1,5 +1,5 @@
 class Event:
-    def __init__(self, name, date, place, duration, info="None", category="None", image=None, tickets=[], comments=[]):
+    def __init__(self, name, date, place, duration, info=None, category=None, image=None, tickets=[], comments=[]):
         self._name = name
         self._place = place
         self._image = image
@@ -203,7 +203,7 @@ class Event:
 
     ### °°° other functions °°°
 
-    # une idée -> donner category, date, place, comments ... aux tickets ?
+
 
 
 

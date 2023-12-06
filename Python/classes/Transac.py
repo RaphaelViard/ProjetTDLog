@@ -42,8 +42,8 @@ class Transaction:
     def get_transaction_summary(self):
         return {
             "Transaction ID": id(self),
-            "Seller": self.seller._username,
-            "Buyer": self.buyer._username,
+            "Seller": self.seller.username,
+            "Buyer": self.buyer.username,
             "Amount": self.price,
             "Ticket ID": self.ticket.id,
             "Event Name": self.ticket.event.name,
@@ -63,9 +63,9 @@ class Transaction:
     ## operation
 
     def execute_transaction(self):
-        if self.buyer._solde >= self.price:
-            self.seller._solde += self.price
-            self.buyer._solde -= self.price
+        if self.buyer.solde >= self.price:
+            self.seller.solde += self.price
+            self.buyer.solde -= self.price
             self.ticket.owner = self.buyer
             print("Transaction successful.")
         else:
@@ -154,4 +154,3 @@ class Transaction:
 
     ### °°° other functions °°°
 
-    ## idée -> appliquer transaction fees
