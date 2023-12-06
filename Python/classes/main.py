@@ -128,3 +128,10 @@ print(l)
 
 date_test = Date("04-12-2023","15:30",ListEvents[:2])
 print(date_test.__str__())
+
+# -> Postman <- (visualisation des API)
+# Graph Pro L
+
+
+
+

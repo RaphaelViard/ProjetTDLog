@@ -2,15 +2,15 @@ import json
 from datetime import datetime
 
 class Comment:
-    def __init__(self, rating,author, title, content, date, statereply=0, likes=0,):
-        self._rating = rating
+    def __init__(self, author, title, content, rating, date, statereply=0, likes=0, replies=[]):
+        self._author = author
         self._title = title
+        self._rating = rating # 0-> bad, 1-> medium, 2-> good
+        self._date = date
         self._content = content
         self._likes = likes
-        self._replies = []
+        self._replies = replies
         self._statereply = statereply
-        self._author = author
-        self._date = date
 
     ## property / setter
 
@@ -47,42 +47,54 @@ class Comment:
         return self._likes
 
     @author.setter
-    def set_author(self, new_author):
+    def author(self, new_author):
         self._author = new_author
 
-    @replies.setter
-    def set_reply(self, new_replies):
-        self._replies = new_replies
-
     @statereply.setter
-    def set_statereply(self, new_state_reply):
+    def statereply(self, new_state_reply):
         self._state_reply = new_state_reply
 
     @rating.setter
-    def set_rating(self, new_rating):
+    def rating(self, new_rating):
         self._rating = new_rating
 
     @title.setter
-    def set_title(self, new_title):
+    def title(self, new_title):
         self._title = new_title
 
     @content.setter
-    def set_content(self, new_content):
+    def content(self, new_content):
         self._content = new_content
 
     @date.setter
-    def set_date(self, new_date):
+    def date(self, new_date):
         self._date = new_date
 
     @likes.setter
-    def set_likes(self, new_num_likes):
+    def likes(self, new_num_likes):
         self._likes = new_num_likes
 
     def add_like(self):
         self._likes += 1
 
-    def with_like(self):
+    def remove_like(self):
         self._likes -= 1
+
+    @replies.setter
+    def replies(self, new_replies):
+        self._replies = new_replies
+
+    def add_reply(self, reply_comment):
+        """Adds a reply to a comment."""
+        # Ensure that reply_comment is an instance of the Comment class
+        if self.statereply == True or reply_comment.statereply == False:
+            raise ValueError("You can only add replies to comments")
+        self.add_reply(reply_comment)
+
+    def remove_reply(self, reply_comment):
+        """Removes a specific reply to a comment."""
+        if reply_comment in self._replies:
+            self.remove_reply(reply_comment)
 
     ## features
 
@@ -100,13 +112,12 @@ class Comment:
 
     def has_keyword(self, keyword):
         """Checks the presence of a keyword in the comment's content."""
-        return keyword.lower() in self._content.lower()
+        return keyword.lower() in self.content.lower()
 
     def time_since_creation(self):
         """Returns the time difference since the comment's creation."""
         time_difference = datetime.now() - self.date.to_datetime()
         return time_difference
-
 
     ## update / clone
 
@@ -118,47 +129,47 @@ class Comment:
     def clone(self, new_date):
         """Clones the comment with a new date."""
         return Comment(
-            author=self._author,
-            rating=self._rating,
-            title=self._title,
-            content=self._content,
-            date=new_date,
-            likes=self._likes,
-            replies=self._replies,
-            statereply=self._statereply
+            author=self.author,
+            rating=self.rating,
+            title=self.title,
+            content=self.content,
+            date=self.date,
+            likes=self.likes,
+            replies=self.replies,
+            statereply=self.statereply
         )
 
     ## display / format
 
     def __str__(self):
-        return f"Comment by {self._author} on {self._date}: {self._title}"
+        return f"Comment by {self.author.username} on {self.date.date}: {self.title}"
 
     def display_details(self):
         """Displays all comment details."""
-        print(f"Author: {self._author}")
-        print(f"Date: {self._date._date}")  # Using the to_string method from the Date class
-        print(f"Title: {self._title}")
-        print(f"Content: {self._content}")
-        print(f"Rating: {self._rating}")
-        print(f"Likes: {self._likes}")
+        print(f"Author: {self.author}")
+        print(f"Date: {self.date.date}")  # Using the to_string method from the Date class
+        print(f"Title: {self.title}")
+        print(f"Content: {self.content}")
+        print(f"Rating: {self.rating}")
+        print(f"Likes: {self.likes}")
 
     def truncate_title(self, length=30):
         """Truncates the title to a certain length."""
-        return self._title[:length] + "..." if len(self._title) > length else self._title
+        return self._title[:length] + "..." if len(self.title) > length else self.title
 
     def summarize(self, length=20):
         """Returns a summarized version of the comment."""
-        return f"{self._content[:length]}..." if len(self._content) > length else self._content
+        return f"{self._content[:length]}..." if len(self._content) > length else self.content
 
     def to_json(self):
         """Returns a JSON representation of the comment."""
         comment_json = {
-            "author": self._author,
-            "date": self._date.to_string(),
-            "title": self._title,
-            "content": self._content,
-            "rating": self._rating,
-            "likes": self._likes
+            "author": self.author,
+            "date": self.date.date,
+            "title": self.title,
+            "content": self.content,
+            "rating": self.rating,
+            "likes": self.likes
         }
         return json.dumps(comment_json)
 
@@ -179,19 +190,5 @@ class Comment:
     def is_popular(self, threshold=100):
         """Checks if the comment is popular based on a likes threshold."""
         return self.likes >= threshold
-
-    ## reply
-
-    def add_reply(self, reply_comment):
-        """Adds a reply to a comment."""
-        # Ensure that reply_comment is an instance of the Comment class
-        if self.statereply == True or reply_comment.statereply == False:
-            raise ValueError("You can only add replies to comments")
-        self._replies.append(reply_comment)
-
-    def remove_reply(self, reply_comment):
-        """Removes a specific reply to a comment."""
-        if reply_comment in self._replies:
-            self._replies.remove(reply_comment)
 
     ### °°° other functions °°°
