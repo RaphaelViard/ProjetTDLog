@@ -202,9 +202,3 @@ class Event:
         return [ticket for ticket in self.tickets if ticket.owner and ticket.owner.username == owner_username]
 
     ### °°° other functions °°°
-
-
-
-
-
-

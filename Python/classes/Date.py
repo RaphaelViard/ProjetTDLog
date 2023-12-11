@@ -7,7 +7,7 @@ hour_format = "%H:%M" # ne pas mettre les % en pratique
 
 # créer une sous classe datevent
 
-class Date :
+class Date:
     def __init__(self, date, hour=None):
         self._date = date # see date_format for format
         self._hour = hour # see hour_format for format
