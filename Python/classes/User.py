@@ -138,7 +138,6 @@ class User:
 
     @property
     def following(self) -> List[str]:
->>>>>>> faff86e85f2b86df828a8276360025f458c5acf3
         return self._following
 
     # Setters
@@ -183,15 +182,12 @@ class User:
     def event_interested(self, new_event_interested):
         self._event_interested = new_event_interested
 
-<<<<<<< HEAD
     @transaction_history.setter
     def transaction_history(self, new_transaction_history):
         self._transaction_history = new_transaction_history
-=======
     @purchase_history.setter
     def purchase_history(self, new_purchase_history):
         self._purchase_history = new_purchase_history
->>>>>>> faff86e85f2b86df828a8276360025f458c5acf3
 
     @followers.setter
     def followers(self, new_followers):
@@ -200,7 +196,6 @@ class User:
     @following.setter
     def following(self, new_following):
         self._following = new_following
-<<<<<<< HEAD
 
     def add_ticket_to_sale(self, new_ticket):
         self._tickets_to_sale.append(new_ticket)
@@ -306,31 +301,30 @@ class IndividualUser(User):
                  following)
         self._event_interested = event_interested
         self._tickets_owned = tickets_owned
-=======
     
-    def add_ticket_to_sale(self, new_ticket: Ticket):
+    def add_ticket_to_sale(self, new_ticket):
         self._tickets_to_sale.append(new_ticket)
 
-    def remove_ticket_to_sale(self, ticket_to_remove: Ticket):
+    def remove_ticket_to_sale(self, ticket_to_remove):
         if ticket_to_remove in self._tickets_to_sale:
             self._tickets_to_sale.remove(ticket_to_remove)
 
-    def add_ticket_owned(self, new_ticket: Ticket):
+    def add_ticket_owned(self, new_ticket):
         self._tickets_owned.append(new_ticket)
 
-    def remove_ticket_owned(self, ticket_to_remove: Ticket):
+    def remove_ticket_owned(self, ticket_to_remove):
         if ticket_to_remove in self._tickets_owned:
             self._tickets_owned.remove(ticket_to_remove)
 
-    def add_comment(self, new_comment: Comment):
+    def add_comment(self, new_comment):
         self._comments.append(new_comment)
 
-    def remove_comment(self, comment_to_remove: Comment):
+    def remove_comment(self, comment_to_remove):
         if comment_to_remove in self._comments:
             self._comments.remove(comment_to_remove)
 
 
-    def add_transaction_history(self, new_transaction: Transaction):
+    def add_transaction_history(self, new_transaction):
         self._transaction_history.append(new_transaction)
 
     def remove_transaction_history(self, transaction_to_remove: Transaction):

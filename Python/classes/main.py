@@ -193,5 +193,3 @@ user1.display_event_interests()
 
 
 
-=======
->>>>>>> faff86e85f2b86df828a8276360025f458c5acf3
