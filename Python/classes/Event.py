@@ -1,9 +1,5 @@
 class Event:
-<<<<<<< HEAD
     def __init__(self, name, date, place, duration, info=None, category=None, image=None, tickets=[], comments=[]):
-=======
-    def __init__(self, name, date, place, duration, info="None", category="None", image=None, tickets=[], comments=[]):
->>>>>>> faff86e85f2b86df828a8276360025f458c5acf3
         self._name = name
         self._place = place
         self._image = image
