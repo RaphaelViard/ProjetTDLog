@@ -21,7 +21,6 @@ class User:
     def password(self) :
         return self._password
 
-<<<<<<< HEAD
     @property
     def username(self) :
         return self._username
