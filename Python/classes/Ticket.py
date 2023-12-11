@@ -1,6 +1,6 @@
 class Ticket:
 
-    def __init__(self, id, event, price, owner, availability=True):
+    def __init__(self, id, event, price: float, owner, availability=True):
         self._id = id
         self._price = price
         self._availability = availability
@@ -155,12 +155,18 @@ class Ticket:
     # idée -> appliquer des réductions ?
     # idée -> ajouter QR code
 
+
     def exchange(self, new_owner):
         if self.owner:
             self.owner = new_owner
-            print(f"Le ticket {self.id} pour {self.event.name} a été échangé à {new_owner.username}.")
+            print(f"Le ticket {self.ticket_id} pour {self.event.name} a été échangé à {new_owner.username}.")
         else:
-            print(f"Le ticket {self.id} pour {self.event.name} n'a pas encore été acheté.")
+            print(f"Le ticket {self.ticket_id} pour {self.event.name} n'a pas encore été acheté.")
+
+    def add_comment(self, comment):
+        self.comments.append(comment)
+        print("Commentaire ajouté avec succès.")
+
 
     def change_price(self,new_price):
         self.price = new_price

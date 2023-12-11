@@ -6,12 +6,10 @@ from Com import Comment
 
 Colors = Literal["RED", "BLUE", "ORANGE", "BROWN", "PURPLE", "YELLOW", "WHITE", "BLACK"]
 
-
 class User:
     def __init__(self, password: str, username: str, email: str, tickets_to_sale: List[Ticket],
-                 solde: float, color: Colors, comments: List[Comment], image: str, bio: str,
-                 transaction_history: List[Transaction], followers: List[str],
-                 following: List[str]):
+                solde: float, color: Colors, comments: List[Comment], image: str, bio: str, transaction_history: List[Transaction], followers: List[str],
+                following: List[str]):
         self._password: str = password
         self._username: str = username
         self._email: str = email
@@ -40,6 +38,7 @@ class User:
     @property
     def tickets_to_sale(self) -> List[Ticket]:
         return self._tickets_to_sale
+
 
     @property
     def solde(self) -> float:
@@ -130,7 +129,7 @@ class User:
     @following.setter
     def following(self, new_following):
         self._following = new_following
-
+    
     def add_ticket_to_sale(self, new_ticket: Ticket):
         self._tickets_to_sale.append(new_ticket)
 
@@ -151,6 +150,7 @@ class User:
     def remove_comment(self, comment_to_remove: Comment):
         if comment_to_remove in self._comments:
             self._comments.remove(comment_to_remove)
+
 
     def add_transaction_history(self, new_transaction: Transaction):
         self._transaction_history.append(new_transaction)
@@ -176,7 +176,7 @@ class User:
     ## functions
 
     def sell_ticket(self, ticket, buyer):
-        if (buyer.solde < ticket.price):
+        if (buyer.solde<ticket.price):
             print("Solde Insuffisant Pour l'achat")
         elif ticket in self.tickets_to_sale and ticket.owner == self:
             transaction = Transaction(self, buyer, ticket.price, ticket)  # No check for sufficient balance
@@ -233,17 +233,15 @@ class User:
         else:
             print(f"{self._username} has not made any comments on events.")
 
-
 class IndividualUser(User):
     def __init__(self, password: str, username: str, email: str, tickets_to_sale: List[Ticket],
-                 tickets_owned: List[Ticket], solde: float, color: Colors, comments: List[Comment], image: str,
-                 bio: str,
+                 tickets_owned: List[Ticket], solde: float, color: Colors, comments: List[Comment], image: str, bio: str,
                  event_interested: List[Event], purchase_history: List[Transaction], followers: List[str],
                  following: List[str], date_of_birth: str, address: str):
         super().__init__(password, username, email, tickets_to_sale, solde, color,
                          comments, image, bio, purchase_history, followers, following)
         self._event_interested: List[Event] = event_interested
-        self._tickets_owned: List[Ticket] = tickets_owned
+        self._tickets_owned: List[Ticket] = tickets_owned 
         self._date_of_birth: str = date_of_birth
         self._address: str = address
 
@@ -275,10 +273,11 @@ class IndividualUser(User):
     @address.setter
     def address(self, new_address: str):
         self._address = new_address
-
+    
     @tickets_owned.setter
     def tickets_owned(self, new_tickets_owned):
         self._tickets_owned = new_tickets_owned
+
 
     def display_purchase_history(self):  #
         """
@@ -291,7 +290,7 @@ class IndividualUser(User):
         else:
             print(f"{self._username} has no purchase history.")
 
-    def buy_ticket(self, ticket):  #
+    def buy_ticket(self, ticket):  # 
         if self.solde >= ticket.price and ticket.availability:
             self.solde -= ticket.price
             ticket.availability = False
@@ -335,7 +334,6 @@ class IndividualUser(User):
         else:
             print(f"{self._username} has no specific event interests.")
 
-
 class OrganizationUser(User):
     def __init__(self, password: str, username: str, email: str, tickets_to_sale: List[Ticket],
                  solde: float, color: Colors, comments: List[Comment], image: str, bio: str,
@@ -364,3 +362,7 @@ class OrganizationUser(User):
         self._registration_number = new_registration_number
 
     ### °°° other functions °°°
+
+
+
+
