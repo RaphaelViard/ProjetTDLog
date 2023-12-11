@@ -1,74 +1,10 @@
+from typing import List, Literal
+from Ticket import Ticket
 from Transac import Transaction
-class User:
-    def __init__(self, username, password, email=None,
-                  color = "BLACK", image=None, solde=0,  bio=None, tickets_to_sale=[],
-                  transaction_history=[], comments=[], followers=[],
-                  following=[]):
-        self._password = password
-        self._username= username
-        self._email= email
-        self._solde= solde
-        self._color = color
-        self._image = image
-        self._bio = bio
-        self._tickets_to_sale = tickets_to_sale
-        self._comments = comments
-        self._followers = followers
-        self._following = following
-        self._transaction_history = transaction_history
+from Event import Event
+from Com import Comment
 
-    @property
-    def password(self) :
-        return self._password
-
-<<<<<<< HEAD
-    @property
-    def username(self) :
-        return self._username
-
-    @property
-    def email(self) :
-        return self._email
-
-    @property
-    def tickets_to_sale(self) :
-        return self._tickets_to_sale
-
-    @property
-    def solde(self) :
-        return self._solde
-
-    @property
-    def color(self) :
-        return self._color
-
-    @property
-    def comments(self) :
-        return self._comments
-
-    @property
-    def image(self) :
-        return self._image
-
-    @property
-    def bio(self) :
-        return self._bio
-
-    @property
-    def event_interested(self) :
-        return self._event_interested
-
-    @property
-    def transaction_history(self) :
-        return self._transaction_history
-
-    @property
-    def followers(self) :
-        return self._followers
-
-    @property
-    def following(self) :
-        return self.following
+Colors = Literal["RED", "BLUE", "ORANGE", "BROWN", "PURPLE", "YELLOW", "WHITE", "BLACK"]
 
 class User:
     def __init__(self, password: str, username: str, email: str, tickets_to_sale: List[Ticket],
@@ -182,9 +118,6 @@ class User:
     def event_interested(self, new_event_interested):
         self._event_interested = new_event_interested
 
-    @transaction_history.setter
-    def transaction_history(self, new_transaction_history):
-        self._transaction_history = new_transaction_history
     @purchase_history.setter
     def purchase_history(self, new_purchase_history):
         self._purchase_history = new_purchase_history
@@ -196,135 +129,30 @@ class User:
     @following.setter
     def following(self, new_following):
         self._following = new_following
-
-    def add_ticket_to_sale(self, new_ticket):
-        self._tickets_to_sale.append(new_ticket)
-
-    def remove_ticket_to_sale(self, ticket_to_remove):
-        if ticket_to_remove in self.tickets_to_sale:
-            self.tickets_to_sale.remove(ticket_to_remove)
-
-    def add_comment(self, new_comment):
-        self.comments.append(new_comment)
-
-    def remove_comment(self, comment_to_remove):
-        if comment_to_remove in self.comments:
-            self.comments.remove(comment_to_remove)
-
-    def add_transaction_history(self, new_transaction):
-        self._transaction_history.append(new_transaction)
-
-    def remove_transaction_history(self, transaction_to_remove):
-        if transaction_to_remove in self._purchase_history:
-            self._transaction_history.remove(transaction_to_remove)
-
-    def add_follower(self, new_follower):
-        self._followers.append(new_follower)
-
-    def remove_follower(self, follower_to_remove):
-        if follower_to_remove in self._followers:
-            self._followers.remove(follower_to_remove)
-
-    def add_following(self, new_following):
-        self._following.append(new_following)
-
-    def remove_following(self, following_to_remove):
-        if following_to_remove in self._following:
-            self._following.remove(following_to_remove)
-
-    ## functions
-
-    def sell_ticket(self, ticket, buyer):
-        if (buyer.solde < ticket.price):
-            print("Solde Insuffisant")
-        elif ticket in self.tickets_to_sale and ticket.owner == self:
-            transaction = Transaction(self, buyer, ticket.price, ticket)  # No check for sufficient balance
-            buyer.solde -= ticket.price
-            self.solde += ticket.price
-            ticket.owner = buyer
-            buyer.tickets_owned.append(ticket)
-            self.tickets_to_sale.remove(ticket)
-            ticket.availability = False
-            print(f"{self.username} sold ticket {ticket.id} to {buyer.username} for {ticket.price}$.")
-            return transaction
-        else:
-            print("Sale impossible. User does not own the ticket or invalid transaction.")
-
-    def display_followers(self):
-        if self.followers:
-            print(f"{self._username} has the following followers:")
-            for follower in self.followers:
-                print(f" - {follower}")
-        else:
-            print(f"{self.username} has no followers.")
-
-    def display_following(self):
-        if self._following:
-            print(f"{self.username} follows the following people:")
-            for user in self._following:
-                print(f" - {user}")
-        else:
-            print(f"{self.username} is not following anyone.")
-
-    def update_bio(self, new_bio: str):
-        self._bio = new_bio
-        print(f"The biography of {self.username} has been updated.")
-
-    def update_image(self, new_image: str):
-        self._image = new_image
-        print(f"The profile image of {self.username} has been updated.")
-
-    def add_comment_to_event(self, event, new_comment):
-        if event in self._event_interested:
-            event.add_comment(new_comment)
-            print(f"{self.username} added a comment to the event: {event.name}")
-        else:
-            print(f"{self.username} cannot add a comment to an event they are not interested in.")
-
-    def display_comments_on_events(self):
-        if self.comments:
-            print(f"{self.username}'s comments on events:")
-            for comment in self.comments:
-                print(f" - {comment.event_name}: {comment.text}")
-        else:
-            print(f"{self.username} has not made any comments on events.")
-
-
-class IndividualUser(User):
-    def __init__(self, username, password, email=None,
-                  color = "BLACK", image=None, solde=0,  bio=None, tickets_to_sale=[],
-                  transaction_history=[], comments=[], followers=[],
-                 following=[], tickets_owned=[], event_interested = []):
-        super().__init__(username, password, email,
-                  color, image, solde,  bio, tickets_to_sale,
-                  transaction_history, comments, followers,
-                 following)
-        self._event_interested = event_interested
-        self._tickets_owned = tickets_owned
     
-    def add_ticket_to_sale(self, new_ticket):
+    def add_ticket_to_sale(self, new_ticket: Ticket):
         self._tickets_to_sale.append(new_ticket)
 
-    def remove_ticket_to_sale(self, ticket_to_remove):
+    def remove_ticket_to_sale(self, ticket_to_remove: Ticket):
         if ticket_to_remove in self._tickets_to_sale:
             self._tickets_to_sale.remove(ticket_to_remove)
 
-    def add_ticket_owned(self, new_ticket):
+    def add_ticket_owned(self, new_ticket: Ticket):
         self._tickets_owned.append(new_ticket)
 
-    def remove_ticket_owned(self, ticket_to_remove):
+    def remove_ticket_owned(self, ticket_to_remove: Ticket):
         if ticket_to_remove in self._tickets_owned:
             self._tickets_owned.remove(ticket_to_remove)
 
-    def add_comment(self, new_comment):
+    def add_comment(self, new_comment: Comment):
         self._comments.append(new_comment)
 
-    def remove_comment(self, comment_to_remove):
+    def remove_comment(self, comment_to_remove: Comment):
         if comment_to_remove in self._comments:
             self._comments.remove(comment_to_remove)
 
 
-    def add_transaction_history(self, new_transaction):
+    def add_transaction_history(self, new_transaction: Transaction):
         self._transaction_history.append(new_transaction)
 
     def remove_transaction_history(self, transaction_to_remove: Transaction):
@@ -349,7 +177,7 @@ class IndividualUser(User):
 
     def sell_ticket(self, ticket, buyer):
         if (buyer.solde<ticket.price):
-            print("Solde Insuffisant")
+            print("Solde Insuffisant Pour l'achat")
         elif ticket in self.tickets_to_sale and ticket.owner == self:
             transaction = Transaction(self, buyer, ticket.price, ticket)  # No check for sufficient balance
             buyer.solde -= ticket.price
@@ -358,6 +186,9 @@ class IndividualUser(User):
             buyer.tickets_owned.append(ticket)
             self.tickets_to_sale.remove(ticket)
             ticket.availability = False
+            ticket.event.remove_ticket(ticket)
+            self.add_transaction_history(transaction)
+            buyer.add_transaction_history(transaction)
             print(f"{self.username} sold ticket {ticket.id} to {buyer.username} for {ticket.price}$.")
             return transaction
         else:
@@ -413,26 +244,17 @@ class IndividualUser(User):
         self._tickets_owned: List[Ticket] = tickets_owned 
         self._date_of_birth: str = date_of_birth
         self._address: str = address
->>>>>>> faff86e85f2b86df828a8276360025f458c5acf3
 
     # Additional property and setter for IndividualUser
 
     @property
-    def tickets_owned(self) :
-        return self._tickets_owned
+    def date_of_birth(self) -> str:
+        return self._date_of_birth
 
     @property
-    def event_interested(self):
-        return self._event_interested
+    def address(self) -> str:
+        return self._address
 
-<<<<<<< HEAD
-    @event_interested.setter
-    def event_interested(self, new_event_interested):
-        self._event_interested = new_event_interested
-
-    def add_event_interested(self, new_event):
-        self._event_interested.append(new_event)
-=======
     @property
     def tickets_owned(self) -> List[Ticket]:
         return self._tickets_owned
@@ -456,35 +278,19 @@ class IndividualUser(User):
     def tickets_owned(self, new_tickets_owned):
         self._tickets_owned = new_tickets_owned
 
->>>>>>> faff86e85f2b86df828a8276360025f458c5acf3
 
-    def remove_event_interested(self, event_to_remove):
-        if event_to_remove in self._event_interested:
-            self._event_interested.remove(event_to_remove)
-
-    @tickets_owned.setter
-    def tickets_owned(self, new_tickets_owned):
-        self._tickets_owned = new_tickets_owned
-
-    def add_ticket_owned(self, new_ticket):
-        self.tickets_owned.append(new_ticket)
-
-    def remove_ticket_owned(self, ticket_to_remove):
-        if ticket_to_remove in self.tickets_owned:
-            self.tickets_owned.remove(ticket_to_remove)
-
-    def display_purchase_history(self):
+    def display_purchase_history(self):  #
         """
         Display the user's purchase history.
         """
-        if self.purchase_history:
-            print(f"{self.username} has the following purchase history:")
-            for transaction in self.purchase_history:
+        if self._purchase_history:
+            print(f"{self._username} has the following purchase history:")
+            for transaction in self._purchase_history:
                 print(f" - {transaction}")
         else:
-            print(f"{self.username} has no purchase history.")
+            print(f"{self._username} has no purchase history.")
 
-    def buy_ticket(self, ticket):
+    def buy_ticket(self, ticket):  # 
         if self.solde >= ticket.price and ticket.availability:
             self.solde -= ticket.price
             ticket.availability = False
@@ -494,84 +300,41 @@ class IndividualUser(User):
         else:
             print("Purchase impossible. Insufficient balance or ticket not available.")
 
-    def display_tickets_owned(self):
-        if self.tickets_owned:
+    def display_tickets_owned(self):  #
+        if self._tickets_owned:
             print(f"{self.username} owns the following tickets:")
-        for ticket in self.tickets_owned:
+        for ticket in self._tickets_owned:
             print(f" - {ticket.event_name} ({ticket.price} €)")
         else:
-            print(f"{self.username} owns no tickets.")
+            print(f"{self._username} owns no tickets.")
 
-    def add_event_interest(self, new_event):
+    def add_event_interest(self, new_event: Event):  #
         """
         Add an event to the user's list of interests.
         """
         self._event_interested.append(new_event)
-        print(f"{self.username} is now interested in the event: {new_event.name}")
+        print(f"{self._username} is now interested in the event: {new_event.name}")
 
-    def remove_event_interest(self, event_to_remove):
+    def remove_event_interest(self, event_to_remove: Event):  #
         """
         Remove an event from the user's list of interests.
         """
         if event_to_remove in self._event_interested:
-            self.event_interested.remove(event_to_remove)
-            print(f"{self.username} is no longer interested in the event: {event_to_remove.name}")
+            self._event_interested.remove(event_to_remove)
+            print(f"{self._username} is no longer interested in the event: {event_to_remove.name}")
 
-    def display_event_interests(self):
+    def display_event_interests(self):  #
         """
         Display the events that the user is interested in.
         """
         if self._event_interested:
-            print(f"{self.username} is interested in the following events:")
-            for event in self.event_interested:
+            print(f"{self._username} is interested in the following events:")
+            for event in self._event_interested:
                 print(f" - {event.name}")
         else:
-            print(f"{self.username} has no specific event interests.")
-
-    def display_details(self):
-        print(f"Username: {self.username}")
-        print(f"Email: {self.email}")
-        print(f"Balance: {self.solde} €")
-        print(f"Color: {self.color}")
-        print(f"Bio: {self.bio}")
-        print(f"Image: {self.image}")
-        print("Tickets for Sale:")
-        if self.tickets_to_sale:
-            for ticket in self.tickets_to_sale:
-                print(f" - Ticket {ticket.id} for {ticket.event['name']} - {ticket.price} €")
-        else:
-            print("No tickets for sale.")
-        print("Event Interests:")
-        if self.event_interested:
-            for event in self.event_interested:
-                print(f" - {event['name']}")
-        else:
-            print("No specific event interests.")
-        print("Followers:")
-        if self.followers:
-            for follower in self.followers:
-                print(f" - {follower.username}")
-        else:
-            print("No followers.")
-        print("Following:")
-        if self.following:
-            for following_user in self.following:
-                print(f" - {following_user.username}")
-        else:
-            print("Not following anyone.")
-
+            print(f"{self._username} has no specific event interests.")
 
 class OrganizationUser(User):
-<<<<<<< HEAD
-    def __init__(self, username, password, email=None,
-                  color = "BLACK", image=None, solde=0,  bio=None, tickets_to_sale=[],
-                  transaction_history=[], comments=[], followers=[],
-                  following=[]):
-        super().__init__(username, password, email,
-                  color, image, solde,  bio, tickets_to_sale,
-                  transaction_history, comments, followers,
-                 following)
-=======
     def __init__(self, password: str, username: str, email: str, tickets_to_sale: List[Ticket],
                  solde: float, color: Colors, comments: List[Comment], image: str, bio: str,
                  followers: List[str], following: List[str], organization_name: str, registration_number: str):
@@ -579,8 +342,27 @@ class OrganizationUser(User):
                          comments, image, bio, [], followers, following)
         self._organization_name: str = organization_name
         self._registration_number: str = registration_number
->>>>>>> faff86e85f2b86df828a8276360025f458c5acf3
 
     # Additional property and setter for OrganizationUser
 
+    @property
+    def organization_name(self) -> str:
+        return self._organization_name
+
+    @property
+    def registration_number(self) -> str:
+        return self._registration_number
+
+    @organization_name.setter
+    def organization_name(self, new_organization_name: str):
+        self._organization_name = new_organization_name
+
+    @registration_number.setter
+    def registration_number(self, new_registration_number: str):
+        self._registration_number = new_registration_number
+
     ### °°° other functions °°°
+
+
+
+

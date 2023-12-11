@@ -42,8 +42,6 @@ class Transaction:
     def get_transaction_summary(self):
         return {
             "Transaction ID": id(self),
-            "Seller": self.seller.username,
-            "Buyer": self.buyer.username,
             "Seller": self.seller._username,
             "Buyer": self.buyer._username,
             "Amount": self.price,
@@ -65,9 +63,6 @@ class Transaction:
     ## operation
 
     def execute_transaction(self):
-        if self.buyer.solde >= self.price:
-            self.seller.solde += self.price
-            self.buyer.solde -= self.price
         if self.buyer._solde >= self.price:
             self.seller._solde += self.price
             self.buyer._solde -= self.price
