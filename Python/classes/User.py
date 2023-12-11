@@ -68,7 +68,8 @@ class User:
 
     @property
     def following(self) :
-=======
+        return self.following
+
 class User:
     def __init__(self, password: str, username: str, email: str, tickets_to_sale: List[Ticket],
                 solde: float, color: Colors, comments: List[Comment], image: str, bio: str, transaction_history: List[Transaction], followers: List[str],
