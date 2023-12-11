@@ -38,17 +38,11 @@ for i in range(10):
     place = ListPlaces[2*i]
     image = f"image_{i}.jpg"
     info = f"Information about Event_{i}"
-<<<<<<< HEAD
-    category = "Concert" if i % 2 == 0 else "Match"
-    duration = i/5  # Durée fictive pour tous les événements en heure
-    nouvel_event = Event(name=name, date=date, place=place, duration=duration, image=image, info=info, category=category)
-=======
     tickets = []  # Liste de Ticket fictive
     comments = []  # Liste de Comment fictive
     category = "Concert" if i % 2 == 0 else "Match"
     duration = i/5  # Durée fictive pour tous les événements en heure
-    nouvel_event = Event(name, date, place, image, info, tickets, comments, category, duration)
->>>>>>> faff86e85f2b86df828a8276360025f458c5acf3
+    nouvel_event = Event(name, date, place,duration,info,category,image, tickets, comments, category, duration)
     ListEvents.append(nouvel_event)
 
 # ListEvents[5].display_event_info()
@@ -62,18 +56,10 @@ User3 = OrganizationUser(password="AGoodPassword",username="AccorArena",email="A
 Ticket1 = Ticket("01",ListEvents[5],30,User3)
 Ticket2 = Ticket("02",ListEvents[6],40,User3)
 Ticket3 = Ticket("03",ListEvents[3],50,User3)
-<<<<<<< HEAD
-TicketsL = [Ticket1,Ticket2,Ticket3]
-
-for Tick in TicketsL:
-    User3.add_ticket_to_sale(Tick)
-#Rajouter dans un ticket : Event : pour un ticket, on est "obligés" de rjaouter l'attribut Event pour avoir toutes les infos du concert
-=======
 Tickets = [Ticket1,Ticket2,Ticket3]
 for Tick in Tickets:
     User3.add_ticket_to_sale(Tick)
 #Rajouter dans un ticket : Event : pour un ticket, on est "obligés" de rjaouter l'attribut Event pour avoir toutes les infos du concert 
->>>>>>> faff86e85f2b86df828a8276360025f458c5acf3
 #Ajouter les events dans les dates, les events dans les Places, et les tickets dans les bons events
 k=0
 for Ev in ListEvents:
@@ -124,7 +110,6 @@ User1.solde += 50
 
 Transaction2 = User3.sell_ticket(Ticket2,User1)
 
-<<<<<<< HEAD
 """
 
 ### --- Test ChatGPT ---
