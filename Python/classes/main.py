@@ -42,14 +42,14 @@ for i in range(10):
     comments = []  # Liste de Comment fictive
     category = "Concert" if i % 2 == 0 else "Match"
     duration = i/5  # Durée fictive pour tous les événements en heure
-    nouvel_event = Event(name, date, place,duration,info,category,image, tickets, comments, category, duration)
+    nouvel_event = Event(name, date, place,duration,info,category,image, tickets, comments)
     ListEvents.append(nouvel_event)
 
 # ListEvents[5].display_event_info()
 
-User1 = IndividualUser(password="azerty",username="Pingouin06",email="Pingouin@gmail.com",solde=50,color="BLUE",image="image1.jpg",bio="J'aime le Rap et les match du PSG")
-User2 = IndividualUser(password="12345",username="Serpent27",email="Serpent@gmail.com",solde=80,color="RED",image="image2.jpg",bio="J'aime le raggae et les match du Racing95")
-User3 = OrganizationUser(password="AGoodPassword",username="AccorArena",email="Accor@arena.fr",solde=0,color="ORANGE",image="image3.jpg",bio="Salle de concert située vers Gare de Lyon")
+User1 = IndividualUser(password="azerty",username="Pingouin06",email="Pingouin@gmail.com",tickets_to_sale=[],tickets_owned=[],solde=50,color="BLUE",comments=[],image="image1.jpg",bio="J'aime le Rap et les match du PSG",event_interested=[],purchase_history=[],followers=[],following=[],date_of_birth="13/04/1998",address="Rue victor Hugo")
+User2 = IndividualUser(password="12345",username="Serpent27",email="Serpent@gmail.com",tickets_to_sale=[],tickets_owned=[],solde=80,color="RED",comments=[],image="image2.jpg",bio="J'aime le raggae et les match du Racing95",event_interested=[],purchase_history=[],followers=[],following=[],date_of_birth="26/10/1996",address="Rue des marroniers")
+User3 = OrganizationUser(password="AGoodPassword",username="AccorArena",email="Accor@arena.fr",tickets_to_sale=[],solde=0,color="ORANGE",comments=[],image="image3.jpg",bio="Salle de concert située vers Gare de Lyon",followers=[],following=[],organization_name="AccorHotelArena",registration_number="FX01")
 
 #Trucs a chaner pour les users : Orga n'a pas de ticket_owned, difference orga_name et username ? EventInterested ne devrait exister que pour individual
 
@@ -63,7 +63,7 @@ for Tick in Tickets:
 #Ajouter les events dans les dates, les events dans les Places, et les tickets dans les bons events
 k=0
 for Ev in ListEvents:
-    for Tick in TicketsL:
+    for Tick in Tickets:
         if Ev==Tick.event:
             Ev.add_ticket(Tick) #On rajoute les tickets dans les bons Events
             k +=1
