@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Onglet 3</title>
+    <!-- Intégration de Bootstrap via CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <!-- Barre de navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">MonApp</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/onglet1">Onglet 1</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/onglet2">Onglet 2</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/onglet3">Onglet 3 <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Affichage du solde -->
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <span id="soldeNavbar" class="nav-link" style="color: #00FF00; font-weight: bold;">
+                    Solde: {{ current_user.solde }} €
+                </span>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/deconnexion">Déconnexion</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Contenu de la page -->
+    <div class="container mt-4">
+        <!-- Contenu de l'Onglet 3 -->
+        <h1 class="display-4">Bienvenue sur l'Onglet 3</h1>
+        <p class="lead">Bonjour, {{ current_user.username }}!</p>
+
+        <!-- Formulaire de mise à jour du solde -->
+        <div id="mettreAJourSolde" class="mt-4">
+            <h2>Mettre à jour le solde</h2>
+            <form method="POST" action="/mettre_a_jour_solde">
+                <div class="form-group">
+                    <label for="nouveauSolde">Nouveau Solde</label>
+                    <input type="number" class="form-control" id="nouveauSolde" name="nouveauSolde" placeholder="Entrez le nouveau solde" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Mettre à jour</button>
+            </form>
+        </div>
+
+        <!-- Liste des tickets en vente (vous pouvez ajouter le code ici pour afficher les tickets en vente) -->
+        <div id="ticketsEnVente" class="mt-4">
+            <h2>Tickets en Vente</h2>
+            <!-- Ajoutez ici le code pour afficher les tickets en vente -->
+        </div>
+
+        <!-- Liste des tickets achetés (vous pouvez ajouter le code ici pour afficher les tickets achetés) -->
+        <div id="ticketsAchetes" class="mt-4">
+            <h2>Tickets Achetés</h2>
+            <!-- Ajoutez ici le code pour afficher les tickets achetés -->
+        </div>
+    </div>
+
+    <!-- Scripts Bootstrap et JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Fonction pour mettre à jour le solde dans la barre de navigation
+        function mettreAJourSolde(nouveauSolde) {
+            document.getElementById("soldeNavbar").textContent = "Solde: " + nouveauSolde + " €";
+        }
+
+        // Code JavaScript pour gérer la soumission du formulaire de mise à jour du solde
+        document.getElementById("mettreAJourSolde").addEventListener("submit", function (e) {
+            e.preventDefault(); // Empêcher la soumission par défaut du formulaire
+
+            var nouveauSolde = parseFloat(document.getElementById("nouveauSolde").value);
+
+            // Envoyer la demande de mise à jour du solde au serveur (vous devez implémenter cette partie côté serveur)
+            // Après la mise à jour réussie du solde, appelez la fonction mettreAJourSolde avec le nouveau solde
+            // Exemple d'appel : mettreAJourSolde(nouveauSolde);
+        });
+    </script>
+</body>
+</html>

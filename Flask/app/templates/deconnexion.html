@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Déconnexion</title>
+    <!-- Intégration de Bootstrap via CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="display-4">Déconnexion</h1>
+        <p>Vous avez été déconnecté avec succès.</p>
+        <a href="/" class="btn btn-primary">Retour à l'accueil</a>
+    </div>
+
+    <script>
+        // Fonction de déconnexion
+        function logoutUser() {
+            // Supprimer le jeton d'authentification du localStorage
+            localStorage.removeItem('authToken');
+
+            alert('Vous avez été déconnecté.');
+
+            // Rediriger l'utilisateur vers la page d'accueil, par exemple
+            window.location.href = '/';
+        }
+
+        // Appeler la fonction de déconnexion lorsque la page se charge
+        window.onload = logoutUser;
+    </script>
+</body>
+</html>
