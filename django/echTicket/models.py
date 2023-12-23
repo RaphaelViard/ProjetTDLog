@@ -1,5 +1,5 @@
 from django.db import models
-
+from .classesPy.Ticket import Ticket
 
 class Com(models.Model):
     auteur = models.CharField(max_length=255)
