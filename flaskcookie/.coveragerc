@@ -1,0 +1,6 @@
+[run]
+source = flaskcookie
+omit = 
+    tests/*
+    autoapp.py
+
