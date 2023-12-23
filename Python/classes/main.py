@@ -171,10 +171,10 @@ user1.update_bio("New bio for JohnDoe.")
 user1.update_image("new_profile_pic.jpg")
 
 # Affichage des détails de l'utilisateur
-user1.display_details()
+#user1.display_details()
 
 # Affichage des événements auxquels l'utilisateur est intéressé
-user1.display_event_interests()
+#user1.display_event_interests()
 
 
 

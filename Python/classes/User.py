@@ -169,7 +169,7 @@ class User:
             buyer.solde -= ticket.price
             self.solde += ticket.price
             ticket.owner = buyer
-            buyer.tickets_owned.append(ticket)
+            buyer._tickets_owned.append(ticket)
             self.tickets_to_sale.remove(ticket)
             ticket.availability = False
             print(f"{self.username} sold ticket {ticket.id} to {buyer.username} for {ticket.price}$.")
