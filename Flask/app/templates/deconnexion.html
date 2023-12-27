@@ -9,8 +9,8 @@
 <body>
     <div class="container mt-4">
         <h1 class="display-4">Déconnexion</h1>
-        <p>Vous avez été déconnecté avec succès.</p>
-        <a href="/" class="btn btn-primary">Retour à l'accueil</a>
+        <p>Êtes-vous sûr de vouloir vous déconnecter ?</p>
+        <button onclick="logoutUser()" class="btn btn-primary">Déconnexion</button>
     </div>
 
     <script>
@@ -24,9 +24,7 @@
             // Rediriger l'utilisateur vers la page d'accueil, par exemple
             window.location.href = '/';
         }
-
-        // Appeler la fonction de déconnexion lorsque la page se charge
-        window.onload = logoutUser;
     </script>
 </body>
 </html>
+ 

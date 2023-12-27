@@ -86,11 +86,11 @@ def connexion():
 
         # Vérifiez si l'utilisateur existe dans la base de données (vous devrez implémenter cette logique)
         user = User.query.filter_by(username=username).first()
-        if user:
+        if user: 
             # L'utilisateur est connecté avec succès
             login_user(user)  # Enregistrez l'utilisateur connecté
 
-            flash('Connexion réussie !', 'success')
+            flash('Connexion réus sie !', 'success')
 
             # Redirigez l'utilisateur vers la page d'accueil (index)
             return redirect(url_for('index'))
@@ -105,7 +105,7 @@ def connexion():
 def deconnexion():
     logout_user()
     flash('Vous avez été déconnecté.', 'info')
-    return redirect(url_for('index'))
+    return render_template('deconnexion.html')
 
 @app.route('/mettre_en_vente', methods=['POST'])
 @login_required
@@ -213,6 +213,10 @@ def acheter_ticket():
 
     return jsonify({"status": "error"})
 
+@app.route('/acheter_ticket')
+def nouvelle_page():
+    tickets = Ticket.query.all()
+    return render_template('acheter_ticket.html',tickets=tickets)
 
 @app.route('/onglet1', methods=['GET', 'POST'])
 @login_required

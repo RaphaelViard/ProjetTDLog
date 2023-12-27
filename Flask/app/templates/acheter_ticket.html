@@ -1,13 +1,51 @@
-<ul>
-    {% for ticket in tickets %}
-        <li>
-            Événement: {{ ticket.nomEvenement }}, Date: {{ ticket.dateEvenement }}, Lieu: {{ ticket.lieuEvenement }}, Prix: {{ ticket.prixTicket }}€, Vendeur: {{ ticket.nomUtilisateur }}
-            {% if ticket.nomUtilisateur != nomUtilisateurActif %}
-                <form method="POST" action="/acheter_ticket">
-                    <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
-                    <button type="submit" class="btn btn-primary">Acheter</button>
-                </form>
-            {% endif %}
-        </li>
-    {% endfor %}
-</ul>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Acheter des tickets</title>
+    <!-- Intégration de Bootstrap via CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .no-tickets {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="display-4">Acheter des tickets</h1>
+        <div class="row mt-4">
+            <div class="col-md-8">
+                {% if tickets %}
+                    <!-- Liste des tickets à acheter -->
+                    <ul>
+                        {% for ticket in tickets %}
+                            <li>
+                                Événement: {{ ticket.nom_evenement }}, Date: {{ ticket.date_evenement }}, Lieu: {{ ticket.lieu_evenement }}, Prix: {{ ticket.prix_ticket }}€, Vendeur: {{ ticket.nomUtilisateur }}
+                                {% if ticket.nomUtilisateur != nomUtilisateurActif %}
+                                    <form method="POST" action="/acheter_ticket">
+                                        <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+                                        <button type="submit" class="btn btn-primary">Acheter</button>
+                                    </form>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <!-- Aucun ticket disponible -->
+                    <div class="no-tickets">
+                        Pas de tickets disponibles
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
