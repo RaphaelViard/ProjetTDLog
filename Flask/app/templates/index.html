@@ -38,6 +38,9 @@
                        Solde: {{ current_user.solde }} €
                     </a>
                 </li>
+                <li class="nav-item">
+                    <span class="nav-link" style="color: white;">Username: {{ current_user.username }}</span>
+                </li>
             {% else %}
                   <li class="nav-item">
                       <a class="nav-link" href="/connexion">Connexion</a>
