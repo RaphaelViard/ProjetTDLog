@@ -64,9 +64,9 @@
                     <!-- Liste des tickets à acheter -->
                     <ul>
                         {% for ticket in tickets %}
+                        {% if ticket.nomUtilisateur != current_user.username %}
                             <li>
                                 Événement: {{ ticket.nom_evenement }}, Date: {{ ticket.date_evenement }}, Lieu: {{ ticket.lieu_evenement }}, Prix: {{ ticket.prix_ticket }}€, Vendeur: {{ ticket.nomUtilisateur }}
-                                {% if ticket.nomUtilisateur != nomUtilisateurActif %}
                                     <form method="POST" action="/acheter_ticket">
                                         <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
                                         <button type="submit" class="btn btn-primary">Acheter</button>
