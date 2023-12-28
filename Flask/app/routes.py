@@ -196,14 +196,21 @@ def acheter_ticket():
         if ticket_id:
             ticket = Ticket.query.get(ticket_id)
             if ticket and ticket.nomUtilisateur != current_user.username:
-
-                # Update the ticket's owner to the active user and mark it as not for sale
-                ticket.nomUtilisateur = current_user.username
-                ticket.en_vente = False
-
-                db.session.commit()
-                flash('Achat du ticket réussi !', 'success')
-                return redirect(url_for('onglet1'))
+                acheteur = User.query.filter_by(username=current_user.username).first()
+                vendeur = User.query.filter_by(username=ticket.nomUtilisateur).first()
+                if acheteur and vendeur:
+                    prix_ticket=ticket.prix_ticket
+                    if acheteur.money >= prix_ticket:
+                        acheteur.money -= prix_ticket
+                        vendeur.money += prix_ticket
+                        ticket.nomUtilisateur = acheteur.username
+                        ticket.en_vente = False
+                        db.session.commit()
+                        flash('Achat du ticket réussi !', 'success')
+                        return redirect(url_for('index'))
+                    else:
+                        flash('Vous n\'avez pas assez d\'argent pour acheter ce ticket.', 'danger')
+                        return jsonify({"status": "error"})   
             else:
                 flash('Le ticket sélectionné n\'est pas disponible.', 'danger')
                 return jsonify({"status": "error"})
@@ -213,10 +220,10 @@ def acheter_ticket():
 
     return jsonify({"status": "error"})
 
-@app.route('/acheter_ticket')
+@app.route('/liste_tickets')
 def nouvelle_page():
     tickets = Ticket.query.all()
-    return render_template('acheter_ticket.html',tickets=tickets)
+    return render_template('liste_tickets.html',tickets=tickets)
 
 @app.route('/onglet1', methods=['GET', 'POST'])
 @login_required

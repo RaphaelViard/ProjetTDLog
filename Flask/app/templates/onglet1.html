@@ -86,10 +86,12 @@
             <h2>Tickets Recommandés</h2>
             <ul id="ticketsListRecommandes">
                 {% for ticket in tickets_recommandes %}
+                {% if ticket.en_vente %}
                 <li>
                     {{ ticket.nom_evenement }} - {{ ticket.date_evenement }} - {{ ticket.lieu_evenement }} - {{ ticket.prix_ticket }} €
                     <button class="btn btn-primary" onclick="acheterTicket(ticket.id)">Acheter</button>
                 </li>
+                {% endif %}
                 {% endfor %}
             </ul>
         </div>

@@ -70,7 +70,7 @@
                     <!-- Liste des tickets à acheter -->
                     <ul>
                         {% for ticket in tickets %}
-                        {% if ticket.nomUtilisateur != current_user.username %}
+                        {% if ticket.nomUtilisateur != current_user.username and ticket.en_vente %}
                             <li>
                                 Événement: {{ ticket.nom_evenement }}, Date: {{ ticket.date_evenement }}, Lieu: {{ ticket.lieu_evenement }}, Prix: {{ ticket.prix_ticket }}€, Vendeur: {{ ticket.nomUtilisateur }}
                                     <form method="POST" action="/acheter_ticket">
