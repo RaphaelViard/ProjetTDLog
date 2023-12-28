@@ -209,8 +209,7 @@ def acheter_ticket():
                         flash('Achat du ticket réussi !', 'success')
                         return redirect(url_for('index'))
                     else:
-                        flash('Vous n\'avez pas assez d\'argent pour acheter ce ticket.', 'danger')
-                        return jsonify({"status": "error"})   
+                         return render_template('solde_insuffisant.html')   
             else:
                 flash('Le ticket sélectionné n\'est pas disponible.', 'danger')
                 return jsonify({"status": "error"})

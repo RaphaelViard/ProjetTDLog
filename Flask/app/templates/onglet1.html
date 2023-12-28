@@ -88,10 +88,13 @@
                 {% for ticket in tickets_recommandes %}
                 {% if ticket.en_vente %}
                 <li>
-                    {{ ticket.nom_evenement }} - {{ ticket.date_evenement }} - {{ ticket.lieu_evenement }} - {{ ticket.prix_ticket }} €
-                    <button class="btn btn-primary" onclick="acheterTicket(ticket.id)">Acheter</button>
+                    Événement: {{ ticket.nom_evenement }}, Date: {{ ticket.date_evenement }}, Lieu: {{ ticket.lieu_evenement }}, Prix: {{ ticket.prix_ticket }}€, Vendeur: {{ ticket.nomUtilisateur }}
+                        <form method="POST" action="/acheter_ticket">
+                            <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+                            <button type="submit" class="btn btn-primary">Acheter</button>
+                        </form>
+                    {% endif %}
                 </li>
-                {% endif %}
                 {% endfor %}
             </ul>
         </div>
