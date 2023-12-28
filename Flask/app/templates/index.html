@@ -18,7 +18,10 @@
                     <a class="nav-link" href="/">Accueil <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/acheter_ticket">Acheter des tickets</a>
+                    <a class="nav-link" href="/liste_tickets">Liste des tickets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/onglet1">Onglet 1</a>
                 </li> 
                 <li class="nav-item">
                     <a class="nav-link" href="/onglet2">Onglet 2</a>
@@ -35,7 +38,7 @@
                 </li>
                <li class="nav-item">
                     <a class="nav-link" style="color: green;" href="#">
-                       Solde: {{ current_user.solde }} €
+                       Solde: {{ current_user.money }} €
                     </a>
                 </li>
                 <li class="nav-item">
@@ -44,6 +47,9 @@
             {% else %}
                   <li class="nav-item">
                       <a class="nav-link" href="/connexion">Connexion</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/inscription">Inscription</a>
               </li>
             {% endif %}       
       </ul>

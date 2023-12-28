@@ -7,3 +7,4 @@ class AppConfig():
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Ajoutez ici d'autres paramètres de configuration au besoin
+    

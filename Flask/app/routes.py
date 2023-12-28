@@ -69,7 +69,7 @@ def inscription():
         password = request.form['password']
 
         # Créez un nouvel utilisateur et ajoutez-le à la base de données
-        new_user = User(username=username, password=password)
+        new_user = User(username=username, password=password,money=0)
         db.session.add(new_user)
         db.session.commit()
 
@@ -264,16 +264,13 @@ def mettre_a_jour_solde():
 
         # Recherchez l'utilisateur actuel dans la base de données
         user = User.query.filter_by(id=current_user.id).first()
+        user.money += nouveau_solde
+        # Enregistrez les modifications dans la base de données
+        db.session.commit()
 
-        if user:
-            # Mettez à jour le solde de l'utilisateur
-            user.solde = nouveau_solde
-
-            # Enregistrez les modifications dans la base de données
-            db.session.commit()
-
-            flash('Solde mis à jour avec succès !', 'success')
-            return redirect(url_for('onglet3'))  # Redirection vers l'onglet 3 après la mise à jour du solde
-        else:
-            flash('Utilisateur introuvable.', 'danger')
-            return redirect(url_for('onglet3'))
+        flash('Solde mis à jour avec succès !', 'success')
+        return redirect(url_for('onglet3'))  # Redirection vers l'onglet 3 après la mise à jour du solde
+    else:
+        flash('Utilisateur introuvable.', 'danger')
+        return redirect(url_for('onglet3'))
+        

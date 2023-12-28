@@ -19,7 +19,7 @@
                     <a class="nav-link" href="/">Accueil <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/acheter_ticket">Acheter des tickets</a>
+                    <a class="nav-link" href="/liste_tickets">Liste des tickets</a>
                 </li> 
                 <li class="nav-item">
                     <a class="nav-link" href="/onglet2">Onglet 2</a>
@@ -36,7 +36,7 @@
                 </li>
                <li class="nav-item">
                     <a class="nav-link" style="color: green;" href="#">
-                       Solde: {{ current_user.solde }} €
+                       Solde: {{ current_user.money }} €
                     </a>
                 </li>
                 <li class="nav-item">
@@ -45,6 +45,9 @@
             {% else %}
                   <li class="nav-item">
                       <a class="nav-link" href="/connexion">Connexion</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/inscription">Inscription</a>
               </li>
             {% endif %}       
       </ul>
@@ -82,7 +85,7 @@
                 {% for ticket in tickets_recommandes %}
                 <li>
                     {{ ticket.nom_evenement }} - {{ ticket.date_evenement }} - {{ ticket.lieu_evenement }} - {{ ticket.prix_ticket }} €
-                    <button class="btn btn-primary" onclick="acheterTicket({{ ticket.id }})">Acheter</button>
+                    <button class="btn btn-primary" onclick="acheterTicket(ticket.id)">Acheter</button>
                 </li>
                 {% endfor %}
             </ul>
