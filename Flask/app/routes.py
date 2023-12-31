@@ -61,22 +61,18 @@ def onglet3():
         flash('Veuillez vous connecter pour accéder à Onglet 3', 'danger')
         return redirect(url_for('connexion'))
 
-# Route d'inscription
+# Route pour l'inscription
 @app.route('/inscription', methods=['GET', 'POST'])
 def inscription():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-
-        # Créez un nouvel utilisateur et ajoutez-le à la base de données
-        new_user = User(username=username, password=password)
-        db.session.add(new_user)
+        initial_solde = float(request.form['initialSolde'])  # Récupérez le solde initial du formulaire
+        user = User(username=username, password=password, money=initial_solde)  # Créez un nouvel utilisateur avec le solde initial
+        db.session.add(user)
         db.session.commit()
-
-        # Après l'inscription réussie, redirigez l'utilisateur vers la page de connexion
-        flash('Inscription réussie ! Vous pouvez maintenant vous connecter.', 'success')
-        return redirect(url_for('connexion'))  # Redirection vers la page de connexion
-
+        login_user(user)  # Connectez l'utilisateur immédiatement après l'inscription
+        return redirect(url_for('index'))
     return render_template('inscription.html')
 
 @app.route('/connexion', methods=['GET', 'POST'])
@@ -268,8 +264,8 @@ def mettre_a_jour_solde():
             # Enregistrez les modifications dans la base de données
             db.session.commit()
 
-            flash('Solde mis à jour avec succès !', 'success')
-            return redirect(url_for('onglet3'))  # Redirection vers l'onglet 3 après la mise à jour du solde
+            response = {'nouveauSolde': nouveau_solde}
+            return jsonify(response)  # Renvoyez le nouveau solde au format JSON
         else:
             flash('Utilisateur introuvable.', 'danger')
             return redirect(url_for('onglet3'))

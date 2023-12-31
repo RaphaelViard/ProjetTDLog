@@ -30,15 +30,15 @@
             </ul>
         </div>
 
-        <!-- Affichage du solde -->
+        <!-- Affichage du solde en vert -->
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <span id="soldeNavbar" class="nav-link" style="color: #00FF00; font-weight: bold;">
-                    Solde: {{ current_user.solde }} €
-                </span>
+                <a class="nav-link" href="/deconnexion">Déconnexion</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/deconnexion">Déconnexion</a>
+                <a class="nav-link" style="color: green;">
+                    Solde: {{ current_user.money }} €
+                </a>
             </li>
         </ul>
     </nav>
@@ -52,7 +52,7 @@
         <!-- Formulaire de mise à jour du solde -->
         <div id="mettreAJourSolde" class="mt-4">
             <h2>Mettre à jour le solde</h2>
-            <form method="POST" action="/mettre_a_jour_solde">
+            <form method="POST" action="/mettre_a_jour_solde" id="soldeForm">
                 <div class="form-group">
                     <label for="nouveauSolde">Nouveau Solde</label>
                     <input type="number" class="form-control" id="nouveauSolde" name="nouveauSolde" placeholder="Entrez le nouveau solde" required>
@@ -61,13 +61,13 @@
             </form>
         </div>
 
-        <!-- Liste des tickets en vente (vous pouvez ajouter le code ici pour afficher les tickets en vente) -->
+        <!-- Liste des tickets en vente -->
         <div id="ticketsEnVente" class="mt-4">
             <h2>Tickets en Vente</h2>
             <!-- Ajoutez ici le code pour afficher les tickets en vente -->
         </div>
 
-        <!-- Liste des tickets achetés (vous pouvez ajouter le code ici pour afficher les tickets achetés) -->
+        <!-- Liste des tickets achetés -->
         <div id="ticketsAchetes" class="mt-4">
             <h2>Tickets Achetés</h2>
             <!-- Ajoutez ici le code pour afficher les tickets achetés -->
@@ -81,18 +81,31 @@
     <script>
         // Fonction pour mettre à jour le solde dans la barre de navigation
         function mettreAJourSolde(nouveauSolde) {
-            document.getElementById("soldeNavbar").textContent = "Solde: " + nouveauSolde + " €";
+            var soldeElement = document.querySelector(".nav-link[style='color: green;']");
+            soldeElement.textContent = "Solde: " + nouveauSolde + " €";
+            // Mettez à jour le contenu du solde dans la barre de navigation
         }
 
         // Code JavaScript pour gérer la soumission du formulaire de mise à jour du solde
-        document.getElementById("mettreAJourSolde").addEventListener("submit", function (e) {
+        document.getElementById("soldeForm").addEventListener("submit", function (e) {
             e.preventDefault(); // Empêcher la soumission par défaut du formulaire
 
             var nouveauSolde = parseFloat(document.getElementById("nouveauSolde").value);
 
-            // Envoyer la demande de mise à jour du solde au serveur (vous devez implémenter cette partie côté serveur)
-            // Après la mise à jour réussie du solde, appelez la fonction mettreAJourSolde avec le nouveau solde
-            // Exemple d'appel : mettreAJourSolde(nouveauSolde);
+            // Envoyer la demande de mise à jour du solde au serveur via une requête AJAX
+            $.ajax({
+                url: "/mettre_a_jour_solde",  // URL de la route Flask pour mettre à jour le solde
+                type: "POST",
+                data: { nouveauSolde: nouveauSolde },  // Envoyez le nouveau solde au serveur
+                dataType: "json",
+                success: function (data) {
+                    // Mettez à jour le solde dans la barre de navigation avec le nouveau solde
+                    mettreAJourSolde(data.nouveauSolde);
+                },
+                error: function () {
+                    console.log("Erreur lors de la mise à jour du solde.");
+                }
+            });
         });
     </script>
 </body>

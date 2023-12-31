@@ -9,7 +9,7 @@
 <body>
     <div class="container mt-4">
         <h1 class="display-4">Inscription</h1>
-        <form method="POST" action="/inscription" onsubmit="registerUser()">
+        <form method="POST" action="/inscription" onsubmit="return registerUser()">
             <div class="form-group">
                 <label for="username">Nom d'utilisateur</label>
                 <input type="text" class="form-control" id="username" name="username" required>
@@ -17,6 +17,10 @@
             <div class="form-group">
                 <label for="password">Mot de passe</label>
                 <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="initialSolde">Solde initial (en euros)</label>
+                <input type="number" class="form-control" id="initialSolde" name="initialSolde" required>
             </div>
             <button type="submit" class="btn btn-primary">S'inscrire</button>
         </form>
@@ -26,13 +30,25 @@
         // Fonction pour stocker les informations de l'utilisateur dans le localStorage
         function registerUser() {
             var username = document.getElementById('username').value;
+            var initialSolde = parseFloat(document.getElementById('initialSolde').value);
+
+            // Vérifiez s'il y a des erreurs dans le formulaire
+            if (!username || !initialSolde || initialSolde < 0) {
+                // Affichez un message d'erreur (vous pouvez personnaliser ce message)
+                alert("Veuillez remplir tous les champs correctement.");
+                return false; // Empêche la soumission du formulaire
+            }
+
             // Vous pouvez ajouter d'autres données de l'utilisateur si nécessaire
             var userData = {
                 username: username,
+                initialSolde: initialSolde, // Stockez le solde initial
                 // Autres données de l'utilisateur
             };
             // Stocker les données dans le localStorage
             localStorage.setItem('userData', JSON.stringify(userData));
+
+            return true; // Permet la soumission du formulaire
         }
     </script>
 </body>

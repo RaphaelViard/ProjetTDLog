@@ -37,7 +37,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" style="color: green;" href="#">
-                    Solde: {{ current_user.solde }} €
+                    Solde: {{ current_user.money }} €
                 </a>
             </li>
         </ul>
@@ -72,11 +72,11 @@
         <!-- Liste de tickets recommandés et en vente -->
         <div id="listeTickets" class="mt-3">
             <h2>Tickets Recommandés</h2>
-            <ul id="ticketsListRecommandes">
+            <ul id="ticketsListRecommandes" style="list-style-type: none; padding-left: 0;">
                 {% for ticket in tickets_recommandes %}
-                <li>
+                <li class="ticket-item" style="margin-bottom: 10px;">
                     {{ ticket.nom_evenement }} - {{ ticket.date_evenement }} - {{ ticket.lieu_evenement }} - {{ ticket.prix_ticket }} €
-                    <button class="btn btn-primary" onclick="acheterTicket({{ ticket.id }})">Acheter</button>
+                    <button class="btn btn-primary ml-2" onclick="acheterTicket({{ ticket.id }})">Acheter</button>
                 </li>
                 {% endfor %}
             </ul>
@@ -120,7 +120,7 @@
                     for (var i = 0; i < data.length; i++) {
                         var ticket = data[i];
                         var listItem = $("<li>").text(ticket.nom_evenement + " - " + ticket.date_evenement + " - " + ticket.lieu_evenement + " - " + ticket.prix_ticket + " € ");
-                        var acheterButton = $("<button>").addClass("btn btn-primary").text("Acheter").click(function () {
+                        var acheterButton = $("<button>").addClass("btn btn-primary ml-2").text("Acheter").click(function () {
                             acheterTicket(ticket.id); // Appel de la fonction acheterTicket avec l'ID du ticket
                         });
                         listItem.append(acheterButton);
