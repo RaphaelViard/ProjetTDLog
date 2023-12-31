@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Acheter des tickets</title>
+    <!-- Intégration de Bootstrap via CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .no-tickets {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">MonApp</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Accueil <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/liste_tickets">Liste des tickets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/onglet1">Onglet 1</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/onglet2">Onglet 2</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/onglet3">Onglet 3</a>
+                </li>
+            </ul>
+        </div>
+        <ul class="navbar-nav ml-auto">
+            {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/deconnexion">Déconnexion</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" style="color: green;" href="#">
+                        Solde: {{ current_user.money }} €
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">{{ current_user.username }}</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/connexion">Connexion</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/inscription">Inscription</a>
+                  </li>
+            {% endif %}
+        </ul>
+    </nav>
+    
+    <div class="container mt-4">
+        <h1 class="display-4">Acheter des tickets</h1>
+        <div class="row mt-4">
+            <div class="col-md-8">
+                {% if tickets %}
+                    <!-- Liste des tickets à acheter -->
+                    <ul>
+                        {% for ticket in tickets %}
+                        {% if ticket.nomUtilisateur != current_user.username and ticket.en_vente %}
+                            <li>
+                                Événement: {{ ticket.nom_evenement }}, Date: {{ ticket.date_evenement }}, Lieu: {{ ticket.lieu_evenement }}, Prix: {{ ticket.prix_ticket }}€, Vendeur: {{ ticket.nomUtilisateur }}
+                                    <form method="POST" action="/acheter_ticket">
+                                        <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+                                        <button type="submit" class="btn btn-primary">Acheter</button>
+                                    </form>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <!-- Aucun ticket disponible -->
+                    <div class="no-tickets">
+                        Pas de tickets disponibles
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
