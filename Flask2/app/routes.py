@@ -207,7 +207,7 @@ def acheter_ticket():
                         ticket.en_vente = False
                         db.session.commit()
                         flash('Achat du ticket réussi !', 'success')
-                        return redirect(url_for('index'))
+                        return redirect(url_for('onglet1'))
                     else:
                          return render_template('solde_insuffisant.html')   
             else:
@@ -225,41 +225,38 @@ def nouvelle_page():
     return render_template('liste_tickets.html',tickets=tickets)
 
 @app.route('/onglet1', methods=['GET', 'POST'])
-@login_required
 def onglet1():
-    if current_user.is_authenticated:
+    if request.method == 'POST':
+        tri_lieu = request.form.get('tri_lieu')
+        tri_date = request.form.get('tri_date')
+        tri_nom = request.form.get('tri_nom')
 
-        # Afficher la page d'Onglet 1 si l'utilisateur est connecté
-        if request.method == 'POST':
-            # Récupérer les critères de recherche depuis le formulaire
-            nom_evenement = request.form.get('nomEvenement')
-            date_evenement = request.form.get('dateEvenement')
-            lieu_evenement = request.form.get('lieuEvenement')
-            # Requête à la base de données pour les tickets correspondants
-            tickets_search = Ticket.query.filter_by(
-                nom_evenement=nom_evenement,
-                date_evenement=date_evenement,
-                lieu_evenement=lieu_evenement,
-                nomUtilisateur=current_user.username  # Assurez-vous de filtrer les tickets de l'utilisateur actif
-            ).all()
+        # Récupérez tous les tickets non triés par défaut
+        tickets = Ticket.query.all()
 
-            # Chargez les tickets recommandés depuis la base de données
-            tickets_recommandes = Ticket.query.filter(
-                (Ticket.nomUtilisateur != current_user.username) & (Ticket.en_vente == True)
-            ).all()
+        # Appliquez la logique de filtrage en fonction des informations saisies par l'utilisateur
+        if tri_lieu:
+            tickets = [ticket for ticket in tickets if tri_lieu.lower() in ticket.lieu_evenement.lower()]
 
-            return render_template('onglet1.html', tickets_search=tickets_search, tickets_recommande=tickets_recommandes)
+        if tri_date:
+            # Convertissez la date entrée au format "a-mm-jj" en objet datetime
+            try:
+                tri_date = datetime.strptime(tri_date, '%Y-%m-%d').date()
+            except ValueError:
+                # Gestion de l'erreur si la date n'est pas au bon format
+                return "La date doit être au format a-mm-jj (année-mois-jour)."
 
-        # Chargez les tickets recommandés depuis la base de données pour l'affichage
-        tickets_recommandes = Ticket.query.filter(
-            Ticket.nomUtilisateur != current_user.username  # Exclure les tickets de l'utilisateur actif
-        ).all()
+            # Filtrer les tickets en fonction de la date
+            tickets = [ticket for ticket in tickets if tri_date == ticket.date_evenement]
 
-        return render_template('onglet1.html', tickets_recommandes=tickets_recommandes)
+        if tri_nom:
+            tickets = [ticket for ticket in tickets if tri_nom.lower() in ticket.nom_evenement.lower()]
+
     else:
-        # Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
-        flash('Veuillez vous connecter pour accéder à Onglet 1', 'danger')
-        return redirect(url_for('connexion'))
+        # Si la méthode est GET (affichage initial), récupérez tous les tickets non triés
+        tickets = Ticket.query.all()
+
+    return render_template('onglet1.html', tickets=tickets)
 
 # Route pour mettre à jour le solde
 @app.route('/mettre_a_jour_solde', methods=['POST'])
@@ -279,4 +276,17 @@ def mettre_a_jour_solde():
     else:
         flash('Utilisateur introuvable.', 'danger')
         return redirect(url_for('onglet3'))
-        
+
+@app.route('/check_username', methods=['POST'])
+def check_username():
+    data = request.get_json()
+    username = data['username']
+
+    user = User.query.filter_by(username=username).first()
+
+    if user:
+        response = {'usernameExists': True}
+    else:
+        response = {'usernameExists': False}
+
+    return jsonify(response)

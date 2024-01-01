@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Onglet 3</title>
+    <title>Onglet 2</title>
     <!-- Intégration de Bootstrap via CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
@@ -16,16 +16,13 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/">Accueil <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/">Accueil</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/liste_tickets">Liste des tickets</a>
-                </li> 
                 <li class="nav-item">
                     <a class="nav-link" href="/onglet1">Onglet 1</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/onglet2">Onglet 2</a>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/onglet2">Onglet 2 <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/onglet3">Onglet 3</a>
@@ -48,48 +45,45 @@
             {% else %}
                   <li class="nav-item">
                       <a class="nav-link" href="/connexion">Connexion</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/inscription">Inscription</a>
-                  </li>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/inscription">Inscription</a>
+              </li>
             {% endif %}       
       </ul>
     </nav>
 
     <!-- Contenu de la page -->
     <div class="container mt-4">
-        <!-- Contenu de l'Onglet 3 -->
-        <h1 class="display-4">Bienvenue sur l'Onglet 3</h1>
-        <p class="lead">Bonjour, {{ current_user.username }}!</p>
+        <!-- Contenu de l'Onglet 2 -->
+        <h1 class="display-4">Bienvenue sur l'Onglet 2</h1>
 
-        <!-- Formulaire de mise à jour du solde -->
-        <div id="mettreAJourSolde" class="mt-4">
-            <h2>Mettre à jour le solde</h2>
-            <form method="POST" action="/mettre_a_jour_solde">
+        <!-- Formulaire de mise en vente de tickets -->
+        <div class="mt-4">
+            <h2>Mettre en Vente des Tickets</h2>
+            <form method="POST" action="/mettre_en_vente">
                 <div class="form-group">
-                    <label for="nouveauSolde">Ajout de solde</label>
-                    <input type="number" class="form-control" id="nouveauSolde" name="nouveauSolde" placeholder="Entrez votre ajout de solde" required>
+                    <label for="nomEvenement">Nom de l'événement</label>
+                    <input type="text" class="form-control" id="nomEvenement" name="nomEvenement" placeholder="Entrez le nom de l'événement" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                <div class="form-group">
+                    <label for="dateEvenement">Date de l'événement</label>
+                    <input type="date" class="form-control" id="dateEvenement" name="dateEvenement" required>
+                </div>
+                <div class="form-group">
+                    <label for="lieuEvenement">Lieu de l'événement</label>
+                    <input type="text" class="form-control" id="lieuEvenement" name="lieuEvenement" placeholder="Entrez le lieu" required>
+                </div>
+                <div class="form-group">
+                    <label for="prixTicket">Prix du ticket</label>
+                    <input type="number" class="form-control" id="prixTicket" name="prixTicket" placeholder="Prix en euros" required>
+                </div>
+                <!-- Utilisez le nom d'utilisateur actif sans le demander dans le formulaire -->
+                <input type="hidden" name="nomUtilisateur" value="{{ current_user.username }}">
+                <button type="submit" class="btn btn-primary">Mettre en Vente</button>
             </form>
         </div>
-        <div id="ticketsEnVente" class="mt-4">
-            <h2>Tickets en vente par {{ current_user.username }}</h2>
-            <ul>
-                {% for ticket in tickets_en_vente %}
-                    <li>{{ ticket.nom_evenement }} - {{ ticket.prix_ticket }} €</li>
-                {% endfor %}
-            </ul>    
-        </div>
-        <div id="ticketsAchetes" class="mt-4">
-            <h2>Tickets possédés par {{ current_user.username }}</h2>
-            <ul>
-                {% for ticket in tickets_achetes %}
-                    <li>{{ ticket.nom_evenement }} - {{ ticket.prix_ticket }} €</li>
-                {% endfor %}
-            </ul> 
-       </div>
-       </div>
+    </div>
 
     <!-- Scripts Bootstrap et JavaScript -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

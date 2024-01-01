@@ -16,19 +16,16 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/">Accueil <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/">Accueil</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/liste_tickets">Liste des tickets</a>
-                </li> 
                 <li class="nav-item">
                     <a class="nav-link" href="/onglet1">Onglet 1</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/onglet2">Onglet 2</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/onglet3">Onglet 3</a>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/onglet3">Onglet 3 <span class="sr-only">(current)</span></a>
                 </li>
             </ul>
         </div>
@@ -60,14 +57,13 @@
     <div class="container mt-4">
         <!-- Contenu de l'Onglet 3 -->
         <h1 class="display-4">Bienvenue sur l'Onglet 3</h1>
-        <p class="lead">Bonjour, {{ current_user.username }}!</p>
+        <p class="lead" id="nomUtilisateurActif">Bonjour, {{ current_user.username }}!</p>
 
         <!-- Formulaire de mise à jour du solde -->
         <div id="mettreAJourSolde" class="mt-4">
-            <h2>Mettre à jour le solde</h2>
+            <h2>Augmenter le solde</h2>
             <form method="POST" action="/mettre_a_jour_solde">
                 <div class="form-group">
-                    <label for="nouveauSolde">Ajout de solde</label>
                     <input type="number" class="form-control" id="nouveauSolde" name="nouveauSolde" placeholder="Entrez votre ajout de solde" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Mettre à jour</button>

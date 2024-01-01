@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Inscription</title>
+    <!-- Intégration de Bootstrap via CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="display-4">Inscription</h1>
+        <form method="POST" action="/inscription" onsubmit="checkUsername(event)">
+            <div class="form-group">
+                <label for="username">Nom d'utilisateur</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+                <div id="usernameError" class="text-danger"></div>
+            </div>
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">S'inscrire</button>
+        </form>
+    </div>
+
+    <script>
+        function checkUsername(event) {
+            event.preventDefault(); // Empêche la soumission du formulaire par défaut
+
+            var username = document.getElementById('username').value;
+
+            // Envoi de la demande au serveur pour vérifier le nom d'utilisateur
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/check_username", true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.usernameExists) {
+                            document.getElementById('usernameError').innerHTML = "Ce nom d'utilisateur est déjà utilisé.";
+                        } else {
+                            // Si le nom d'utilisateur n'existe pas, vous pouvez soumettre le formulaire
+                            document.getElementById('usernameError').innerHTML = ""; // Effacez les messages d'erreur précédents
+                            event.target.submit(); // Soumettez le formulaire si le nom d'utilisateur est unique
+                        }
+                    } else {
+                        document.getElementById('usernameError').innerHTML = "Erreur de communication avec le serveur.";
+                    }
+                }
+            };
+            xhr.send(JSON.stringify({ username: username }));
+        }
+    </script>
+</body>
+</html>
