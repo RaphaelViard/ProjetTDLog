@@ -32,19 +32,8 @@ class Ticket(db.Model):
 
 with app.app_context():
     db.create_all()
-#    for i in range(10):
-#        ticket_existant = Ticket.query.filter_by(nom_evenement=f"evenement {i}").first()
-#        if not ticket_existant:
-#            nouveau_ticket = Ticket(nom_evenement=f"evenement {i}",
-#            date_evenement=datetime.date(2023, 12, 31),
-#            lieu_evenement=f"Lieu {i}",
-#            prix_ticket=50.0,
-#            nomUtilisateur=f"Utilisateur {i}",
-#            en_vente=True)
-#            db.session.add(nouveau_ticket)
-#            db.session.commit()
-#            print("Ticket ajouté !")
     all_tickets = Ticket.query.all()
     for ticket in all_tickets:
         print(ticket.nom_evenement)
+        print(ticket.lieu_evenement)
         print(ticket.id)

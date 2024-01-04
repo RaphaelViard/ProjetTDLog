@@ -5,6 +5,7 @@ from app import app, db
 from app.models import User, Ticket
 from datetime import datetime
 from flask import jsonify
+from io import BytesIO
 
 @app.route('/')
 def index():
@@ -116,24 +117,23 @@ def mettre_en_vente():
         date_evenement_str = request.form.get('dateEvenement')  # Obtenez la date sous forme de chaîne de caractères
         lieu_evenement = request.form.get('lieuEvenement')
         prix_ticket = float(request.form.get('prixTicket'))
-
-        # Convertissez la chaîne de caractères en objet date
         date_evenement = datetime.strptime(date_evenement_str, '%Y-%m-%d').date()
-
-        # Créez un nouveau ticket et associez-le à l'utilisateur actif
         new_ticket = Ticket(
             nom_evenement=nom_evenement,
             date_evenement=date_evenement,
             lieu_evenement=lieu_evenement,
             prix_ticket=prix_ticket,
             nomUtilisateur=current_user.username
-        )
+            )
         db.session.add(new_ticket)
         db.session.commit()
 
         flash('Le ticket a été mis en vente avec succès !', 'success')
+        return redirect(url_for('onglet2'))
 
     return redirect(url_for('onglet2'))
+
+
 
 # Route pour récupérer les tickets mis en vente par l'utilisateur actif au format JSON
 @app.route('/tickets_en_vente', methods=['GET'])
@@ -232,7 +232,7 @@ def onglet1():
         tri_nom = request.form.get('tri_nom')
 
         # Récupérez tous les tickets non triés par défaut
-        tickets = Ticket.query.all()
+        tickets = Ticket.query.filter(Ticket.nomUtilisateur != current_user.username,    Ticket.en_vente == True).all()
 
         # Appliquez la logique de filtrage en fonction des informations saisies par l'utilisateur
         if tri_lieu:
@@ -254,7 +254,7 @@ def onglet1():
 
     else:
         # Si la méthode est GET (affichage initial), récupérez tous les tickets non triés
-        tickets = Ticket.query.all()
+        tickets = Ticket.query.filter(Ticket.nomUtilisateur != current_user.username,    Ticket.en_vente == True).all()
 
     return render_template('onglet1.html', tickets=tickets)
 
