@@ -24,6 +24,7 @@ class Ticket(db.Model):
     prix_ticket = db.Column(db.Float)
     nomUtilisateur = db.Column(db.String(255))
     en_vente = db.Column(db.Boolean, default=True)
+    code_secret = db.Column(db.String(32), unique=True) 
 
     def __repr__(self):
         return f'<Ticket {self.nom_evenement}>'
@@ -32,8 +33,10 @@ class Ticket(db.Model):
 
 with app.app_context():
     db.create_all()
+#    db.drop_all()
     all_tickets = Ticket.query.all()
     for ticket in all_tickets:
         print(ticket.nom_evenement)
         print(ticket.lieu_evenement)
         print(ticket.id)
+        print(ticket.code_secret)

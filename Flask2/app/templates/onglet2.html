@@ -5,6 +5,17 @@
     <title>Onglet 2</title>
     <!-- Intégration de Bootstrap via CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .drag-drop-area {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .drag-drop-area.active {
+            border-color: #007bff;
+        }
+    </style>
 </head>
 <body>
     <!-- Barre de navigation -->
@@ -78,6 +89,13 @@
                     <label for="prixTicket">Prix du ticket</label>
                     <input type="number" class="form-control" id="prixTicket" name="prixTicket" placeholder="Prix en euros" required>
                 </div>
+                <div class="container mt-4">
+                    <h2>Ajouter des fichiers PDF (max. 5 Mo chacun)</h2>
+                    <div class="drag-drop-area" id="pdfDropArea">
+                        Glissez-déposez vos fichiers ici ou cliquez pour sélectionner
+                        <input type="file" id="fileInput" name="file" multiple style="display: none;">
+                    </div>
+                </div>
                 <!-- Utilisez le nom d'utilisateur actif sans le demander dans le formulaire -->
                 <input type="hidden" name="nomUtilisateur" value="{{ current_user.username }}">
                 <button type="submit" class="btn btn-primary">Mettre en Vente</button>
@@ -86,6 +104,72 @@
     </div>
 
     <!-- Scripts Bootstrap et JavaScript -->
+    <script>
+        // Empêcher le comportement par défaut du navigateur pour le glisser-déposer
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            document.getElementById('pdfDropArea').addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        // Mettre en surbrillance la zone de glisser-déposer lorsqu'un fichier est survolé
+        ['dragenter', 'dragover'].forEach(eventName => {
+            document.getElementById('pdfDropArea').addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            document.getElementById('pdfDropArea').addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight() {
+            document.getElementById('pdfDropArea').classList.add('active');
+        }
+
+        function unhighlight() {
+            document.getElementById('pdfDropArea').classList.remove('active');
+        }
+
+        // Gérer le dépôt de fichiers
+        document.getElementById('pdfDropArea').addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            let dt = e.dataTransfer;
+            let files = dt.files;
+
+            handleFiles(files);
+        }
+
+        // Manipuler les fichiers
+        function handleFiles(files) {
+            for (let i = 0; i < files.length; i++) {
+                let file = files[i];
+                // Traitez chaque fichier ici (téléchargement, stockage, etc.)
+                console.log('Nom du fichier:', file.name);
+
+            }
+
+        }
+
+
+        // Si vous voulez également déclencher la sélection de fichier par clic
+        document.getElementById('pdfDropArea').addEventListener('click', triggerFileInput, false);
+
+        function triggerFileInput() {
+            document.getElementById('fileInput').click();
+        }
+
+        document.getElementById('fileInput').addEventListener('change', handleFileInputChange, false);
+
+        function handleFileInputChange(e) {
+            let files = e.target.files;
+
+            handleFiles(files);
+        }
+    </script>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

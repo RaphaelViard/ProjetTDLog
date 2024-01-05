@@ -4,8 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 from app import app, db
 from app.models import User, Ticket
 from datetime import datetime
-from flask import jsonify
+from flask import jsonify,send_from_directory
 from io import BytesIO
+import secrets
 
 @app.route('/')
 def index():
@@ -62,6 +63,7 @@ def onglet3():
         flash('Veuillez vous connecter pour accéder à Onglet 3', 'danger')
         return redirect(url_for('connexion'))
 
+
 # Route d'inscription
 @app.route('/inscription', methods=['GET', 'POST'])
 def inscription():
@@ -108,6 +110,9 @@ def deconnexion():
     flash('Vous avez été déconnecté.', 'info')
     return render_template('deconnexion.html')
 
+
+codes_and_files = {}
+
 @app.route('/mettre_en_vente', methods=['POST'])
 @login_required
 def mettre_en_vente():
@@ -118,21 +123,45 @@ def mettre_en_vente():
         lieu_evenement = request.form.get('lieuEvenement')
         prix_ticket = float(request.form.get('prixTicket'))
         date_evenement = datetime.strptime(date_evenement_str, '%Y-%m-%d').date()
+        code_secret = secrets.token_urlsafe(16)
+
         new_ticket = Ticket(
             nom_evenement=nom_evenement,
             date_evenement=date_evenement,
             lieu_evenement=lieu_evenement,
             prix_ticket=prix_ticket,
-            nomUtilisateur=current_user.username
+            nomUtilisateur=current_user.username,
+            code_secret=code_secret
             )
         db.session.add(new_ticket)
         db.session.commit()
+
+        uploaded_files = request.files.getlist('file')
+        for file in uploaded_files:
+            if file.filename != '':
+                filename = secrets.secure_filename(file.filename)
+                codes_and_files[code_secret] = filename
+      
 
         flash('Le ticket a été mis en vente avec succès !', 'success')
         return redirect(url_for('onglet2'))
 
     return redirect(url_for('onglet2'))
 
+@app.route('/telecharger_fichier/<code_secret>', methods=['GET'])
+@login_required
+def telecharger_fichier(code_secret):
+    if code_secret in code_and_files:
+        filename = code_and_files[code_secret]
+
+        # Ici, vous devriez avoir le chemin complet vers le fichier à télécharger
+        # Assurez-vous d'avoir le chemin approprié vers votre répertoire de téléchargement
+        chemin_fichier = f'/chemin/vers/repertoire/telechargement/{filename}'
+        
+        return send_file(chemin_fichier, as_attachment=True)
+    else:
+        flash('Fichier introuvable', 'danger')
+        return redirect(url_for('onglet3'))
 
 
 # Route pour récupérer les tickets mis en vente par l'utilisateur actif au format JSON
