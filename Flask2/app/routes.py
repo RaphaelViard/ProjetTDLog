@@ -70,9 +70,10 @@ def inscription():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        Bio = request.form['Bio']
 
         # Créez un nouvel utilisateur et ajoutez-le à la base de données
-        new_user = User(username=username, password=password,money=0)
+        new_user = User(username=username, password=password,Bio=Bio,money=0)
         db.session.add(new_user)
         db.session.commit()
 
@@ -311,6 +312,25 @@ def mettre_a_jour_solde():
         flash('Utilisateur introuvable.', 'danger')
         return redirect(url_for('onglet3'))
 
+@app.route('/mettre_a_jour_Bio', methods=['POST'])
+@login_required
+def mettre_a_jour_Bio():
+    if request.method == 'POST':
+        nouvelle_bio = request.form['NouvelleBio']
+
+        # Recherchez l'utilisateur actuel dans la base de données
+        user = User.query.filter_by(id=current_user.id).first()
+        user.Bio = nouvelle_bio
+        # Enregistrez les modifications dans la base de données
+        db.session.commit()
+
+        flash('Bio mise à jour avec succès !', 'success')
+        return redirect(url_for('onglet3'))  # Redirection vers l'onglet 3 après la mise à jour du solde
+    else:
+        flash('Utilisateur introuvable.', 'danger')
+        return redirect(url_for('onglet3'))
+
+
 @app.route('/check_username', methods=['POST'])
 def check_username():
     data = request.get_json()
@@ -324,3 +344,60 @@ def check_username():
         response = {'usernameExists': False}
 
     return jsonify(response)
+
+@app.route('/PageUser/<nom_utilisateur>',methods=['GET'])
+@login_required
+def PageUser(nom_utilisateur):
+      Utilisateur = User.query.filter_by(username=nom_utilisateur).first()
+      tickets = Ticket.query.filter_by(nomUtilisateur=Utilisateur.username)
+      if Utilisateur:
+            return render_template('PageUser.html', Utilisateur=Utilisateur,tickets=tickets) 
+
+@app.route('/Retirervente',methods=['POST'])
+@login_required
+def Retirervente():
+    ticket_id = request.form['ticket_id']
+    ticket= Ticket.query.filter_by(id=ticket_id).first()
+    ticket.en_vente = False
+    db.session.commit()
+    return redirect(url_for('onglet3'))
+
+@app.route('/mettrevente',methods=['POST'])
+@login_required
+def mettrevente():
+    ticket_id = request.form['ticket_id']
+    prix = float(request.form['prix'])
+    ticket= Ticket.query.filter_by(id=ticket_id).first()
+    if ticket:
+        ticket.en_vente = True
+        ticket.prix_ticket = prix
+        db.session.commit()
+        return redirect(url_for('onglet3'))
+
+  
+@app.route('/Retirersite',methods=['POST'])
+@login_required
+def Retirersite():
+    ticket_id = request.form['ticket_id']
+    ticket= Ticket.query.filter_by(id=ticket_id).first()
+    if ticket:
+        db.session.delete(ticket)
+        db.session.commit()
+        return redirect(url_for('onglet3'))
+
+@app.route('/Changerprix',methods=['POST'])
+@login_required
+def Changerprix():
+    ticket_id = request.form['ticket_id']
+    nouveau_prix = float(request.form['nouveau_prix'])
+    ticket= Ticket.query.filter_by(id=ticket_id).first()
+    if ticket:
+        ticket.prix_ticket = nouveau_prix
+        db.session.commit()
+        return redirect(url_for('onglet3'))
+
+  
+
+
+
+

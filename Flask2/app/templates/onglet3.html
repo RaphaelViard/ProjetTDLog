@@ -5,6 +5,53 @@
     <title>Onglet 3</title>
     <!-- Intégration de Bootstrap via CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .custom-margin-bottom {
+            margin-bottom: 10mm; /* Ajoute un espace de 10 mm entre chaque élément de la liste */
+        }
+    </style>
+       <style>
+        /* Style pour la fenêtre modale */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 20% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+            text-align: center;
+        }
+
+        /* Style pour les boutons */
+        #confirmButton,
+        #cancelButton {
+            margin: 5px;
+            padding: 8px 20px;
+            cursor: pointer;
+        }
+
+        #confirmButton {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+        }
+
+        #cancelButton {
+            background-color: #d9534f;
+            color: white;
+            border: none;
+        }
+    </style>
 </head>
 <body>
     <!-- Barre de navigation -->
@@ -57,7 +104,7 @@
     <div class="container mt-4">
         <!-- Contenu de l'Onglet 3 -->
         <h1 class="display-4">Bienvenue sur l'Onglet 3</h1>
-        <p class="lead" id="nomUtilisateurActif">Bonjour, {{ current_user.username }}!</p>
+        <p class="lead" id="nomUtilisateurActif">Bonjour, {{ current_user.username }} !</p>
 
         <!-- Formulaire de mise à jour du solde -->
         <div id="mettreAJourSolde" class="mt-4">
@@ -69,11 +116,32 @@
                 <button type="submit" class="btn btn-primary">Mettre à jour</button>
             </form>
         </div>
+        <div id="mettreAJourBio" class="mt-4">
+            <h2>Modifier votre Bio</h2>
+            <p>Votre bio actuelle : {{ current_user.Bio }}</p>
+            <form method="POST" action="/mettre_a_jour_Bio">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="NouvelleBio" name="NouvelleBio" placeholder="Entrez votre nouvelle bio" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Mettre à jour</button>
+            </form>
+        </div>
+        
         <div id="ticketsEnVente" class="mt-4">
             <h2>Tickets en vente par {{ current_user.username }}</h2>
             <ul>
                 {% for ticket in tickets_en_vente %}
-                    <li>{{ ticket.nom_evenement }} - {{ ticket.prix_ticket }} €</li>
+                    <li class="d-flex justify-content-between align-items-center custom-margin-bottom">
+                        <span>Evenement : {{ ticket.nom_evenement }} - Prix de vente : {{ ticket.prix_ticket }} € - Code unique : {{ ticket.code_secret }}</span>
+                        <form method="POST" action="/Retirervente" id="retirerTicketForm">
+                            <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+                            <button type="button" class="btn btn-primary float-right retirer-vente">Retirer de la vente</button>
+                        </form>
+                        <form method="POST" action="/Retirersite" id="retirerSiteForm">
+                            <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+                            <a href="#" onclick="openModal()" class="btn btn-danger float-right retirer-site">Retirer du site</a>
+                        </form>
+                    </li>
                 {% endfor %}
             </ul>    
         </div>
@@ -81,15 +149,97 @@
             <h2>Tickets possédés par {{ current_user.username }}</h2>
             <ul>
                 {% for ticket in tickets_achetes %}
-                    <li>{{ ticket.nom_evenement }} - {{ ticket.prix_ticket }} €</li>
+                    <li class="d-flex justify-content-between align-items-center custom-margin-bottom">
+                        <span> Evenement : {{ ticket.nom_evenement }} - Acheté à {{ ticket.prix_ticket }} € - Code unique : {{ ticket.code_secret }}</span>
+                        <form method="POST" action="/mettrevente" id="mettreTicketForm">
+                            <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+                            <button type="button" class="btn btn-primary float-right mettrevente" onclick="openModal2(event)">Mettre en vente</button>
+                        </form>
+                        <form method="POST" action="/Retirersite" id="retirerSiteForm">
+                            <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+                            <a href="#" onclick="openModal()" class="btn btn-danger float-right retirer-site">Retirer du site</a>
+                        </form>
+                    </li>
                 {% endfor %}
             </ul> 
        </div>
        </div>
+       <div id="confirmationModal" class="modal">
+         <div class="modal-content">
+            <h2>Êtes-vous sûr de vouloir retirer ce ticket du site ?</h2>
+            <button id="confirmButton" onclick="confirmAction()">Confirmer</button>
+            <button id="cancelButton" onclick="closeModal()">Annuler</button>
+         </div>
+       </div>
+        <div id="pricemodal" class="modal">
+             <div class="modal-content">
+                <h2>A quel prix voulez vous mettre ce ticket en vente ?</h2>
+                <form method="POST" action="/mettrevente" id="prixVenteForm">
+                    <input type="hidden" id = "ticketId" name="ticket_id" value="">
+                    <input type="number" name="prix" placeholder="Prix de vente" required>
+                    <button type="button" id="confirmButton" onclick="confirmAction2()">Confirmer</button>
+                    <button type="button" id="cancelButton" onclick="closeModal2()">Annuler</button>
+                </form>
+            </div>
+        </div>
+
 
     <!-- Scripts Bootstrap et JavaScript -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        const retirerButton = document.querySelector('.retirer-vente');
+        const retirerForm = document.querySelector('#retirerTicketForm');
+    
+        retirerButton.addEventListener('click', function(event) {
+            event.preventDefault();
+    
+            fetch('/Retirervente', {
+                method: 'POST',
+                body: new FormData(retirerForm),
+            })
+            .then(response => {
+                console.log('Ticket retiré de la vente avec succès.');
+                window.location.href = '/onglet3'; // Redirection vers onglet3 après avoir retiré le ticket de la vente
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+            });
+        });
+    </script>   
+    <script>
+        // Fonction pour ouvrir le modal
+        function openModal() {
+            document.getElementById('confirmationModal').style.display = 'block';
+        }
+        function openModal2(event) {
+            event.preventDefault();
+            document.getElementById('pricemodal').style.display = 'block';
+            var ticketId = document.querySelector('#mettreTicketForm input[name="ticket_id"]').value;
+            document.getElementById('ticketId').value = ticketId;
+        }
+    
+        // Fonction pour fermer le modal
+        function closeModal() {
+            document.getElementById('confirmationModal').style.display = 'none';
+        }
+        
+        function closeModal2() {
+            document.getElementById('pricemodal').style.display = 'none';
+        }
+    
+        // Fonction pour exécuter l'action de confirmation (retrait du site)
+        function confirmAction() {
+            document.getElementById('retirerSiteForm').submit(); // Soumission du formulaire pour retirer le ticket du site
+            closeModal(); // Fermeture du modal après confirmation
+        }
+
+            // Fonction pour exécuter l'action de confirmation
+    function confirmAction2() {
+        document.getElementById('prixVenteForm').submit(); // Soumettre le formulaire pour enregistrer le prix de vente
+        closeModal2(); // Fermer le modal après la confirmation
+    }
+</script>
 </body>
 </html>
