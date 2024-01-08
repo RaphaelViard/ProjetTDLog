@@ -254,38 +254,43 @@ def nouvelle_page():
     return render_template('liste_tickets.html',tickets=tickets)
 
 @app.route('/onglet1', methods=['GET', 'POST'])
+@login_required
 def onglet1():
-    if request.method == 'POST':
-        tri_lieu = request.form.get('tri_lieu')
-        tri_date = request.form.get('tri_date')
-        tri_nom = request.form.get('tri_nom')
+    if current_user.is_authenticated:
+        if request.method == 'POST':
+            tri_lieu = request.form.get('tri_lieu')
+            tri_date = request.form.get('tri_date')
+            tri_nom = request.form.get('tri_nom')
 
-        # Récupérez tous les tickets non triés par défaut
-        tickets = Ticket.query.filter(Ticket.nomUtilisateur != current_user.username,    Ticket.en_vente == True).all()
+            # Récupérez tous les tickets non triés par défaut
+            tickets = Ticket.query.filter(Ticket.nomUtilisateur != current_user.username, Ticket.en_vente == True).all()
 
-        # Appliquez la logique de filtrage en fonction des informations saisies par l'utilisateur
-        if tri_lieu:
-            tickets = [ticket for ticket in tickets if tri_lieu.lower() in ticket.lieu_evenement.lower()]
+            # Appliquez la logique de filtrage en fonction des informations saisies par l'utilisateur
+            if tri_lieu:
+                tickets = [ticket for ticket in tickets if tri_lieu.lower() in ticket.lieu_evenement.lower()]
 
-        if tri_date:
-            # Convertissez la date entrée au format "a-mm-jj" en objet datetime
-            try:
-                tri_date = datetime.strptime(tri_date, '%Y-%m-%d').date()
-            except ValueError:
-                # Gestion de l'erreur si la date n'est pas au bon format
-                return "La date doit être au format a-mm-jj (année-mois-jour)."
+            if tri_date:
+                # Convertissez la date entrée au format "a-mm-jj" en objet datetime
+                try:
+                    tri_date = datetime.strptime(tri_date, '%Y-%m-%d').date()
+                except ValueError:
+                    # Gestion de l'erreur si la date n'est pas au bon format
+                    return "La date doit être au format a-mm-jj (année-mois-jour)."
 
-            # Filtrer les tickets en fonction de la date
-            tickets = [ticket for ticket in tickets if tri_date == ticket.date_evenement]
+                # Filtrer les tickets en fonction de la date
+                tickets = [ticket for ticket in tickets if tri_date == ticket.date_evenement]
 
-        if tri_nom:
-            tickets = [ticket for ticket in tickets if tri_nom.lower() in ticket.nom_evenement.lower()]
+            if tri_nom:
+                tickets = [ticket for ticket in tickets if tri_nom.lower() in ticket.nom_evenement.lower()]
 
+        else:
+            # Si la méthode est GET (affichage initial), récupérez tous les tickets non triés
+            tickets = Ticket.query.filter(Ticket.nomUtilisateur != current_user.username, Ticket.en_vente == True).all()
+
+        return render_template('onglet1.html', tickets=tickets)
     else:
-        # Si la méthode est GET (affichage initial), récupérez tous les tickets non triés
-        tickets = Ticket.query.filter(Ticket.nomUtilisateur != current_user.username,    Ticket.en_vente == True).all()
-
-    return render_template('onglet1.html', tickets=tickets)
+        flash('Veuillez vous connecter pour accéder à Onglet 2', 'danger')
+        return redirect(url_for('connexion'))
 
 # Route pour mettre à jour le solde
 @app.route('/mettre_a_jour_solde', methods=['POST'])

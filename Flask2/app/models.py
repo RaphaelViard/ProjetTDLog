@@ -31,12 +31,4 @@ class Ticket(db.Model):
 
 
 
-with app.app_context():
-    db.create_all()
-#    db.drop_all()
-    all_tickets = Ticket.query.all()
-    for ticket in all_tickets:
-        print(ticket.nom_evenement)
-        print(ticket.lieu_evenement)
-        print(ticket.id)
-        print(ticket.code_secret)
+
