@@ -349,7 +349,7 @@ def check_username():
 @login_required
 def PageUser(nom_utilisateur):
       Utilisateur = User.query.filter_by(username=nom_utilisateur).first()
-      tickets = Ticket.query.filter_by(nomUtilisateur=Utilisateur.username)
+      tickets = Ticket.query.filter_by(nomUtilisateur=Utilisateur.username, en_vente=True)
       if Utilisateur:
             return render_template('PageUser.html', Utilisateur=Utilisateur,tickets=tickets) 
 
