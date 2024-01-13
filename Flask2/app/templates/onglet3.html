@@ -34,7 +34,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/deconnexion">Déconnexion</a>
                 </li>
-               <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link" style="color: green;" href="#">
                        Solde: {{ current_user.money }} €
                     </a>
@@ -43,14 +43,14 @@
                     <span class="nav-link" style="color: white;">Username: {{ current_user.username }}</span>
                 </li>
             {% else %}
-                  <li class="nav-item">
-                      <a class="nav-link" href="/connexion">Connexion</a>
-                  </li>
-                  <li class="nav-item">
+                <li class="nav-item">
+                    <a class="nav-link" href="/connexion">Connexion</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="/inscription">Inscription</a>
-                  </li>
-            {% endif %}       
-      </ul>
+                </li>
+            {% endif %}
+        </ul>
     </nav>
 
     <!-- Contenu de la page -->
@@ -75,17 +75,26 @@
                 {% for ticket in tickets_en_vente %}
                     <li>{{ ticket.nom_evenement }} - {{ ticket.prix_ticket }} €</li>
                 {% endfor %}
-            </ul>    
+            </ul>
         </div>
         <div id="ticketsAchetes" class="mt-4">
             <h2>Tickets possédés par {{ current_user.username }}</h2>
             <ul>
                 {% for ticket in tickets_achetes %}
-                    <li>{{ ticket.nom_evenement }} - {{ ticket.prix_ticket }} €</li>
+                    <li>
+                        {{ ticket.nom_evenement }} - {{ ticket.prix_ticket }} €
+                        {% if ticket.chemin_pdf %}
+                            <a href="{{ url_for('download_pdf', ticket_id=ticket.id) }}" class="btn btn-primary">
+                                Afficher PDF
+                            </a
+                        {% else %}
+                            Aucun PDF associé
+                        {% endif %}
+                    </li>
                 {% endfor %}
-            </ul> 
-       </div>
-       </div>
+            </ul>
+        </div>
+    </div>
 
     <!-- Scripts Bootstrap et JavaScript -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

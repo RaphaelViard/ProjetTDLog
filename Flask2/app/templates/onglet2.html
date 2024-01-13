@@ -60,7 +60,7 @@
               <li class="nav-item">
                 <a class="nav-link" href="/inscription">Inscription</a>
               </li>
-            {% endif %}       
+            {% endif %}
       </ul>
     </nav>
 
@@ -72,7 +72,7 @@
         <!-- Formulaire de mise en vente de tickets -->
         <div class="mt-4">
             <h2>Mettre en Vente des Tickets</h2>
-            <form method="POST" action="/mettre_en_vente">
+            <form method="POST" action="/mettre_en_vente" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="nomEvenement">Nom de l'événement</label>
                     <input type="text" class="form-control" id="nomEvenement" name="nomEvenement" placeholder="Entrez le nom de l'événement" required>
@@ -90,11 +90,12 @@
                     <input type="number" class="form-control" id="prixTicket" name="prixTicket" placeholder="Prix en euros" required>
                 </div>
                 <div class="container mt-4">
-                    <h2>Ajouter des fichiers PDF (max. 5 Mo chacun)</h2>
+                    <h2>Ajouter un fichier PDF (max. 5 Mo)</h2>
                     <div class="drag-drop-area" id="pdfDropArea">
-                        Glissez-déposez vos fichiers ici ou cliquez pour sélectionner
-                        <input type="file" id="fileInput" name="file" multiple style="display: none;">
+                        Glissez-déposez votre fichier ici ou cliquez pour sélectionner
+                        <input type="file" id="fileInput" name="file" accept=".pdf" style="display: none;" required>
                     </div>
+                    <p id="selectedFileName"></p> <!-- Ajout d'un paragraphe pour afficher le nom du fichier -->
                 </div>
                 <!-- Utilisez le nom d'utilisateur actif sans le demander dans le formulaire -->
                 <input type="hidden" name="nomUtilisateur" value="{{ current_user.username }}">
@@ -144,15 +145,11 @@
 
         // Manipuler les fichiers
         function handleFiles(files) {
-            for (let i = 0; i < files.length; i++) {
-                let file = files[i];
-                // Traitez chaque fichier ici (téléchargement, stockage, etc.)
-                console.log('Nom du fichier:', file.name);
-
+            if (files.length > 0) {
+                // Mettre à jour le texte du paragraphe avec le nom du fichier sélectionné
+                document.getElementById('selectedFileName').textContent = 'Fichier sélectionné : ' + files[0].name;
             }
-
         }
-
 
         // Si vous voulez également déclencher la sélection de fichier par clic
         document.getElementById('pdfDropArea').addEventListener('click', triggerFileInput, false);

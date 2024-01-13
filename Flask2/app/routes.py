@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, Response
 from flask_login import login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
 from app import app, db
@@ -7,6 +7,8 @@ from datetime import datetime
 from flask import jsonify,send_from_directory
 from io import BytesIO
 import secrets
+import os
+from werkzeug.utils import secure_filename
 
 @app.route('/')
 def index():
@@ -42,6 +44,37 @@ def onglet2():
     else:
         flash('Veuillez vous connecter pour accéder à Onglet 2', 'danger')
         return redirect(url_for('connexion'))
+
+@app.route('/acheter_ticket', methods=['POST'])
+@login_required
+def acheter_ticket():
+    if request.method == 'POST':
+        ticket_id = request.form.get('ticket_id')
+        if ticket_id:
+            ticket = Ticket.query.get(ticket_id)
+            if ticket and ticket.nomUtilisateur != current_user.username:
+                acheteur = User.query.filter_by(username=current_user.username).first()
+                vendeur = User.query.filter_by(username=ticket.nomUtilisateur).first()
+                if acheteur and vendeur:
+                    prix_ticket=ticket.prix_ticket
+                    if acheteur.money >= prix_ticket:
+                        acheteur.money -= prix_ticket
+                        vendeur.money += prix_ticket
+                        ticket.nomUtilisateur = acheteur.username
+                        ticket.en_vente = False
+                        db.session.commit()
+                        flash('Achat du ticket réussi !', 'success')
+                        return redirect(url_for('onglet1'))
+                    else:
+                         return render_template('solde_insuffisant.html')
+            else:
+                flash('Le ticket sélectionné n\'est pas disponible.', 'danger')
+                return jsonify({"status": "error"})
+        else:
+            flash('Erreur lors de l\'achat du ticket.', 'danger')
+            return jsonify({"status": "error"})
+
+    return jsonify({"status": "error"})
 
 @app.route('/onglet3')
 @login_required
@@ -111,7 +144,14 @@ def deconnexion():
     return render_template('deconnexion.html')
 
 
-codes_and_files = {}
+# Fonction pour générer un code_secret unique
+def generate_unique_code():
+    while True:
+        code_secret = secrets.token_urlsafe(16)
+        # Vérifiez si le code_secret existe déjà dans la base de données
+        existing_ticket = Ticket.query.filter_by(code_secret=code_secret).first()
+        if not existing_ticket:
+            return code_secret
 
 @app.route('/mettre_en_vente', methods=['POST'])
 @login_required
@@ -119,11 +159,31 @@ def mettre_en_vente():
     if request.method == 'POST':
         # Récupérez les données du formulaire
         nom_evenement = request.form.get('nomEvenement')
-        date_evenement_str = request.form.get('dateEvenement')  # Obtenez la date sous forme de chaîne de caractères
+        date_evenement_str = request.form.get('dateEvenement')
         lieu_evenement = request.form.get('lieuEvenement')
-        prix_ticket = float(request.form.get('prixTicket'))
-        date_evenement = datetime.strptime(date_evenement_str, '%Y-%m-%d').date()
-        code_secret = secrets.token_urlsafe(16)
+        prix_ticket = request.form.get('prixTicket')
+
+        # Vérifiez si tous les champs obligatoires sont remplis
+        if not nom_evenement or not date_evenement_str or not lieu_evenement or not prix_ticket:
+            flash('Veuillez remplir tous les champs obligatoires.', 'danger')
+            return redirect(url_for('onglet2'))
+
+        # Vérifiez le format de la date
+        try:
+            date_evenement = datetime.strptime(date_evenement_str, '%Y-%m-%d').date()
+        except ValueError:
+            flash('Le format de la date est incorrect. Utilisez le format YYYY-MM-DD.', 'danger')
+            return redirect(url_for('onglet2'))
+
+        code_secret = generate_unique_code()
+
+        uploaded_file = request.files['file']
+        if uploaded_file.filename != '':
+            filename = secure_filename(uploaded_file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            uploaded_file.save(file_path)
+        else:
+            file_path = None
 
         new_ticket = Ticket(
             nom_evenement=nom_evenement,
@@ -131,38 +191,45 @@ def mettre_en_vente():
             lieu_evenement=lieu_evenement,
             prix_ticket=prix_ticket,
             nomUtilisateur=current_user.username,
-            code_secret=code_secret
-            )
+            code_secret=code_secret,
+            chemin_pdf=file_path,
+        )
         db.session.add(new_ticket)
         db.session.commit()
-
-        uploaded_files = request.files.getlist('file')
-        for file in uploaded_files:
-            if file.filename != '':
-                filename = secrets.secure_filename(file.filename)
-                codes_and_files[code_secret] = filename
-      
 
         flash('Le ticket a été mis en vente avec succès !', 'success')
         return redirect(url_for('onglet2'))
 
     return redirect(url_for('onglet2'))
 
-@app.route('/telecharger_fichier/<code_secret>', methods=['GET'])
+# Route pour télécharger un PDF
+@app.route('/download_pdf/<int:ticket_id>')
 @login_required
-def telecharger_fichier(code_secret):
-    if code_secret in code_and_files:
-        filename = code_and_files[code_secret]
+def download_pdf(ticket_id):
+    ticket = Ticket.query.get(ticket_id)
 
-        # Ici, vous devriez avoir le chemin complet vers le fichier à télécharger
-        # Assurez-vous d'avoir le chemin approprié vers votre répertoire de téléchargement
-        chemin_fichier = f'/chemin/vers/repertoire/telechargement/{filename}'
-        
-        return send_file(chemin_fichier, as_attachment=True)
-    else:
-        flash('Fichier introuvable', 'danger')
+    if not ticket or ticket.nomUtilisateur != current_user.username:
+        flash('Vous n\'avez pas accès à ce ticket.', 'danger')
         return redirect(url_for('onglet3'))
 
+    if not ticket.chemin_pdf:
+        flash('Aucun PDF associé à ce ticket.', 'danger')
+        return redirect(url_for('onglet3'))
+
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], ticket.chemin_pdf)
+
+    def generate():
+        with open(file_path, 'rb') as pdf_file:
+            while True:
+                chunk = pdf_file.read(1024)
+                if not chunk:
+                    break
+                yield chunk
+
+    response = Response(generate(), content_type='application/pdf')
+    response.headers['Content-Disposition'] = f'inline; filename={secure_filename(ticket.chemin_pdf)}'
+
+    return response
 
 # Route pour récupérer les tickets mis en vente par l'utilisateur actif au format JSON
 @app.route('/tickets_en_vente', methods=['GET'])
@@ -216,37 +283,6 @@ def tickets_recommandes():
         # Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
         flash('Veuillez vous connecter pour accéder à cette page', 'danger')
         return redirect(url_for('connexion'))
-
-@app.route('/acheter_ticket', methods=['POST'])
-@login_required
-def acheter_ticket():
-    if request.method == 'POST':
-        ticket_id = request.form.get('ticket_id')
-        if ticket_id:
-            ticket = Ticket.query.get(ticket_id)
-            if ticket and ticket.nomUtilisateur != current_user.username:
-                acheteur = User.query.filter_by(username=current_user.username).first()
-                vendeur = User.query.filter_by(username=ticket.nomUtilisateur).first()
-                if acheteur and vendeur:
-                    prix_ticket=ticket.prix_ticket
-                    if acheteur.money >= prix_ticket:
-                        acheteur.money -= prix_ticket
-                        vendeur.money += prix_ticket
-                        ticket.nomUtilisateur = acheteur.username
-                        ticket.en_vente = False
-                        db.session.commit()
-                        flash('Achat du ticket réussi !', 'success')
-                        return redirect(url_for('onglet1'))
-                    else:
-                         return render_template('solde_insuffisant.html')   
-            else:
-                flash('Le ticket sélectionné n\'est pas disponible.', 'danger')
-                return jsonify({"status": "error"})
-        else:
-            flash('Erreur lors de l\'achat du ticket.', 'danger')
-            return jsonify({"status": "error"})
-
-    return jsonify({"status": "error"})
 
 @app.route('/liste_tickets')
 def nouvelle_page():
