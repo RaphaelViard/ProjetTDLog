@@ -1,8 +1,8 @@
-"""Ajouter la colonne id à la table Ticket
+"""Initial migration
 
-Revision ID: 5f6832b92335
+Revision ID: b467ea620138
 Revises: 
-Create Date: 2024-01-08 15:37:58.752814
+Create Date: 2024-01-13 20:04:47.040398
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '5f6832b92335'
+revision = 'b467ea620138'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -35,6 +35,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(length=80), nullable=False),
     sa.Column('password', sa.String(length=120), nullable=False),
+    sa.Column('Bio', sa.String(length=9999), nullable=True),
     sa.Column('money', sa.Float(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('username')

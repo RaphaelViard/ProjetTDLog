@@ -81,7 +81,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <span class="nav-link" style="color: white;">Username: {{ current_user.username }}</span>
+                    <span class="nav-link" style="color: white;">{{ current_user.username }}</span>
                 </li>
             {% else %}
                 <li class="nav-item">
@@ -122,7 +122,7 @@
                     <ul>
                         {% for ticket in tickets %}
                             <li>
-                                Événement: {{ ticket.nom_evenement }}, Date: {{ ticket.date_evenement }}, Lieu: {{ ticket.lieu_evenement }}, Prix: {{ ticket.prix_ticket }}€, Vendeur: {{ ticket.nomUtilisateur }}
+                                Événement: {{ ticket.nom_evenement }}, Date: {{ ticket.date_evenement }}, Lieu: {{ ticket.lieu_evenement }}, Prix: {{ ticket.prix_ticket }}€, Vendeur:  <a href="{{ url_for('PageUser', nom_utilisateur=ticket.nomUtilisateur) }}">{{ ticket.nomUtilisateur }}</a>, Code unique: {{ ticket.code_secret }}
                                     <form method="POST" action="/acheter_ticket">
                                         <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
                                         <button type="submit" class="btn btn-primary acheter-button">Acheter</button>
@@ -170,7 +170,8 @@
             form.submit();
             modal.style.display = 'none';
         });
-    </script>    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 

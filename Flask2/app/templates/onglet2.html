@@ -51,7 +51,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <span class="nav-link" style="color: white;">Username: {{ current_user.username }}</span>
+                    <span class="nav-link" style="color: white;">{{ current_user.username }}</span>
                 </li>
             {% else %}
                   <li class="nav-item">
@@ -72,7 +72,7 @@
         <!-- Formulaire de mise en vente de tickets -->
         <div class="mt-4">
             <h2>Mettre en Vente des Tickets</h2>
-            <form method="POST" action="/mettre_en_vente" enctype="multipart/form-data">
+            <form method="POST" action="/mettre_en_vente" enctype="multipart/form-data" onsubmit="return validateForm();">
                 <div class="form-group">
                     <label for="nomEvenement">Nom de l'événement</label>
                     <input type="text" class="form-control" id="nomEvenement" name="nomEvenement" placeholder="Entrez le nom de l'événement" required>
@@ -164,6 +164,22 @@
             let files = e.target.files;
 
             handleFiles(files);
+        }
+
+        // Validation du formulaire
+        function validateForm() {
+            const nomEvenement = document.getElementById('nomEvenement').value;
+            const dateEvenement = document.getElementById('dateEvenement').value;
+            const lieuEvenement = document.getElementById('lieuEvenement').value;
+            const prixTicket = document.getElementById('prixTicket').value;
+            const fileInput = document.getElementById('fileInput');
+
+            if (nomEvenement === '' || dateEvenement === '' || lieuEvenement === '' || prixTicket === '' || !fileInput.files.length) {
+                alert("Tous les champs doivent être remplis, y compris la sélection du fichier PDF.");
+                return false; // Empêcher la soumission du formulaire
+            }
+
+            return true; // Autoriser la soumission du formulaire
         }
     </script>
 

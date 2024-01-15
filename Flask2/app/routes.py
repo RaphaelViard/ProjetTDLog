@@ -103,9 +103,10 @@ def inscription():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        Bio = request.form['Bio']
 
         # Créez un nouvel utilisateur et ajoutez-le à la base de données
-        new_user = User(username=username, password=password,money=0)
+        new_user = User(username=username, password=password,Bio=Bio,money=0)
         db.session.add(new_user)
         db.session.commit()
 
@@ -347,6 +348,25 @@ def mettre_a_jour_solde():
         flash('Utilisateur introuvable.', 'danger')
         return redirect(url_for('onglet3'))
 
+@app.route('/mettre_a_jour_Bio', methods=['POST'])
+@login_required
+def mettre_a_jour_Bio():
+    if request.method == 'POST':
+        nouvelle_bio = request.form['NouvelleBio']
+
+        # Recherchez l'utilisateur actuel dans la base de données
+        user = User.query.filter_by(id=current_user.id).first()
+        user.Bio = nouvelle_bio
+        # Enregistrez les modifications dans la base de données
+        db.session.commit()
+
+        flash('Bio mise à jour avec succès !', 'success')
+        return redirect(url_for('onglet3'))  # Redirection vers l'onglet 3 après la mise à jour du solde
+    else:
+        flash('Utilisateur introuvable.', 'danger')
+        return redirect(url_for('onglet3'))
+
+
 @app.route('/check_username', methods=['POST'])
 def check_username():
     data = request.get_json()
@@ -360,3 +380,76 @@ def check_username():
         response = {'usernameExists': False}
 
     return jsonify(response)
+
+@app.route('/PageUser/<nom_utilisateur>',methods=['GET'])
+@login_required
+def PageUser(nom_utilisateur):
+      Utilisateur = User.query.filter_by(username=nom_utilisateur).first()
+      tickets = Ticket.query.filter_by(nomUtilisateur=Utilisateur.username, en_vente=True)
+      if Utilisateur:
+            return render_template('PageUser.html', Utilisateur=Utilisateur,tickets=tickets)
+
+@app.route('/supprimer_ticket/<int:ticket_id>', methods=['POST'])
+def supprimer_ticket(ticket_id):
+    ticket = Ticket.query.get(ticket_id)
+    if ticket:
+        db.session.delete(ticket)
+        db.session.commit()
+    return redirect('/onglet3')  # Redirection vers l'Onglet 3 après la suppression
+
+
+# Route pour remettre en vente un ticket (POST)
+@app.route('/remettre_vente/<int:ticket_id>', methods=['POST'])
+def remettre_vente(ticket_id):
+    ticket = Ticket.query.get(ticket_id)
+
+    if ticket:
+        ticket.en_vente = True
+        db.session.commit()
+        return jsonify({'message': 'Ticket remis en vente avec succès'}), 200
+    else:
+        return jsonify({'error': 'Ticket non trouvé'}), 404
+
+# Routes pour retirer un ticket de la vente
+@app.route('/retirer_vente/<int:ticket_id>', methods=['POST'])
+def retirer_vente(ticket_id):
+    ticket = Ticket.query.get(ticket_id)
+    if ticket:
+        ticket.en_vente = False
+        db.session.commit()
+    return redirect(url_for('onglet3'))
+
+@app.route('/modifier_vente', methods=['POST'])
+def modifier_vente():
+    if request.method == 'POST':
+        ticket_id = request.form.get('ticket_id')
+        nouveau_nom = request.form.get('nomEvenementModif')
+        nouveau_lieu = request.form.get('lieuEvenementModif')
+        date_evenement_str = request.form.get('dateEvenementModif')  # Récupérez la date au format AAAA-MM-JJ
+        nouvelle_date = datetime.strptime(date_evenement_str, '%Y-%m-%d')  # Convertissez la date en objet datetime
+        nouveau_prix = request.form.get('prixTicketModif')
+
+        # Mettez à jour les informations du ticket dans la base de données avec SQLAlchemy
+        ticket = Ticket.query.get(ticket_id)
+        if ticket:
+            ticket.nom_evenement = nouveau_nom
+            ticket.lieu_evenement = nouveau_lieu
+            ticket.date_evenement = nouvelle_date
+            ticket.prix_ticket = nouveau_prix
+
+            # Enregistrez les modifications dans la base de données
+            db.session.commit()
+
+    return redirect(url_for('onglet3'))  # Redirigez l'utilisateur vers la page de l'onglet 3 après la modification
+
+# Route pour mettre à jour le mot de passe
+@app.route('/mettre_a_jour_mot_de_passe', methods=['POST'])
+@login_required  # Assurez-vous que l'utilisateur est connecté
+def mettre_a_jour_mot_de_passe():
+    if request.method == 'POST':
+        nouveau_mot_de_passe = request.form['nouveauMotDePasse']
+        current_user.password = nouveau_mot_de_passe
+        db.session.commit()
+        flash('Mot de passe mis à jour avec succès.', 'success')
+    return redirect(url_for('onglet3'))
+
