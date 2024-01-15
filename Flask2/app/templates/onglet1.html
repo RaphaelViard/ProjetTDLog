@@ -50,7 +50,7 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="/">MonApp</a>
+        <a class="navbar-brand" href="/">Tykz</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -60,13 +60,13 @@
                     <a class="nav-link" href="/">Accueil</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="/onglet1">Onglet 1 <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/onglet1">Achat<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/onglet2">Onglet 2</a>
+                    <a class="nav-link" href="/onglet2">Vente</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/onglet3">Onglet 3</a>
+                    <a class="nav-link" href="/onglet3">Profil</a>
                 </li>
             </ul>
         </div>
@@ -89,13 +89,15 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/inscription">Inscription</a>
-                  </li>
+                </li>
             {% endif %}
         </ul>
     </nav>
 
     <div class="container mt-4">
-        <h1 class="display-4">Acheter des tickets</h1>
+        <h1 class="display-4">Trouvez votre ticket</h1>
+
+        <br>
 
         <!-- Formulaire de tri des tickets -->
         <form method="POST" action="/onglet1">
@@ -108,6 +110,9 @@
                 </div>
                 <div class="col">
                     <input type="text" class="form-control" name="tri_nom" placeholder="Entrez un nom">
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" name="tri_code" placeholder="Entrez un code unique">
                 </div>
                 <div class="col">
                     <button type="submit" class="btn btn-primary">Trier</button>
@@ -174,6 +179,5 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 </body>
 </html>
