@@ -7,6 +7,8 @@ import os
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SECRET_KEY'] = 'my_secret_key_123'
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 # Obtenir le chemin absolu du répertoire courant du script
 current_directory = os.path.dirname(os.path.realpath(__file__))
@@ -17,14 +19,9 @@ if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-db = SQLAlchemy(app)
-
 # Initialize Flask-Login
 login_manager = LoginManager(app)
 login_manager.login_view = 'connexion'
-
-# Initialize Flask-Migrate
-migrate = Migrate(app, db)
 
 # Import the User model (assuming it exists in your app.models module)
 from app.models import User

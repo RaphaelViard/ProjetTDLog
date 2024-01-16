@@ -127,7 +127,7 @@ def connexion():
             # L'utilisateur est connecté avec succès
             login_user(user)  # Enregistrez l'utilisateur connecté
 
-            flash('Connexion réus sie !', 'success')
+            flash('Connexion réussie !', 'success')
 
             # Redirigez l'utilisateur vers la page d'accueil (index)
             return redirect(url_for('index'))
