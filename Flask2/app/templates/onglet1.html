@@ -127,7 +127,9 @@
                     <ul>
                         {% for ticket in tickets %}
                             <li>
-                                Événement: {{ ticket.nom_evenement }}, Date: {{ ticket.date_evenement }}, Lieu: {{ ticket.lieu_evenement }}, Prix: {{ ticket.prix_ticket }}€, Vendeur:  <a href="{{ url_for('PageUser', nom_utilisateur=ticket.nomUtilisateur) }}">{{ ticket.nomUtilisateur }}</a>, Code unique: {{ ticket.code_secret }}
+                                Événement: {{ ticket.nom_evenement }}, Date: {{ ticket.date_evenement }}, Lieu: {{ ticket.lieu_evenement }},
+                                Prix: {{ ticket.prix_ticket }}€, Vendeur:  <a href="{{ url_for('PageUser', nom_utilisateur=ticket.nomUtilisateur) }}">
+                                {{ ticket.nomUtilisateur }}</a>, Code unique: {{ ticket.code_secret }}
                                     <form method="POST" action="/acheter_ticket">
                                         <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
                                         <button type="submit" class="btn btn-primary acheter-button">Acheter</button>
@@ -136,13 +138,15 @@
                         {% endfor %}
                     </ul>
                 {% else %}
-                    <!-- Aucun ticket disponible -->
+                    <!-- Si aucun ticket disponible -->
                     <div class="no-tickets">
                         Pas de tickets disponibles
                     </div>
                 {% endif %}
             </div>
         </div>
+
+
     </div>
     <div class="modal" id="modal">
         <div class="modal-content">

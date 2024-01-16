@@ -120,10 +120,10 @@ def inscription():
 def connexion():
     if request.method == 'POST':
         username = request.form['username']
-
+        Password = request.form['password']
         # Vérifiez si l'utilisateur existe dans la base de données (vous devrez implémenter cette logique)
         user = User.query.filter_by(username=username).first()
-        if user: 
+        if user and user.password==Password:
             # L'utilisateur est connecté avec succès
             login_user(user)  # Enregistrez l'utilisateur connecté
 
@@ -453,4 +453,3 @@ def mettre_a_jour_mot_de_passe():
         db.session.commit()
         flash('Mot de passe mis à jour avec succès.', 'success')
     return redirect(url_for('onglet3'))
-
