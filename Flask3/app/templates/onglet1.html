@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Acheter des tickets</title>
-    <!-- Intégration de Bootstrap via CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         /* Style pour la fenêtre modale */
@@ -26,7 +25,6 @@
             width: 50%;
             text-align: center;
         }
-
         /* Style pour les boutons */
         #confirmButton,
         #cancelButton {
@@ -99,7 +97,7 @@
 
         <br>
 
-        <!-- Formulaire de tri des tickets -->
+        <!-- Tri des tickets suivant différents critères-->
         <form method="POST" action="/onglet1">
             <div class="form-row">
                 <div class="col">
@@ -123,7 +121,7 @@
         <div class="row mt-4">
             <div class="col-md-8">
                 {% if tickets %}
-                    <!-- Liste des tickets à acheter -->
+                    <!-- Liste des tickets que l'utilisateur peut acheter -->
                     <ul>
                         {% for ticket in tickets %}
                             <li>

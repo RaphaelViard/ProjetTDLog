@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Onglet 2</title>
-    <!-- Intégration de Bootstrap via CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .drag-drop-area {
@@ -64,9 +63,7 @@
         </ul>
     </nav>
 
-    <!-- Contenu de la page -->
     <div class="container mt-4">
-        <!-- Contenu de l'Onglet 2 -->
         <h1 class="display-4">Vendez votre ticket</h1>
 
         <!-- Formulaire de mise en vente de tickets -->
@@ -95,9 +92,9 @@
                         Glissez-déposez votre fichier ici ou cliquez pour sélectionner
                         <input type="file" id="fileInput" name="file" accept=".pdf" style="display: none;" required>
                     </div>
-                    <p id="selectedFileName"></p> <!-- Ajout d'un paragraphe pour afficher le nom du fichier -->
+                    <p id="selectedFileName"></p> <!-- On rajoute un paragraphe pour afficher le nom du fichier -->
                 </div>
-                <!-- Utilisez le nom d'utilisateur actif sans le demander dans le formulaire -->
+                <!-- On utilise nom d'utilisateur actif sans le demander dans le formulaire -->
                 <input type="hidden" name="nomUtilisateur" value="{{ current_user.username }}">
                 <button type="submit" class="btn btn-primary">Mettre en Vente</button>
             </form>

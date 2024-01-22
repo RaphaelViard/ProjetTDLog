@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Inscription</title>
-    <!-- Intégration de Bootstrap via CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
@@ -45,7 +44,7 @@
                             document.getElementById('usernameError').innerHTML = "Ce nom d'utilisateur est déjà utilisé.";
                         } else {
                             // Si le nom d'utilisateur n'existe pas, vous pouvez soumettre le formulaire
-                            document.getElementById('usernameError').innerHTML = ""; // Effacez les messages d'erreur précédents
+                            document.getElementById('usernameError').innerHTML = "";
                             event.target.submit(); // Soumettez le formulaire si le nom d'utilisateur est unique
                         }
                     } else {

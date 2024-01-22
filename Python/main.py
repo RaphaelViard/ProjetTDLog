@@ -1,9 +1,3 @@
-#  il peut être judicieux de retourner des copies pour les listes
-# attention à ne pas faire de répétition entre les get et les property
-# ajouter toutes les vérifications nécessaires, d'existence par exemple
-# documenter
-
-# Import des classes depuis les fichiers correspondants
 from classes.Ticket import Ticket
 from classes.Transac import Transaction
 from classes.Event import Event
@@ -49,5 +43,3 @@ event2.add_comment(comment2)
 
 print("Event Comments:")
 event1.display_comments()
-
-# (Vous pouvez ajouter plus d'opérations en fonction de votre logique métier)

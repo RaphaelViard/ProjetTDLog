@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Onglet 3</title>
-    <!-- Intégration de Bootstrap via CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .custom-margin-bottom {
             margin-bottom: 10mm; /* Ajoute un espace de 10 mm entre chaque élément de la liste */
         }
-
         /* Style pour la fenêtre modale */
         .modal {
             display: none;
@@ -30,7 +28,6 @@
             width: 50%;
             text-align: center;
         }
-
         /* Style pour les boutons */
         #confirmButton,
         #cancelButton {
@@ -53,7 +50,6 @@
     </style>
 </head>
 <body>
-    <!-- Barre de navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="/">Tykz</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,10 +94,7 @@
             {% endif %}
         </ul>
     </nav>
-
-    <!-- Contenu de la page -->
     <div class="container mt-4">
-        <!-- Contenu de l'Onglet 3 -->
         <h1 class="display-4">Votre profil</h1>
         <p class="lead" id="nomUtilisateurActif">Bonjour, {{ current_user.username }} !</p>
 
@@ -146,8 +139,6 @@
         <button type="submit" class="btn btn-primary">Mettre à jour le mot de passe</button>
     </form>
 </div>
-
-
 
         <!-- Liste des tickets en vente -->
         <div id="ticketsEnVente" class="mt-4">
@@ -240,13 +231,13 @@
     supprimerAchatButtons.forEach(button => {
         button.addEventListener('click', function(event) {
             const ticketId = event.target.getAttribute('data-ticket-id');
-            // Envoyer une demande de suppression du ticket avec l'ID ticketId
+            // On envoyer une demande de suppression du ticket avec l'ID ticketId
             fetch('/supprimer_ticket/' + ticketId, {
                 method: 'POST',
             })
             .then(response => {
                 console.log('Ticket supprimé avec succès.');
-                window.location.reload(); // Recharger la page après la suppression
+                window.location.reload(); // On recharger la page après la suppression
             })
             .catch(error => {
                 console.error('Erreur:', error);
@@ -263,13 +254,13 @@ remettreVenteButtons.forEach(button => {
 });
 
 function remettreTicketEnVente(ticketId) {
-    // Envoyer une demande pour remettre le ticket en vente avec l'ID ticketId
+    // On envoyer une demande pour remettre le ticket en vente avec l'ID ticketId
     fetch('/remettre_vente/' + ticketId, {
         method: 'POST',
     })
     .then(response => {
         console.log('Ticket remis en vente avec succès.');
-        window.location.reload(); // Recharger la page après la remise en vente
+        window.location.reload(); // On recharger la page après la remise en vente
     })
     .catch(error => {
         console.error('Erreur:', error);
@@ -280,13 +271,13 @@ function remettreTicketEnVente(ticketId) {
     retirerVenteButtons.forEach(button => {
         button.addEventListener('click', function(event) {
             const ticketId = event.target.getAttribute('data-ticket-id');
-            // Envoyer une demande pour retirer le ticket de la vente avec l'ID ticketId
+            // On envoie une demande pour retirer le ticket de la vente avec l'ID ticketId
             fetch('/retirer_vente/' + ticketId, {
                 method: 'POST',
             })
             .then(response => {
                 console.log('Ticket retiré de la vente avec succès.');
-                window.location.reload(); // Recharger la page après le retrait
+                window.location.reload(); // On recharge la page après le retrait
             })
             .catch(error => {
                 console.error('Erreur:', error);
