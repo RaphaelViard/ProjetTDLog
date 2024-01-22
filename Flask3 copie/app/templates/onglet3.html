@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Onglet 3</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .custom-margin-bottom {
+            margin-bottom: 10mm; /* Ajoute un espace de 10 mm entre chaque élément de la liste */
+        }
+
+        /* Style pour la fenêtre modale */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 20% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+            text-align: center;
+        }
+
+        /* Style pour les boutons */
+        #confirmButton,
+        #cancelButton {
+            margin: 5px;
+            padding: 8px 20px;
+            cursor: pointer;
+        }
+
+        #confirmButton {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+        }
+
+        #cancelButton {
+            background-color: #d9534f;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">Tykz</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/onglet1">Achat</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/onglet2">Vente</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/onglet3">Profil<span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </div>
+        <ul class="navbar-nav ml-auto">
+            {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/deconnexion">Déconnexion</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" style="color: green;" href="#">
+                        Solde: {{ current_user.money }} €
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link" style="color: white;">{{ current_user.username }}</span>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/connexion">Connexion</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/inscription">Inscription</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    <div class="container mt-4">
+        <h1 class="display-4">Votre profil</h1>
+        <p class="lead" id="nomUtilisateurActif">Bonjour, {{ current_user.username }} !</p>
+        <div id="mettreAJourSolde" class="mt-4">
+            <h2>Augmenter le solde</h2>
+            <form method="POST" action="/mettre_a_jour_solde">
+                <div class="form-group">
+                    <input type="number" class="form-control" id="nouveauSolde" name="nouveauSolde" placeholder="Entrez votre ajout de solde" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Mettre à jour</button>
+            </form>
+        </div>
+        <div id="mettreAJourBio" class="mt-4">
+    <h2>Modifier votre Bio</h2>
+    <form method="POST" action="/mettre_a_jour_Bio">
+        <div class="form-group">
+            <label for="BioActuelle">Bio actuelle</label>
+            <textarea class="form-control" id="BioActuelle" name="BioActuelle" rows="3" readonly>{{ current_user.Bio }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="NouvelleBio">Nouvelle bio</label>
+            <input type="text" class="form-control" id="NouvelleBio" name="NouvelleBio" placeholder="Entrez votre nouvelle bio" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Mettre à jour</button>
+    </form>
+</div>
+<div id="modifierMotDePasse" class="mt-4">
+    <h2>Modifier le mot de passe</h2>
+    <form method="POST" action="/mettre_a_jour_mot_de_passe">
+        <div class="form-group">
+            <label for="motDePasseActuel">Mot de passe actuel</label>
+            <input type="text" class="form-control" id="motDePasseActuel" name="motDePasseActuel" value="{{ current_user.password }}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="nouveauMotDePasse">Nouveau mot de passe</label>
+            <input type="password" class="form-control" id="nouveauMotDePasse" name="nouveauMotDePasse" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Mettre à jour le mot de passe</button>
+    </form>
+</div>
+        <!-- Liste des tickets en vente -->
+        <div id="ticketsEnVente" class="mt-4">
+            <h2>Tickets en vente par {{ current_user.username }}</h2>
+            <ul>
+                {% for ticket in tickets_en_vente %}
+                    <li class="d-flex justify-content-between align-items-center custom-margin-bottom">
+                        <span>Événement: {{ ticket.nom_evenement }} - Date: {{ ticket.date_evenement }} - Lieu: {{ ticket.lieu_evenement }} - Prix: {{ ticket.prix_ticket }}€ - Code unique: {{ ticket.code_secret }}</span>
+                        <div>
+                            <button type="button" class="btn btn-danger supprimer-achat" onclick="confirmerSuppression({{ ticket.id }})">Supprimer</button>
+                            <button type="button" class="btn btn-warning retirer-vente" data-ticket-id="{{ ticket.id }}">Retirer de la vente</button>
+                            <button type="button" class="btn btn-info modifier-vente" data-ticket-id="{{ ticket.id }}" data-ticket-nom="{{ ticket.nom_evenement }}" data-ticket-prix="{{ ticket.prix_ticket }}" data-ticket-lieu="{{ ticket.lieu_evenement }}" data-ticket-date="{{ ticket.date_evenement }}">Modifier</button>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <!-- Liste des tickets possédés -->
+        <div id="ticketsAchetes" class="mt-4">
+            <h2>Tickets possédés par {{ current_user.username }}</h2>
+            <ul>
+                {% for ticket in tickets_achetes %}
+                    <li class="d-flex justify-content-between align-items-center custom-margin-bottom">
+                        <span>Événement: {{ ticket.nom_evenement }} - Date: {{ ticket.date_evenement }} - Lieu: {{ ticket.lieu_evenement }} - Prix: {{ ticket.prix_ticket }}€ - Code unique: {{ ticket.code_secret }}</span>
+                        <div>
+                            {% if ticket.chemin_pdf %}
+                                <a href="{{ url_for('download_pdf', ticket_id=ticket.id) }}" class="btn btn-primary">
+                                    Afficher PDF
+                                </a>
+                            {% else %}
+                                Aucun PDF associé
+                            {% endif %}
+                            <button type="button" class="btn btn-danger supprimer-achat" onclick="confirmerSuppression({{ ticket.id }})">Supprimer</button>
+                            <button type="button" class="btn btn-success remettre-vente" data-ticket-id="{{ ticket.id }}">Remettre en vente</button>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <br>
+    </div>
+    <!-- Ajout d'une fenêtre modale pour la modification de la vente -->
+    <div id="modifierModal" class="modal">
+        <div class="modal-content">
+            <h3>Modifier le ticket en vente</h3>
+            <form method="POST" action="/modifier_vente" id="modifierVenteForm">
+                <input type="hidden" name="ticket_id" id="ticketId" value="">
+                <div class="form-group">
+                    <label for="nomEvenementModif">Nom de l'événement</label>
+                    <input type="text" class="form-control" id="nomEvenementModif" name="nomEvenementModif" required>
+                </div>
+                <div class="form-group">
+                    <label for="lieuEvenementModif">Lieu de l'événement</label>
+                    <input type="text" class="form-control" id="lieuEvenementModif" name="lieuEvenementModif" required>
+                </div>
+                <div class="form-group">
+                    <label for="dateEvenementModif">Date de l'événement (AAAA-MM-JJ)</label>
+                    <input type="text" class="form-control" id="dateEvenementModif" name="dateEvenementModif" placeholder="Exemple : 2024-01-31" required>
+                </div>
+                <div class="form-group">
+                    <label for="prixTicketModif">Prix du ticket</label>
+                    <input type="number" class="form-control" id="prixTicketModif" name="prixTicketModif" required>
+                </div>
+                <button type="button" class="btn btn-success" id="confirmModifierButton">Confirmer</button>
+                <button type="button" class="btn btn-danger" id="cancelModifierButton" onclick="closeModifierModal()">Annuler</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+    // Récupération des éléments de la liste des tickets en vente
+    const supprimerAchatButtons = document.querySelectorAll('.supprimer-achat');
+    const retirerVenteButtons = document.querySelectorAll('.retirer-vente');
+    const remettreVenteButtons = document.querySelectorAll('.remettre-vente');
+    const modifierVenteButtons = document.querySelectorAll('.modifier-vente');
+    const modifierVenteForm = document.getElementById('modifierVenteForm');
+    const ticketIdInput = document.getElementById('ticketId');
+    const nomEvenementModifInput = document.getElementById('nomEvenementModif');
+    const lieuEvenementModifInput = document.getElementById('lieuEvenementModif');
+    const dateEvenementModifInput = document.getElementById('dateEvenementModif');
+    const prixTicketModifInput = document.getElementById('prixTicketModif');
+
+    // Écouteurs d'événements pour les boutons de suppression des tickets possédés
+    supprimerAchatButtons.forEach(button => {
+        button.addEventListener('click', function(event) {
+            const ticketId = event.target.getAttribute('data-ticket-id');
+            // Envoyer une demande de suppression du ticket avec l'ID ticketId
+            fetch('/supprimer_ticket/' + ticketId, {
+                method: 'POST',
+            })
+            .then(response => {
+                console.log('Ticket supprimé avec succès.');
+                window.location.reload(); // Recharger la page après la suppression
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+            });
+        });
+    });
+
+    // Écouteurs d'événements pour les boutons de remise en vente
+remettreVenteButtons.forEach(button => {
+    button.addEventListener('click', function(event) {
+        const ticketId = event.target.getAttribute('data-ticket-id');
+        remettreTicketEnVente(ticketId);
+    });
+});
+
+function remettreTicketEnVente(ticketId) {
+    // Envoyer une demande pour remettre le ticket en vente avec l'ID ticketId
+    fetch('/remettre_vente/' + ticketId, {
+        method: 'POST',
+    })
+    .then(response => {
+        console.log('Ticket remis en vente avec succès.');
+        window.location.reload(); // Recharger la page après la remise en vente
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+    });
+}
+
+    // Écouteurs d'événements pour les boutons de retrait de la vente
+    retirerVenteButtons.forEach(button => {
+        button.addEventListener('click', function(event) {
+            const ticketId = event.target.getAttribute('data-ticket-id');
+            // Envoyer une demande pour retirer le ticket de la vente avec l'ID ticketId
+            fetch('/retirer_vente/' + ticketId, {
+                method: 'POST',
+            })
+            .then(response => {
+                console.log('Ticket retiré de la vente avec succès.');
+                window.location.reload(); // Recharger la page après le retrait
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+            });
+        });
+    });
+
+    // Écouteurs d'événements pour les boutons de modification de la vente
+    modifierVenteButtons.forEach(button => {
+        button.addEventListener('click', function(event) {
+            const ticketId = event.target.getAttribute('data-ticket-id');
+            const ticketNom = event.target.getAttribute('data-ticket-nom');
+            const ticketLieu = event.target.getAttribute('data-ticket-lieu');
+            const ticketDate = event.target.getAttribute('data-ticket-date');
+            const ticketPrix = event.target.getAttribute('data-ticket-prix');
+
+            ticketIdInput.value = ticketId;
+            nomEvenementModifInput.value = ticketNom;
+            lieuEvenementModifInput.value = ticketLieu;
+            dateEvenementModifInput.value = ticketDate;
+            prixTicketModifInput.value = ticketPrix;
+
+            openModifierModal();
+        });
+    });
+
+    // Fonction pour ouvrir le modal de modification
+    function openModifierModal() {
+        document.getElementById('modifierModal').style.display = 'block';
+    }
+
+    // Fonction pour fermer le modal de modification
+    function closeModifierModal() {
+        document.getElementById('modifierModal').style.display = 'none';
+    }
+
+    // Écouteur d'événement pour le bouton de confirmation de modification
+    document.getElementById('confirmModifierButton').addEventListener('click', function() {
+        modifierVenteForm.submit(); // Soumettre le formulaire de modification
+        closeModifierModal(); // Fermer la fenêtre modale après la confirmation
+    });
+
+    function confirmerSuppression(ticketId) {
+        if (window.confirm("Êtes-vous sûr de vouloir supprimer ce ticket ?")) {
+            fetch('/supprimer_ticket/' + ticketId, {
+                method: 'POST',
+            })
+            .then(response => {
+                console.log('Ticket supprimé avec succès.');
+                window.location.reload(); // Rechargez la page après la suppression
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+            });
+        }
+    }
+    </script>
+</body>
+</html>
