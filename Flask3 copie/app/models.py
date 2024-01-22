@@ -1,7 +1,7 @@
 from app import app
 from app import db
 from flask_login import UserMixin
-from app import login_manager  # Import login_manager from app
+from app import login_manager
 from sqlalchemy import ForeignKeyConstraint, Column, Integer, String, Boolean, Float
 import datetime
 from sqlalchemy.ext.declarative import declarative_base

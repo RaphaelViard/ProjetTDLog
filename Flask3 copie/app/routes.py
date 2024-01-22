@@ -24,7 +24,12 @@ def onglet1():
         tri_date = request.form.get('tri_date')
         tri_nom = request.form.get('tri_nom')
         tri_code = request.form.get('tri_code')
+<<<<<<< HEAD:Flask3 copie/app/routes.py
         tickets = Ticket.query.filter(Ticket.nomUtilisateur != current_user.username, Ticket.en_vente == True).all()
+=======
+        tickets = Ticket.query.filter(Ticket.nomUtilisateur != current_user.username, Ticket.en_vente == True).all() #On récupère tous les tickets en vente du site qui sont en vente et qui ne sont pas à l'utilisateur actif
+        #On a ensuite tous les tris différents : date, lieu, nom d'évènement
+>>>>>>> a191d8889d343b3822a1b74fd87aa8c712ca7357:Flask3/app/routes.py
         if tri_lieu:
             tickets = [ticket for ticket in tickets if tri_lieu.lower() in ticket.lieu_evenement.lower()]
         if tri_date:
@@ -44,6 +49,8 @@ def onglet1():
         tickets = Ticket.query.filter(Ticket.nomUtilisateur != current_user.username, Ticket.en_vente == True).all()
     return render_template('onglet1.html', tickets=tickets)
 
+
+#Route pour acheter un ticket
 @app.route('/acheter_ticket', methods=['POST'])
 @login_required
 def acheter_ticket():
@@ -98,20 +105,28 @@ def onglet2():
             db.session.add(new_ticket)
             db.session.commit()
             flash('Le ticket a été mis en vente avec succès !', 'success')
+<<<<<<< HEAD:Flask3 copie/app/routes.py
+=======
+
+>>>>>>> a191d8889d343b3822a1b74fd87aa8c712ca7357:Flask3/app/routes.py
             return redirect(url_for('onglet2'))
         return render_template('onglet2.html')
     else:
         flash('Veuillez vous connecter pour accéder à Onglet 2', 'danger')
         return redirect(url_for('connexion'))
+<<<<<<< HEAD:Flask3 copie/app/routes.py
 
+=======
+>>>>>>> a191d8889d343b3822a1b74fd87aa8c712ca7357:Flask3/app/routes.py
 def generate_unique_code():
     while True:
         code_secret = secrets.token_urlsafe(16)
-        # Vérifiez si le code_secret existe déjà dans la base de données
-        existing_ticket = Ticket.query.filter_by(code_secret=code_secret).first()
+        existing_ticket = Ticket.query.filter_by(code_secret=code_secret).first() #On vérifie que le code secret n'existe pas déjà dans la base de donnée
         if not existing_ticket:
             return code_secret
 
+
+#Route pour mettre en vente un ticket
 @app.route('/mettre_en_vente', methods=['POST'])
 @login_required
 def mettre_en_vente():
@@ -120,7 +135,11 @@ def mettre_en_vente():
         date_evenement_str = request.form.get('dateEvenement')
         lieu_evenement = request.form.get('lieuEvenement')
         prix_ticket = request.form.get('prixTicket')
+<<<<<<< HEAD:Flask3 copie/app/routes.py
         if not nom_evenement or not date_evenement_str or not lieu_evenement or not prix_ticket:
+=======
+        if not nom_evenement or not date_evenement_str or not lieu_evenement or not prix_ticket: #On vérifie que tous les champs sont remplis
+>>>>>>> a191d8889d343b3822a1b74fd87aa8c712ca7357:Flask3/app/routes.py
             flash('Veuillez remplir tous les champs obligatoires.', 'danger')
             return redirect(url_for('onglet2'))
         try:
@@ -157,10 +176,17 @@ def mettre_en_vente():
 @login_required
 def onglet3():
     if current_user.is_authenticated:
+<<<<<<< HEAD:Flask3 copie/app/routes.py
         tickets_en_vente = Ticket.query.filter(
             (Ticket.nomUtilisateur == current_user.username) & (Ticket.en_vente == True)
         ).all()
         tickets_achetes = Ticket.query.filter(
+=======
+        tickets_en_vente = Ticket.query.filter(         # On récupère les tickets en vente par l'utilisateur actif depuis la base de donnée
+            (Ticket.nomUtilisateur == current_user.username) & (Ticket.en_vente == True)
+        ).all()
+        tickets_achetes = Ticket.query.filter( #On récupère les tickets achetés par l'utilisateur depuis la base de donnée
+>>>>>>> a191d8889d343b3822a1b74fd87aa8c712ca7357:Flask3/app/routes.py
             (Ticket.nomUtilisateur == current_user.username) & (Ticket.en_vente == False)
         ).all()
         return render_template('onglet3.html', tickets_en_vente=tickets_en_vente, tickets_achetes=tickets_achetes)
@@ -187,7 +213,6 @@ def download_pdf(ticket_id):
                 if not chunk:
                     break
                 yield chunk
-
     response = Response(generate(), content_type='application/pdf')
     response.headers['Content-Disposition'] = f'inline; filename={secure_filename(ticket.chemin_pdf)}'
     return response
@@ -231,6 +256,8 @@ def check_username():
         response = {'usernameExists': False}
     return jsonify(response)
 
+
+#Route pour afficher la page d'un utilisateur
 @app.route('/PageUser/<nom_utilisateur>', methods=['GET'])
 @login_required
 def PageUser(nom_utilisateur):
@@ -239,6 +266,11 @@ def PageUser(nom_utilisateur):
     if Utilisateur:
         return render_template('PageUser.html', Utilisateur=Utilisateur, tickets=tickets)
 
+<<<<<<< HEAD:Flask3 copie/app/routes.py
+=======
+
+#Route pour supprimer un ticket
+>>>>>>> a191d8889d343b3822a1b74fd87aa8c712ca7357:Flask3/app/routes.py
 @app.route('/supprimer_ticket/<int:ticket_id>', methods=['POST'])
 def supprimer_ticket(ticket_id):
     ticket = Ticket.query.get(ticket_id)
@@ -247,6 +279,11 @@ def supprimer_ticket(ticket_id):
         db.session.commit()
     return redirect('/onglet3')
 
+<<<<<<< HEAD:Flask3 copie/app/routes.py
+=======
+
+# Route pour remettre en vente un ticket
+>>>>>>> a191d8889d343b3822a1b74fd87aa8c712ca7357:Flask3/app/routes.py
 @app.route('/remettre_vente/<int:ticket_id>', methods=['POST'])
 def remettre_vente(ticket_id):
     ticket = Ticket.query.get(ticket_id)
@@ -257,6 +294,11 @@ def remettre_vente(ticket_id):
     else:
         return jsonify({'error': 'Ticket non trouvé'}), 404
 
+<<<<<<< HEAD:Flask3 copie/app/routes.py
+=======
+
+# Route pour retirer un ticket de la vente
+>>>>>>> a191d8889d343b3822a1b74fd87aa8c712ca7357:Flask3/app/routes.py
 @app.route('/retirer_vente/<int:ticket_id>', methods=['POST'])
 def retirer_vente(ticket_id):
     ticket = Ticket.query.get(ticket_id)
@@ -265,6 +307,7 @@ def retirer_vente(ticket_id):
         db.session.commit()
     return redirect(url_for('onglet3'))
 
+#Route pour modifier les informations d'un ticket
 @app.route('/modifier_vente', methods=['POST'])
 def modifier_vente():
     if request.method == 'POST':
@@ -283,8 +326,15 @@ def modifier_vente():
             db.session.commit()
     return redirect(url_for('onglet3'))
 
+<<<<<<< HEAD:Flask3 copie/app/routes.py
 @app.route('/mettre_a_jour_mot_de_passe', methods=['POST'])
 @login_required
+=======
+
+# Route pour mettre à jour le mot de passe
+@app.route('/mettre_a_jour_mot_de_passe', methods=['POST'])
+@login_required  #On s'assure que l'utilisateur est connecté
+>>>>>>> a191d8889d343b3822a1b74fd87aa8c712ca7357:Flask3/app/routes.py
 def mettre_a_jour_mot_de_passe():
     if request.method == 'POST':
         nouveau_mot_de_passe = request.form['nouveauMotDePasse']
@@ -293,7 +343,6 @@ def mettre_a_jour_mot_de_passe():
         flash('Mot de passe mis à jour avec succès.', 'success')
     return redirect(url_for('onglet3'))
 
-## login
 
 @app.route('/inscription', methods=['GET', 'POST'])
 def inscription():
@@ -301,11 +350,19 @@ def inscription():
         username = request.form['username']
         password = request.form['password']
         Bio = request.form['Bio']
+<<<<<<< HEAD:Flask3 copie/app/routes.py
         new_user = User(username=username, password=password,Bio=Bio,money=0)
+=======
+        new_user = User(username=username, password=password,Bio=Bio,money=0) #On crée le nouvel User, qu'on rajoute à la base de données
+>>>>>>> a191d8889d343b3822a1b74fd87aa8c712ca7357:Flask3/app/routes.py
         db.session.add(new_user)
         db.session.commit()
         flash('Inscription réussie ! Vous pouvez maintenant vous connecter.', 'success')
         return redirect(url_for('connexion'))
+<<<<<<< HEAD:Flask3 copie/app/routes.py
+=======
+
+>>>>>>> a191d8889d343b3822a1b74fd87aa8c712ca7357:Flask3/app/routes.py
     return render_template('inscription.html')
 
 @app.route('/connexion', methods=['GET', 'POST'])
@@ -313,7 +370,11 @@ def connexion():
     if request.method == 'POST':
         username = request.form['username']
         Password = request.form['password']
+<<<<<<< HEAD:Flask3 copie/app/routes.py
         user = User.query.filter_by(username=username).first()
+=======
+        user = User.query.filter_by(username=username).first() #On cherche l'User dans la base de données
+>>>>>>> a191d8889d343b3822a1b74fd87aa8c712ca7357:Flask3/app/routes.py
         if user and user.password==Password:
             login_user(user)
             flash('Connexion réussie !', 'success')
@@ -328,3 +389,51 @@ def deconnexion():
     flash('Vous avez été déconnecté.', 'info')
     return render_template('deconnexion.html')
 
+<<<<<<< HEAD:Flask3 copie/app/routes.py
+=======
+
+# Route pour récupérer les tickets mis en vente par l'utilisateur actif au format JSON
+@app.route('/tickets_en_vente', methods=['GET'])
+@login_required
+def tickets_en_vente():
+    if current_user.is_authenticated:
+        tickets = Ticket.query.filter_by(en_vente=True, nomUtilisateur=current_user.username).all()
+        tickets_en_vente = []
+        for ticket in tickets:
+            ticket_info = {
+                'nom_evenement': ticket.nom_evenement,
+                'date_evenement': str(ticket.date_evenement),
+                'lieu_evenement': ticket.lieu_evenement,
+                'prix_ticket': ticket.prix_ticket,
+            }
+            tickets_en_vente.append(ticket_info)
+        return jsonify(tickets_en_vente)
+    else:
+        flash('Veuillez vous connecter pour accéder à cette page', 'danger')
+        return redirect(url_for('connexion'))
+
+#Route pour créer la liste des tickets recommandés
+@app.route('/tickets_recommandes', methods=['GET'])
+@login_required
+def tickets_recommandes():
+    if current_user.is_authenticated:
+        # Récupérez les tickets recommandés depuis la base de données
+        tickets_recommandes = Ticket.query.filter(
+            Ticket.nomUtilisateur != current_user.username
+        ).all()
+        # Créez une liste de dictionnaires pour les tickets recommandés
+        tickets_data = []
+        for ticket in tickets_recommandes:
+            ticket_info = {
+                'nom_evenement': ticket.nom_evenement,
+                'date_evenement': str(ticket.date_evenement),
+                'lieu_evenement': ticket.lieu_evenement,
+                'prix_ticket': ticket.prix_ticket,
+            }
+            tickets_data.append(ticket_info)
+        return jsonify(tickets_data)
+    else:
+        flash('Veuillez vous connecter pour accéder à cette page', 'danger')
+        return redirect(url_for('connexion'))
+
+>>>>>>> a191d8889d343b3822a1b74fd87aa8c712ca7357:Flask3/app/routes.py

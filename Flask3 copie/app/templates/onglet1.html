@@ -25,7 +25,6 @@
             width: 50%;
             text-align: center;
         }
-
         /* Style pour les boutons */
         #confirmButton,
         #cancelButton {
@@ -95,7 +94,12 @@
     <div class="container mt-4">
         <h1 class="display-4">Trouvez votre ticket</h1>
         <br>
+<<<<<<< HEAD:Flask3 copie/app/templates/onglet1.html
         <!-- Formulaire de tri des tickets -->
+=======
+
+        <!-- Tri des tickets suivant différents critères-->
+>>>>>>> a191d8889d343b3822a1b74fd87aa8c712ca7357:Flask3/app/templates/onglet1.html
         <form method="POST" action="/onglet1">
             <div class="form-row">
                 <div class="col">
@@ -118,7 +122,7 @@
         <div class="row mt-4">
             <div class="col-md-8">
                 {% if tickets %}
-                    <!-- Liste des tickets à acheter -->
+                    <!-- Liste des tickets que l'utilisateur peut acheter -->
                     <ul>
                         {% for ticket in tickets %}
                             <li>

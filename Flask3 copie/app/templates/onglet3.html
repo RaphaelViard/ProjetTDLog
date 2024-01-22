@@ -8,7 +8,6 @@
         .custom-margin-bottom {
             margin-bottom: 10mm; /* Ajoute un espace de 10 mm entre chaque élément de la liste */
         }
-
         /* Style pour la fenêtre modale */
         .modal {
             display: none;
@@ -29,7 +28,6 @@
             width: 50%;
             text-align: center;
         }
-
         /* Style pour les boutons */
         #confirmButton,
         #cancelButton {
@@ -136,6 +134,10 @@
         <button type="submit" class="btn btn-primary">Mettre à jour le mot de passe</button>
     </form>
 </div>
+<<<<<<< HEAD:Flask3 copie/app/templates/onglet3.html
+=======
+
+>>>>>>> a191d8889d343b3822a1b74fd87aa8c712ca7357:Flask3/app/templates/onglet3.html
         <!-- Liste des tickets en vente -->
         <div id="ticketsEnVente" class="mt-4">
             <h2>Tickets en vente par {{ current_user.username }}</h2>
@@ -223,13 +225,13 @@
     supprimerAchatButtons.forEach(button => {
         button.addEventListener('click', function(event) {
             const ticketId = event.target.getAttribute('data-ticket-id');
-            // Envoyer une demande de suppression du ticket avec l'ID ticketId
+            // On envoyer une demande de suppression du ticket avec l'ID ticketId
             fetch('/supprimer_ticket/' + ticketId, {
                 method: 'POST',
             })
             .then(response => {
                 console.log('Ticket supprimé avec succès.');
-                window.location.reload(); // Recharger la page après la suppression
+                window.location.reload(); // On recharger la page après la suppression
             })
             .catch(error => {
                 console.error('Erreur:', error);
@@ -246,13 +248,13 @@ remettreVenteButtons.forEach(button => {
 });
 
 function remettreTicketEnVente(ticketId) {
-    // Envoyer une demande pour remettre le ticket en vente avec l'ID ticketId
+    // On envoyer une demande pour remettre le ticket en vente avec l'ID ticketId
     fetch('/remettre_vente/' + ticketId, {
         method: 'POST',
     })
     .then(response => {
         console.log('Ticket remis en vente avec succès.');
-        window.location.reload(); // Recharger la page après la remise en vente
+        window.location.reload(); // On recharger la page après la remise en vente
     })
     .catch(error => {
         console.error('Erreur:', error);
@@ -263,13 +265,13 @@ function remettreTicketEnVente(ticketId) {
     retirerVenteButtons.forEach(button => {
         button.addEventListener('click', function(event) {
             const ticketId = event.target.getAttribute('data-ticket-id');
-            // Envoyer une demande pour retirer le ticket de la vente avec l'ID ticketId
+            // On envoie une demande pour retirer le ticket de la vente avec l'ID ticketId
             fetch('/retirer_vente/' + ticketId, {
                 method: 'POST',
             })
             .then(response => {
                 console.log('Ticket retiré de la vente avec succès.');
-                window.location.reload(); // Recharger la page après le retrait
+                window.location.reload(); // On recharge la page après le retrait
             })
             .catch(error => {
                 console.error('Erreur:', error);
