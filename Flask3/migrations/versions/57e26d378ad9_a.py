@@ -1,16 +1,8 @@
-<<<<<<< HEAD:Flask2/migrations/versions/965f68eb2def_initial_migration.py
-"""initial migration
+"""a
 
-Revision ID: 965f68eb2def
+Revision ID: 57e26d378ad9
 Revises: 
-Create Date: 2024-01-15 20:16:48.779871
-=======
-"""BDD
-
-Revision ID: 24fcb3e706b7
-Revises: 
-Create Date: 2024-01-15 14:04:25.870706
->>>>>>> 95ffafe3e338dd421670825c382ab93d0e872fd6:Flask2/migrations/versions/24fcb3e706b7_bdd.py
+Create Date: 2024-01-16 13:59:44.819633
 
 """
 from alembic import op
@@ -18,11 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-<<<<<<< HEAD:Flask2/migrations/versions/965f68eb2def_initial_migration.py
-revision = '965f68eb2def'
-=======
-revision = '24fcb3e706b7'
->>>>>>> 95ffafe3e338dd421670825c382ab93d0e872fd6:Flask2/migrations/versions/24fcb3e706b7_bdd.py
+revision = '57e26d378ad9'
 down_revision = None
 branch_labels = None
 depends_on = None
