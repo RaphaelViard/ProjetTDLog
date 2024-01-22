@@ -61,13 +61,8 @@
             {% endif %}
         </ul>
     </nav>
-<<<<<<< HEAD:Flask3 copie/app/templates/onglet2.html
-=======
-
->>>>>>> a191d8889d343b3822a1b74fd87aa8c712ca7357:Flask3/app/templates/onglet2.html
     <div class="container mt-4">
         <h1 class="display-4">Vendez votre ticket</h1>
-
         <!-- Formulaire de mise en vente de tickets -->
         <div class="mt-4">
             <h2>Mettre en Vente des Tickets</h2>
@@ -94,13 +89,8 @@
                         Glissez-déposez votre fichier ici ou cliquez pour sélectionner
                         <input type="file" id="fileInput" name="file" accept=".pdf" style="display: none;" required>
                     </div>
-<<<<<<< HEAD:Flask3 copie/app/templates/onglet2.html
                     <p id="selectedFileName"></p>
-=======
-                    <p id="selectedFileName"></p> <!-- On rajoute un paragraphe pour afficher le nom du fichier -->
->>>>>>> a191d8889d343b3822a1b74fd87aa8c712ca7357:Flask3/app/templates/onglet2.html
                 </div>
-                <!-- On utilise nom d'utilisateur actif sans le demander dans le formulaire -->
                 <input type="hidden" name="nomUtilisateur" value="{{ current_user.username }}">
                 <button type="submit" class="btn btn-primary">Mettre en Vente</button>
             </form>
