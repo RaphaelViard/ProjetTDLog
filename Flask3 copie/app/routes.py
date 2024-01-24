@@ -27,34 +27,40 @@ def onglet1():
         tri_nom = request.form.get("tri_nom")
         tri_code = request.form.get("tri_code")
         tickets = Ticket.query.filter(
-            Ticket.nomUtilisateur != current_user.username, Ticket.en_vente == True
+            Ticket.nomUtilisateur != current_user.username,
+            Ticket.en_vente == True
         ).all()
-        if tri_lieu:
+        if tri_lieu is True:
             tickets = [
                 ticket
                 for ticket in tickets
                 if tri_lieu.lower() in ticket.lieu_evenement.lower()
             ]
-        if tri_date:
+        if tri_date is True:
             try:
-                tri_date = datetime.strptime(tri_date, "%Y-%m-%d").date()
+                tri_date = datetime.strptime(
+                    tri_date, "%Y-%m-%d"
+                ).date()
             except ValueError:
                 flash(
-                    "La date doit être au format a-mm-jj (année-mois-jour).", "danger"
+                    "La date doit être au format a-mm-jj (année-mois-jour).",
+                    "danger",
                 )
                 return redirect(url_for("onglet1"))
             tickets = [
-                ticket for ticket in tickets if tri_date == ticket.date_evenement
+                ticket
+                for ticket in tickets
+                if tri_date == ticket.date_evenement
             ]
 
-        if tri_nom:
+        if tri_nom is True:
             tickets = [
                 ticket
                 for ticket in tickets
                 if tri_nom.lower() in ticket.nom_evenement.lower()
             ]
 
-        if tri_code:
+        if tri_code is True:
             tickets = [
                 ticket
                 for ticket in tickets
@@ -62,7 +68,8 @@ def onglet1():
             ]
     else:
         tickets = Ticket.query.filter(
-            Ticket.nomUtilisateur != current_user.username, Ticket.en_vente == True
+            Ticket.nomUtilisateur != current_user.username,
+            Ticket.en_vente == True
         ).all()
     return render_template("onglet1.html", tickets=tickets)
 
@@ -73,11 +80,15 @@ def onglet1():
 def acheter_ticket():
     if request.method == "POST":
         ticket_id = request.form.get("ticket_id")
-        if ticket_id:
+        if ticket_id is True:
             ticket = Ticket.query.get(ticket_id)
             if ticket and ticket.nomUtilisateur != current_user.username:
-                acheteur = User.query.filter_by(username=current_user.username).first()
-                vendeur = User.query.filter_by(username=ticket.nomUtilisateur).first()
+                acheteur = User.query.filter_by(
+                    username=current_user.username
+                ).first()
+                vendeur = User.query.filter_by(
+                    username=ticket.nomUtilisateur
+                ).first()
                 if acheteur and vendeur:
                     prix_ticket = ticket.prix_ticket
                     if acheteur.money >= prix_ticket:
@@ -91,7 +102,9 @@ def acheter_ticket():
                     else:
                         return render_template("solde_insuffisant.html")
             else:
-                flash("Le ticket sélectionné n'est pas disponible.", "danger")
+                flash("Le ticket sélectionné n'est pas disponible.",
+                    "danger"
+                )
                 return jsonify({"status": "error"})
         else:
             flash("Erreur lors de l'achat du ticket.", "danger")
@@ -100,7 +113,7 @@ def acheter_ticket():
     return jsonify({"status": "error"})
 
 
-## onglet 2
+# onglet 2
 
 
 @app.route("/onglet2", methods=["GET", "POST"])
@@ -123,11 +136,15 @@ def onglet2():
             )
             db.session.add(new_ticket)
             db.session.commit()
-            flash("Le ticket a été mis en vente avec succès !", "success")
+            flash("Le ticket a été mis en vente avec succès !",
+                "success"
+            )
             return redirect(url_for("onglet2"))
         return render_template("onglet2.html")
     else:
-        flash("Veuillez vous connecter pour accéder à Onglet 2", "danger")
+        flash("Veuillez vous connecter pour accéder à Onglet 2",
+            "danger"
+        )
         return redirect(url_for("connexion"))
 
 
@@ -156,10 +173,15 @@ def mettre_en_vente():
             or not lieu_evenement
             or not prix_ticket
         ):
-            flash("Veuillez remplir tous les champs obligatoires.", "danger")
+            flash("Veuillez remplir tous les champs obligatoires.",
+                "danger"
+            )
             return redirect(url_for("onglet2"))
         try:
-            date_evenement = datetime.strptime(date_evenement_str, "%Y-%m-%d").date()
+            date_evenement = datetime.strptime(
+                date_evenement_str,
+                "%Y-%m-%d"
+            ).date()
         except ValueError:
             flash(
                 "Le format de la date est incorrect. Utilisez le format YYYY-MM-DD.",
@@ -198,7 +220,8 @@ def mettre_en_vente():
 def onglet3():
     if current_user.is_authenticated:
         tickets_en_vente = Ticket.query.filter(
-            (Ticket.nomUtilisateur == current_user.username) & (Ticket.en_vente == True)
+            (Ticket.nomUtilisateur == current_user.username) 
+            & (Ticket.en_vente == True)
         ).all()
         tickets_achetes = Ticket.query.filter(
             (Ticket.nomUtilisateur == current_user.username)
@@ -210,7 +233,9 @@ def onglet3():
             tickets_achetes=tickets_achetes,
         )
     else:
-        flash("Veuillez vous connecter pour accéder à Onglet 3", "danger")
+        flash("Veuillez vous connecter pour accéder à Onglet 3",
+            "danger"
+        )
         return redirect(url_for("connexion"))
 
 
@@ -224,7 +249,10 @@ def download_pdf(ticket_id):
     if not ticket.chemin_pdf:
         flash("Aucun PDF associé à ce ticket.", "danger")
         return redirect(url_for("onglet3"))
-    file_path = os.path.join(app.config["UPLOAD_FOLDER"], ticket.chemin_pdf)
+    file_path = os.path.join(
+        app.config["UPLOAD_FOLDER"],
+        ticket.chemin_pdf
+    )
 
     def generate():
         with open(file_path, "rb") as pdf_file:
@@ -234,7 +262,9 @@ def download_pdf(ticket_id):
                     break
                 yield chunk
 
-    response = Response(generate(), content_type="application/pdf")
+    response = Response(generate(),
+                        content_type="application/pdf"
+                )
     response.headers[
         "Content-Disposition"
     ] = f"inline; filename={secure_filename(ticket.chemin_pdf)}"
