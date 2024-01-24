@@ -203,7 +203,7 @@ def onglet3():
             (Ticket.nomUtilisateur == current_user.username) & (Ticket.en_vente)
         ).all()
         tickets_achetes = Ticket.query.filter(
-            (Ticket.nomUtilisateur == current_user.username) & (not Ticket.en_vente)
+            (Ticket.nomUtilisateur == current_user.username) & (Ticket.en_vente == False)
         ).all()
         return render_template(
             "onglet3.html",
