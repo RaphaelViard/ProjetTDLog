@@ -28,7 +28,7 @@ def onglet1():
         tri_code = request.form.get("tri_code")
         tickets = Ticket.query.filter(
             Ticket.nomUtilisateur != current_user.username,
-            Ticket.en_vente  # Pas besoin de mettre == True
+            en_vente = True,
         ).all()
         if tri_lieu is True:
             tickets = [
@@ -38,19 +38,14 @@ def onglet1():
             ]
         if tri_date is True:
             try:
-                tri_date = datetime.strptime(
-                    tri_date, "%Y-%m-%d"
-                ).date()
+                tri_date = datetime.strptime(tri_date, "%Y-%m-%d").date()
             except ValueError:
                 flash(
                     "La date doit être au format a-mm-jj (année-mois-jour).",
                     "danger",
                     )
                 return redirect(url_for("onglet1"))
-            tickets = [
-                ticket
-                for ticket in tickets
-                if tri_date == ticket.date_evenement
+            tickets = [ticket for ticket in tickets if tri_date == ticket.date_evenement
             ]
 
         if tri_nom is True:
@@ -69,7 +64,7 @@ def onglet1():
     else:
         tickets = Ticket.query.filter(
             Ticket.nomUtilisateur != current_user.username,
-            Ticket.en_vente  # Pas besoin de mettre True
+            en_vente = True,
         ).all()
     return render_template("onglet1.html", tickets=tickets)
 
@@ -83,12 +78,8 @@ def acheter_ticket():
         if ticket_id is True:
             ticket = Ticket.query.get(ticket_id)
             if ticket and ticket.nomUtilisateur != current_user.username:
-                acheteur = User.query.filter_by(
-                    username=current_user.username
-                ).first()
-                vendeur = User.query.filter_by(
-                    username=ticket.nomUtilisateur
-                ).first()
+                acheteur = User.query.filter_by(username=current_user.username).first()
+                vendeur = User.query.filter_by(username=ticket.nomUtilisateur).first()
                 if acheteur and vendeur:
                     prix_ticket = ticket.prix_ticket
                     if acheteur.money >= prix_ticket:
@@ -136,15 +127,11 @@ def onglet2():
             )
             db.session.add(new_ticket)
             db.session.commit()
-            flash("Le ticket a été mis en vente avec succès !",
-                  "success"
-                  )
+            flash("Le ticket a été mis en vente avec succès !", "success")
             return redirect(url_for("onglet2"))
         return render_template("onglet2.html")
     else:
-        flash("Veuillez vous connecter pour accéder à Onglet 2",
-              "danger"
-              )
+        flash("Veuillez vous connecter pour accéder à Onglet 2", "danger")
         return redirect(url_for("connexion"))
 
 
@@ -173,20 +160,12 @@ def mettre_en_vente():
             or not lieu_evenement
             or not prix_ticket
         ):
-            flash("Veuillez remplir tous les champs obligatoires.",
-                  "danger"
-                  )
+            flash("Veuillez remplir tous les champs obligatoires.", "danger")
             return redirect(url_for("onglet2"))
         try:
-            date_evenement = datetime.strptime(
-                date_evenement_str,
-                "%Y-%m-%d"
-            ).date()
+            date_evenement = datetime.strptime(date_evenement_str, "%Y-%m-%d").date()
         except ValueError:
-            flash("Le format de la date est incorrect. \
-            Utilisez le format YYYY-MM-DD.",
-                  "danger",
-                  )
+            flash("Le format de la date est incorrect. Utilisez le format YYYY-MM-DD.", "danger")
             return redirect(url_for("onglet2"))
         code_secret = generate_unique_code()
         uploaded_file = request.files["file"]
@@ -220,12 +199,10 @@ def mettre_en_vente():
 def onglet3():
     if current_user.is_authenticated:
         tickets_en_vente = Ticket.query.filter(
-            (Ticket.nomUtilisateur == current_user.username)
-            & (Ticket.en_vente)
+            (Ticket.nomUtilisateur == current_user.username) & (Ticket.en_vente)
         ).all()
         tickets_achetes = Ticket.query.filter(
-            (Ticket.nomUtilisateur == current_user.username)
-            & (not Ticket.en_vente)
+            (Ticket.nomUtilisateur == current_user.username) & (not Ticket.en_vente)
         ).all()
         return render_template(
             "onglet3.html",
@@ -233,9 +210,7 @@ def onglet3():
             tickets_achetes=tickets_achetes,
         )
     else:
-        flash("Veuillez vous connecter pour accéder à Onglet 3",
-              "danger"
-              )
+        flash("Veuillez vous connecter pour accéder à Onglet 3", "danger")
         return redirect(url_for("connexion"))
 
 
@@ -249,10 +224,7 @@ def download_pdf(ticket_id):
     if not ticket.chemin_pdf:
         flash("Aucun PDF associé à ce ticket.", "danger")
         return redirect(url_for("onglet3"))
-    file_path = os.path.join(
-        app.config["UPLOAD_FOLDER"],
-        ticket.chemin_pdf
-    )
+    file_path = os.path.join(app.config["UPLOAD_FOLDER"], ticket.chemin_pdf)
 
     def generate():
         with open(file_path, "rb") as pdf_file:
@@ -262,9 +234,7 @@ def download_pdf(ticket_id):
                     break
                 yield chunk
 
-    response = Response(generate(),
-                        content_type="application/pdf"
-                        )
+    response = Response(generate(), content_type="application/pdf")
     response.headers[
         "Content-Disposition"
     ] = f"inline; filename={secure_filename(ticket.chemin_pdf)}"
@@ -317,9 +287,7 @@ def check_username():
 @login_required
 def PageUser(nom_utilisateur):
     Utilisateur = User.query.filter_by(username=nom_utilisateur).first()
-    tickets = Ticket.query.filter_by(nomUtilisateur=Utilisateur.username,
-                                     en_vente=True
-                                     )
+    tickets = Ticket.query.filter_by(nomUtilisateur=Utilisateur.username,en_vente=True)
     if Utilisateur:
         return render_template(
             "PageUser.html", Utilisateur=Utilisateur, tickets=tickets
@@ -394,16 +362,10 @@ def inscription():
         username = request.form["username"]
         password = request.form["password"]
         Bio = request.form["Bio"]
-        new_user = User(username=username,
-                        password=password,
-                        Bio=Bio,
-                        money=0
-                        )
+        new_user = User(username=username, password=password, Bio=Bio, money=0)
         db.session.add(new_user)
         db.session.commit()
-        flash("Inscription réussie ! Vous pouvez maintenant vous connecter.",
-              "success"
-              )
+        flash("Inscription réussie ! Vous pouvez maintenant vous connecter.", "success")
         return redirect(url_for("connexion"))
     return render_template("inscription.html")
 
@@ -420,10 +382,7 @@ def connexion():
             login_user(user)
             flash("Connexion réussie !", "success")
             return redirect(url_for("index"))
-        flash("La connexion a échoué. \
-               Veuillez vérifier votre nom d'utilisateur.",
-              "danger",
-              )
+        flash("La connexion a échoué. Veuillez vérifier votre nom d'utilisateur.", "danger",)
     return render_template("connexion.html")
 
 
