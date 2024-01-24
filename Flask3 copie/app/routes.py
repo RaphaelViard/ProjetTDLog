@@ -28,7 +28,7 @@ def onglet1():
         tri_code = request.form.get("tri_code")
         tickets = Ticket.query.filter(
             Ticket.nomUtilisateur != current_user.username,
-            en_vente = True,
+            en_vente=True,
         ).all()
         if tri_lieu is True:
             tickets = [
@@ -41,11 +41,10 @@ def onglet1():
                 tri_date = datetime.strptime(tri_date, "%Y-%m-%d").date()
             except ValueError:
                 flash(
-                    "La date doit être au format a-mm-jj (année-mois-jour).",
-                    "danger",
-                    )
+                    "La date doit être au format a-mm-jj (année-mois-jour).", "danger")
                 return redirect(url_for("onglet1"))
-            tickets = [ticket for ticket in tickets if tri_date == ticket.date_evenement
+            tickets = [
+                ticket for ticket in tickets if tri_date == ticket.date_evenement
             ]
 
         if tri_nom is True:
@@ -64,7 +63,7 @@ def onglet1():
     else:
         tickets = Ticket.query.filter(
             Ticket.nomUtilisateur != current_user.username,
-            en_vente = True,
+            en_vente=True,
         ).all()
     return render_template("onglet1.html", tickets=tickets)
 
@@ -93,9 +92,7 @@ def acheter_ticket():
                     else:
                         return render_template("solde_insuffisant.html")
             else:
-                flash("Le ticket sélectionné n'est pas disponible.",
-                      "danger"
-                      )
+                flash("Le ticket sélectionné n'est pas disponible.", "danger")
                 return jsonify({"status": "error"})
         else:
             flash("Erreur lors de l'achat du ticket.", "danger")
@@ -165,7 +162,10 @@ def mettre_en_vente():
         try:
             date_evenement = datetime.strptime(date_evenement_str, "%Y-%m-%d").date()
         except ValueError:
-            flash("Le format de la date est incorrect. Utilisez le format YYYY-MM-DD.", "danger")
+            flash(
+                "Le format de la date est incorrect. Utilisez le format YYYY-MM-DD.",
+                "danger"
+                  )
             return redirect(url_for("onglet2"))
         code_secret = generate_unique_code()
         uploaded_file = request.files["file"]
@@ -287,7 +287,7 @@ def check_username():
 @login_required
 def PageUser(nom_utilisateur):
     Utilisateur = User.query.filter_by(username=nom_utilisateur).first()
-    tickets = Ticket.query.filter_by(nomUtilisateur=Utilisateur.username,en_vente=True)
+    tickets = Ticket.query.filter_by(nomUtilisateur=Utilisateur.username, en_vente=True)
     if Utilisateur:
         return render_template(
             "PageUser.html", Utilisateur=Utilisateur, tickets=tickets
@@ -375,14 +375,15 @@ def connexion():
     if request.method == "POST":
         username = request.form["username"]
         Password = request.form["password"]
-        user = User.query.filter_by(
-            username=username
-            ).first()
+        user = User.query.filter_by(username=username).first()
         if user and user.password == Password:
             login_user(user)
             flash("Connexion réussie !", "success")
             return redirect(url_for("index"))
-        flash("La connexion a échoué. Veuillez vérifier votre nom d'utilisateur.", "danger",)
+        flash(
+            "La connexion a échoué. Veuillez vérifier votre nom d'utilisateur.",
+            "danger",
+              )
     return render_template("connexion.html")
 
 
