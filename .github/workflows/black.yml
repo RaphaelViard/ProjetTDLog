@@ -1,4 +1,4 @@
-name: Black lint
+name: Black Lint
 
 on: [push, pull_request]
 
