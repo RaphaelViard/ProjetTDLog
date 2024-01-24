@@ -28,7 +28,7 @@ def onglet1():
         tri_code = request.form.get("tri_code")
         tickets = Ticket.query.filter(
             Ticket.nomUtilisateur != current_user.username,
-            Ticket.en_vente == True,
+            Ticket.en_vente # Pas besoin de mettre == True
         ).all()
         if tri_lieu is True:
             tickets = [
@@ -45,7 +45,7 @@ def onglet1():
                 flash(
                     "La date doit être au format a-mm-jj (année-mois-jour).",
                     "danger",
-                )
+                    )
                 return redirect(url_for("onglet1"))
             tickets = [
                 ticket
@@ -69,7 +69,7 @@ def onglet1():
     else:
         tickets = Ticket.query.filter(
             Ticket.nomUtilisateur != current_user.username,
-            Ticket.en_vente == True,
+            Ticket.en_vente # Pas besoin de mettre True
         ).all()
     return render_template("onglet1.html", tickets=tickets)
 
@@ -104,7 +104,7 @@ def acheter_ticket():
             else:
                 flash("Le ticket sélectionné n'est pas disponible.",
                       "danger"
-                )
+                      )
                 return jsonify({"status": "error"})
         else:
             flash("Erreur lors de l'achat du ticket.", "danger")
@@ -138,13 +138,13 @@ def onglet2():
             db.session.commit()
             flash("Le ticket a été mis en vente avec succès !",
                   "success"
-            )
+                  )
             return redirect(url_for("onglet2"))
         return render_template("onglet2.html")
     else:
         flash("Veuillez vous connecter pour accéder à Onglet 2",
               "danger"
-        )
+              )
         return redirect(url_for("connexion"))
 
 
@@ -175,7 +175,7 @@ def mettre_en_vente():
         ):
             flash("Veuillez remplir tous les champs obligatoires.",
                 "danger"
-            )
+                )
             return redirect(url_for("onglet2"))
         try:
             date_evenement = datetime.strptime(
@@ -220,7 +220,7 @@ def mettre_en_vente():
 def onglet3():
     if current_user.is_authenticated:
         tickets_en_vente = Ticket.query.filter(
-            (Ticket.nomUtilisateur == current_user.username) 
+            (Ticket.nomUtilisateur == current_user.username)
             & (Ticket.en_vente)
         ).all()
         tickets_achetes = Ticket.query.filter(
@@ -234,8 +234,8 @@ def onglet3():
         )
     else:
         flash("Veuillez vous connecter pour accéder à Onglet 3",
-            "danger"
-        )
+             "danger"
+             )
         return redirect(url_for("connexion"))
 
 
@@ -264,7 +264,7 @@ def download_pdf(ticket_id):
 
     response = Response(generate(),
                         content_type="application/pdf"
-                )
+                        )
     response.headers[
         "Content-Disposition"
     ] = f"inline; filename={secure_filename(ticket.chemin_pdf)}"
@@ -317,7 +317,9 @@ def check_username():
 @login_required
 def PageUser(nom_utilisateur):
     Utilisateur = User.query.filter_by(username=nom_utilisateur).first()
-    tickets = Ticket.query.filter_by(nomUtilisateur=Utilisateur.username, en_vente=True)
+    tickets = Ticket.query.filter_by(nomUtilisateur=Utilisateur.username,
+                                     en_vente=True
+                                     )
     if Utilisateur:
         return render_template(
             "PageUser.html", Utilisateur=Utilisateur, tickets=tickets
@@ -392,7 +394,11 @@ def inscription():
         username = request.form["username"]
         password = request.form["password"]
         Bio = request.form["Bio"]
-        new_user = User(username=username, password=password, Bio=Bio, money=0)
+        new_user = User(username=username,
+                        password=password,
+                        Bio=Bio,
+                        money=0
+                        )
         db.session.add(new_user)
         db.session.commit()
         flash("Inscription réussie ! Vous pouvez maintenant vous connecter.", "success")
@@ -405,7 +411,9 @@ def connexion():
     if request.method == "POST":
         username = request.form["username"]
         Password = request.form["password"]
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(
+            username=username
+            ).first()
         if user and user.password == Password:
             login_user(user)
             flash("Connexion réussie !", "success")

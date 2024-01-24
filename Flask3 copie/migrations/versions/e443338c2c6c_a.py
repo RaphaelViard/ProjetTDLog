@@ -1,7 +1,7 @@
 """a
 
 Revision ID: e443338c2c6c
-Revises: 
+Revises:
 Create Date: 2024-01-24 14:46:55.983407
 
 """
