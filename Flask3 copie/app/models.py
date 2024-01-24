@@ -15,14 +15,16 @@ class User(db.Model, UserMixin):
     money = db.Column(db.Float)
 
     def __repr__(self):
-        return f'<User {self.username}>'
+        return f"<User {self.username}>"
 
 # Modèle de données pour la classe Ticket
 class Ticket(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     code_secret = db.Column(db.String(32), unique=True)
     nom_evenement = db.Column(db.String(255))
-    date_evenement = db.Column(db.Date)  # Assurez-vous que le nom de la colonne est "date_evenement"
+    date_evenement = db.Column(
+        db.Date
+    )  # Assurez-vous que le nom de la colonne est "date_evenement"
     lieu_evenement = db.Column(db.String(255))
     prix_ticket = db.Column(db.Float)
     nomUtilisateur = db.Column(db.String(255))
@@ -30,8 +32,4 @@ class Ticket(db.Model):
     chemin_pdf = Column(String)
 
     def __repr__(self):
-        return f'<Ticket {self.nom_evenement}>'
-
-
-
-
+        return f"<Ticket {self.nom_evenement}>"

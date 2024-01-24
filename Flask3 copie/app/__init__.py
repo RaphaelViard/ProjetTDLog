@@ -5,19 +5,19 @@ from flask_login import LoginManager
 import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SECRET_KEY'] = 'my_secret_key_123'
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
+app.config["SECRET_KEY"] = "my_secret_key_123"
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 current_directory = os.path.dirname(os.path.realpath(__file__))
-UPLOAD_FOLDER = os.path.join(current_directory, 'uploads')
+UPLOAD_FOLDER = os.path.join(current_directory, "uploads")
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 login_manager = LoginManager(app)
-login_manager.login_view = 'connexion'
+login_manager.login_view = "connexion"
 
 from app.models import User
 
