@@ -6,6 +6,7 @@ from sqlalchemy import ForeignKeyConstraint, Column, Integer, String, Boolean, F
 import datetime
 from sqlalchemy.ext.declarative import declarative_base
 
+
 # Modèle de données pour la classe User
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -16,6 +17,7 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f"<User {self.username}>"
+    
 
 # Modèle de données pour la classe Ticket
 class Ticket(db.Model):
