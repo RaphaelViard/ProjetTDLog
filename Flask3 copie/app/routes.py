@@ -28,7 +28,7 @@ def onglet1():
         tri_code = request.form.get("tri_code")
         tickets = Ticket.query.filter(
             Ticket.nomUtilisateur != current_user.username,
-            Ticket.en_vente # Pas besoin de mettre == True
+            Ticket.en_vente  # Pas besoin de mettre == True
         ).all()
         if tri_lieu is True:
             tickets = [
@@ -69,7 +69,7 @@ def onglet1():
     else:
         tickets = Ticket.query.filter(
             Ticket.nomUtilisateur != current_user.username,
-            Ticket.en_vente # Pas besoin de mettre True
+            Ticket.en_vente  # Pas besoin de mettre True
         ).all()
     return render_template("onglet1.html", tickets=tickets)
 
@@ -174,8 +174,8 @@ def mettre_en_vente():
             or not prix_ticket
         ):
             flash("Veuillez remplir tous les champs obligatoires.",
-                "danger"
-                )
+                  "danger"
+                  )
             return redirect(url_for("onglet2"))
         try:
             date_evenement = datetime.strptime(
@@ -185,8 +185,8 @@ def mettre_en_vente():
         except ValueError:
             flash("Le format de la date est incorrect. \
             Utilisez le format YYYY-MM-DD.",
-                "danger",
-            )
+                  "danger",
+                  )
             return redirect(url_for("onglet2"))
         code_secret = generate_unique_code()
         uploaded_file = request.files["file"]
@@ -234,8 +234,8 @@ def onglet3():
         )
     else:
         flash("Veuillez vous connecter pour accéder à Onglet 3",
-             "danger"
-             )
+              "danger"
+              )
         return redirect(url_for("connexion"))
 
 
@@ -401,7 +401,9 @@ def inscription():
                         )
         db.session.add(new_user)
         db.session.commit()
-        flash("Inscription réussie ! Vous pouvez maintenant vous connecter.", "success")
+        flash("Inscription réussie ! Vous pouvez maintenant vous connecter.",
+              "success"
+              )
         return redirect(url_for("connexion"))
     return render_template("inscription.html")
 
@@ -418,10 +420,10 @@ def connexion():
             login_user(user)
             flash("Connexion réussie !", "success")
             return redirect(url_for("index"))
-        flash(
-            "La connexion a échoué. Veuillez vérifier votre nom d'utilisateur.",
-            "danger",
-        )
+        flash("La connexion a échoué. \
+               Veuillez vérifier votre nom d'utilisateur.",
+              "danger",
+              )
     return render_template("connexion.html")
 
 
