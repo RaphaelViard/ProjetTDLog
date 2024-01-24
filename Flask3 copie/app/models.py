@@ -1,9 +1,14 @@
 from app import db
 from flask_login import UserMixin
-from app import login_manager
-from sqlalchemy import ForeignKeyConstraint, Column, Integer, String, Boolean, Float
+from sqlalchemy import Column, String
 import datetime
-from sqlalchemy.ext.declarative import declarative_base
+
+#from app import db
+#from flask_login import UserMixin
+#from app import login_manager
+#from sqlalchemy import ForeignKeyConstraint, Column, Integer, String, Boolean, Float
+#import datetime
+#from sqlalchemy.ext.declarative import declarative_base
 
 
 # Modèle de données pour la classe User
