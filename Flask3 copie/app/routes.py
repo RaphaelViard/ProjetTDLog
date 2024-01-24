@@ -10,6 +10,7 @@ import os
 from werkzeug.utils import secure_filename
 
 
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -28,7 +29,7 @@ def onglet1():
         tri_code = request.form.get("tri_code")
         tickets = Ticket.query.filter(
             Ticket.nomUtilisateur != current_user.username,
-            en_vente=True,
+            Ticket.en_vente == True,
         ).all()
         if tri_lieu is True:
             tickets = [
@@ -64,7 +65,7 @@ def onglet1():
     else:
         tickets = Ticket.query.filter(
             Ticket.nomUtilisateur != current_user.username,
-            en_vente=True,
+            Ticket.en_vente == True,
         ).all()
     return render_template("onglet1.html", tickets=tickets)
 
