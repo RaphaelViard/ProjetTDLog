@@ -8,6 +8,7 @@
 <body>
     <div class="container mt-4">
         <h1 class="display-4">Inscription</h1>
+        <!-- Formulaire d'inscription -->
         <form method="POST" action="/inscription" onsubmit="checkUsername(event)">
             <div class="form-group">
                 <label for="username">Nom d'utilisateur</label>
@@ -25,6 +26,7 @@
             <button type="submit" class="btn btn-primary">S'inscrire</button>
         </form>
     </div>
+    <!-- Code JavaScript -->
     <script>
         function checkUsername(event) {
             event.preventDefault();

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Onglet 3</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Code CSS pour le style -->
     <style>
         .custom-margin-bottom {
             margin-bottom: 10mm; /* Ajoute un espace de 10 mm entre chaque élément de la liste */
@@ -53,6 +54,7 @@
     </style>
 </head>
 <body>
+    <!-- Barre de navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="/">Tykz</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,6 +99,7 @@
             {% endif %}
         </ul>
     </nav>
+     <!-- Contenu principal de la page -->
     <div class="container mt-4">
         <h1 class="display-4">Votre profil</h1>
         <p class="lead" id="nomUtilisateurActif">Bonjour, {{ current_user.username }} !</p>
@@ -204,6 +207,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Code JavaScript -->
     <script>
         // Récupération des éléments de la liste des tickets en vente
         const supprimerAchatButtons = document.querySelectorAll('.supprimer-achat');

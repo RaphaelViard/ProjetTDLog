@@ -5,17 +5,19 @@
     <title>Page d'accueil</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Code CSS pour le style -->
     <style>
-        /* Updated style for the logo */
+        /* Style mis à jour pour le logo */
         #logo {
             max-width: 100%;
             height: auto;
-            margin: 15px 10px; /* Add space at the top and bottom */
-            max-height: 150px; /* Set a maximum height for the logo */
+            margin: 15px 10px; /* Ajoute de l'espace en haut et en bas */
+            max-height: 150px; /* Définit une hauteur maximale pour le logo */
         }
     </style>
 </head>
 <body>
+    <!-- Barre de navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="/">Tykz</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,13 +62,14 @@
             {% endif %}
         </ul>
     </nav>
+    <!-- Contenu principal de la page -->
     <div class="container mt-4">
-    <h1 class="display-4">Bienvenue sur Tykz !</h1>
-    <img id="logo" src="/static/images/logo.png" alt="Logo">
-    <br>
+        <h1 class="display-4">Bienvenue sur Tykz !</h1>
+        <img id="logo" src="/static/images/logo.png" alt="Logo">
         <br>
-    <p>Tykz est une plateforme pour mettre vos tickets en vente, et acheter ceux qui vous intéressent.</p>
-</div>
+        <br>
+        <p>Tykz est une plateforme pour mettre vos tickets en vente, et acheter ceux qui vous intéressent.</p>
+    </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
