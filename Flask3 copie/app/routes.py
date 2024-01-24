@@ -152,11 +152,10 @@ def mettre_en_vente():
         date_evenement_str = request.form.get("dateEvenement")
         lieu_evenement = request.form.get("lieuEvenement")
         prix_ticket = request.form.get("prixTicket")
-        if (
-            not nom_evenement or
-            not date_evenement_str or
-            not lieu_evenement or
-            not prix_ticket
+        if (not nom_evenement
+            or not date_evenement_str
+            or not lieu_evenement
+            or not prix_ticket
         ):
             flash("Veuillez remplir tous les champs obligatoires.", "danger")
             return redirect(url_for("onglet2"))
@@ -203,7 +202,8 @@ def onglet3():
             (Ticket.nomUtilisateur == current_user.username) & (Ticket.en_vente)
         ).all()
         tickets_achetes = Ticket.query.filter(
-            (Ticket.nomUtilisateur == current_user.username) & (Ticket.en_vente == False)
+            (Ticket.nomUtilisateur == current_user.username)
+            & (Ticket.en_vente == False)
         ).all()
         return render_template(
             "onglet3.html",
