@@ -28,7 +28,7 @@ def onglet1():
         tri_code = request.form.get("tri_code")
         tickets = Ticket.query.filter(
             Ticket.nomUtilisateur != current_user.username,
-            Ticket.en_vente == True
+            Ticket.en_vente == True,
         ).all()
         if tri_lieu is True:
             tickets = [
@@ -69,7 +69,7 @@ def onglet1():
     else:
         tickets = Ticket.query.filter(
             Ticket.nomUtilisateur != current_user.username,
-            Ticket.en_vente == True
+            Ticket.en_vente == True,
         ).all()
     return render_template("onglet1.html", tickets=tickets)
 
@@ -103,7 +103,7 @@ def acheter_ticket():
                         return render_template("solde_insuffisant.html")
             else:
                 flash("Le ticket sélectionné n'est pas disponible.",
-                    "danger"
+                      "danger"
                 )
                 return jsonify({"status": "error"})
         else:
@@ -137,13 +137,13 @@ def onglet2():
             db.session.add(new_ticket)
             db.session.commit()
             flash("Le ticket a été mis en vente avec succès !",
-                "success"
+                  "success"
             )
             return redirect(url_for("onglet2"))
         return render_template("onglet2.html")
     else:
         flash("Veuillez vous connecter pour accéder à Onglet 2",
-            "danger"
+              "danger"
         )
         return redirect(url_for("connexion"))
 
@@ -153,7 +153,7 @@ def generate_unique_code():
         code_secret = secrets.token_urlsafe(16)
         existing_ticket = Ticket.query.filter_by(
             code_secret=code_secret
-        ).first()  # On vérifie que le code secret n'existe pas déjà dans la base de donnée
+        ).first()  # On vérifie que le code secret n'est pas déjà dans la bdd
         if not existing_ticket:
             return code_secret
 
@@ -183,8 +183,8 @@ def mettre_en_vente():
                 "%Y-%m-%d"
             ).date()
         except ValueError:
-            flash(
-                "Le format de la date est incorrect. Utilisez le format YYYY-MM-DD.",
+            flash("Le format de la date est incorrect. \
+            Utilisez le format YYYY-MM-DD.",
                 "danger",
             )
             return redirect(url_for("onglet2"))
@@ -212,7 +212,7 @@ def mettre_en_vente():
     return redirect(url_for("onglet2"))
 
 
-## onglet 3
+# onglet 3
 
 
 @app.route("/onglet3")
@@ -221,11 +221,11 @@ def onglet3():
     if current_user.is_authenticated:
         tickets_en_vente = Ticket.query.filter(
             (Ticket.nomUtilisateur == current_user.username) 
-            & (Ticket.en_vente == True)
+            & (Ticket.en_vente)
         ).all()
         tickets_achetes = Ticket.query.filter(
             (Ticket.nomUtilisateur == current_user.username)
-            & (Ticket.en_vente == False)
+            & (not Ticket.en_vente)
         ).all()
         return render_template(
             "onglet3.html",
