@@ -9,6 +9,7 @@ from sqlalchemy import Column, String
 # import datetime
 # from sqlalchemy.ext.declarative import declarative_base
 
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -18,6 +19,7 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f"<User {self.username}>"
+
 
 class Ticket(db.Model):
     id = db.Column(db.Integer, primary_key=True)

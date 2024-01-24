@@ -9,11 +9,14 @@ import secrets
 import os
 from werkzeug.utils import secure_filename
 
+
 @app.route("/")
 def index():
     return render_template("index.html")
 
+
 # onglet 1
+
 
 @app.route("/onglet1", methods=["GET", "POST"])
 @login_required
@@ -98,7 +101,9 @@ def acheter_ticket():
 
     return jsonify({"status": "error"})
 
+
 # onglet 2
+
 
 @app.route("/onglet2", methods=["GET", "POST"])
 @login_required
