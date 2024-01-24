@@ -10,7 +10,6 @@ import os
 from werkzeug.utils import secure_filename
 
 
-
 @app.route("/")
 def index():
     return render_template("index.html")
