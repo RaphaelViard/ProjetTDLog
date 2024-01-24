@@ -30,13 +30,13 @@ def onglet1():
             Ticket.nomUtilisateur != current_user.username,
             Ticket.en_vente == True,
         ).all()
-        if tri_lieu is True:
+        if tri_lieu:
             tickets = [
                 ticket
                 for ticket in tickets
                 if tri_lieu.lower() in ticket.lieu_evenement.lower()
             ]
-        if tri_date is True:
+        if tri_date:
             try:
                 tri_date = datetime.strptime(tri_date, "%Y-%m-%d").date()
             except ValueError:
@@ -48,14 +48,14 @@ def onglet1():
                 ticket for ticket in tickets if tri_date == ticket.date_evenement
             ]
 
-        if tri_nom is True:
+        if tri_nom:
             tickets = [
                 ticket
                 for ticket in tickets
                 if tri_nom.lower() in ticket.nom_evenement.lower()
             ]
 
-        if tri_code is True:
+        if tri_code:
             tickets = [
                 ticket
                 for ticket in tickets
@@ -75,7 +75,7 @@ def onglet1():
 def acheter_ticket():
     if request.method == "POST":
         ticket_id = request.form.get("ticket_id")
-        if ticket_id is True:
+        if ticket_id:
             ticket = Ticket.query.get(ticket_id)
             if ticket and ticket.nomUtilisateur != current_user.username:
                 acheteur = User.query.filter_by(username=current_user.username).first()
