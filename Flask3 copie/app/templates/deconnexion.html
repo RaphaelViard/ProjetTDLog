@@ -17,9 +17,7 @@
         // Fonction de déconnexion
         function logoutUser() {
             localStorage.removeItem('authToken');
-
             alert('Vous avez été déconnecté.');
-
             // Rediriger l'utilisateur vers la page d'accueil
             window.location.href = '/';
         }

@@ -7,10 +7,8 @@
     <!-- Code CSS pour le style -->
     <style>
         .custom-margin-bottom {
-            margin-bottom: 10mm; /* Ajoute un espace de 10 mm entre chaque élément de la liste */
+            margin-bottom: 10mm;
         }
-
-        /* Style pour la fenêtre modale */
         .modal {
             display: none;
             position: fixed;
@@ -21,31 +19,26 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
         }
-
         .modal-content {
             background-color: #fefefe;
-            margin: auto; /* Modification pour centrer horizontalement */
+            margin: auto;
             padding: 20px;
             border: 1px solid #888;
             width: 50%;
             text-align: center;
-            margin-top: 10%; /* Modification pour centrer verticalement */
+            margin-top: 10%;
         }
-
-        /* Style pour les boutons */
         #confirmButton,
         #cancelButton {
             margin: 5px;
             padding: 8px 20px;
             cursor: pointer;
         }
-
         #confirmButton {
             background-color: #5cb85c;
             color: white;
             border: none;
         }
-
         #cancelButton {
             background-color: #d9534f;
             color: white;
@@ -330,7 +323,6 @@
                 alert("Le prix du ticket ne peut pas être négatif.");
                 return false;
             }
-
             return true;
         }
     </script>
