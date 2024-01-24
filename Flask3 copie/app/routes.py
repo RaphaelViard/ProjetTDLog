@@ -11,11 +11,14 @@ import secrets
 import os
 from werkzeug.utils import secure_filename
 
+
 @app.route("/")
 def index():
     return render_template("index.html")
 
+
 ## onglet 1
+
 
 @app.route("/onglet1", methods=["GET", "POST"])
 @login_required
@@ -25,28 +28,48 @@ def onglet1():
         tri_date = request.form.get("tri_date")
         tri_nom = request.form.get("tri_nom")
         tri_code = request.form.get("tri_code")
-        tickets = Ticket.query.filter(Ticket.nomUtilisateur != current_user.username, Ticket.en_vente == True).all()
+        tickets = Ticket.query.filter(
+            Ticket.nomUtilisateur != current_user.username, Ticket.en_vente == True
+        ).all()
         if tri_lieu:
-            tickets = [ticket for ticket in tickets if tri_lieu.lower() in ticket.lieu_evenement.lower()]
+            tickets = [
+                ticket
+                for ticket in tickets
+                if tri_lieu.lower() in ticket.lieu_evenement.lower()
+            ]
         if tri_date:
             try:
                 tri_date = datetime.strptime(tri_date, "%Y-%m-%d").date()
             except ValueError:
-                flash("La date doit être au format a-mm-jj (année-mois-jour).", "danger")
+                flash(
+                    "La date doit être au format a-mm-jj (année-mois-jour).", "danger"
+                )
                 return redirect(url_for("onglet1"))
-            tickets = [ticket for ticket in tickets if tri_date == ticket.date_evenement]
+            tickets = [
+                ticket for ticket in tickets if tri_date == ticket.date_evenement
+            ]
 
         if tri_nom:
-            tickets = [ticket for ticket in tickets if tri_nom.lower() in ticket.nom_evenement.lower()]
+            tickets = [
+                ticket
+                for ticket in tickets
+                if tri_nom.lower() in ticket.nom_evenement.lower()
+            ]
 
         if tri_code:
-            tickets = [ticket for ticket in tickets if tri_code.lower() == ticket.code_secret.lower()]
+            tickets = [
+                ticket
+                for ticket in tickets
+                if tri_code.lower() == ticket.code_secret.lower()
+            ]
     else:
-        tickets = Ticket.query.filter(Ticket.nomUtilisateur != current_user.username, Ticket.en_vente == True).all()
+        tickets = Ticket.query.filter(
+            Ticket.nomUtilisateur != current_user.username, Ticket.en_vente == True
+        ).all()
     return render_template("onglet1.html", tickets=tickets)
 
 
-#Route pour acheter un ticket
+# Route pour acheter un ticket
 @app.route("/acheter_ticket", methods=["POST"])
 @login_required
 def acheter_ticket():
@@ -58,7 +81,7 @@ def acheter_ticket():
                 acheteur = User.query.filter_by(username=current_user.username).first()
                 vendeur = User.query.filter_by(username=ticket.nomUtilisateur).first()
                 if acheteur and vendeur:
-                    prix_ticket=ticket.prix_ticket
+                    prix_ticket = ticket.prix_ticket
                     if acheteur.money >= prix_ticket:
                         acheteur.money -= prix_ticket
                         vendeur.money += prix_ticket
@@ -68,17 +91,19 @@ def acheter_ticket():
                         flash("Achat du ticket réussi !", "success")
                         return redirect(url_for("onglet1"))
                     else:
-                         return render_template("solde_insuffisant.html")
+                        return render_template("solde_insuffisant.html")
             else:
-                flash("Le ticket sélectionné n\'est pas disponible.", "danger")
+                flash("Le ticket sélectionné n'est pas disponible.", "danger")
                 return jsonify({"status": "error"})
         else:
-            flash("Erreur lors de l\'achat du ticket.", "danger")
+            flash("Erreur lors de l'achat du ticket.", "danger")
             return jsonify({"status": "error"})
 
     return jsonify({"status": "error"})
 
+
 ## onglet 2
+
 
 @app.route("/onglet2", methods=["GET", "POST"])
 @login_required
@@ -96,7 +121,7 @@ def onglet2():
                 lieu_evenement=lieu_evenement,
                 prix_ticket=prix_ticket,
                 nomUtilisateur=current_user.username,
-                en_vente=True  # Le ticket est en vente
+                en_vente=True,  # Le ticket est en vente
             )
             db.session.add(new_ticket)
             db.session.commit()
@@ -107,15 +132,18 @@ def onglet2():
         flash("Veuillez vous connecter pour accéder à Onglet 2", "danger")
         return redirect(url_for("connexion"))
 
+
 def generate_unique_code():
     while True:
         code_secret = secrets.token_urlsafe(16)
-        existing_ticket = Ticket.query.filter_by(code_secret=code_secret).first() #On vérifie que le code secret n'existe pas déjà dans la base de donnée
+        existing_ticket = Ticket.query.filter_by(
+            code_secret=code_secret
+        ).first() #On vérifie que le code secret n'existe pas déjà dans la base de donnée
         if not existing_ticket:
             return code_secret
 
 
-#Route pour mettre en vente un ticket
+# Route pour mettre en vente un ticket
 @app.route("/mettre_en_vente", methods=["POST"])
 @login_required
 def mettre_en_vente():
@@ -124,17 +152,24 @@ def mettre_en_vente():
         date_evenement_str = request.form.get("dateEvenement")
         lieu_evenement = request.form.get("lieuEvenement")
         prix_ticket = request.form.get("prixTicket")
-        if not nom_evenement or not date_evenement_str or not lieu_evenement or not prix_ticket:
+        if (
+            not nom_evenement
+            or not date_evenement_str
+            or not lieu_evenement
+            or not prix_ticket):
             flash("Veuillez remplir tous les champs obligatoires.", "danger")
             return redirect(url_for("onglet2"))
         try:
             date_evenement = datetime.strptime(date_evenement_str, "%Y-%m-%d").date()
         except ValueError:
-            flash("Le format de la date est incorrect. Utilisez le format YYYY-MM-DD.", "danger")
+            flash(
+                "Le format de la date est incorrect. Utilisez le format YYYY-MM-DD.",
+                "danger"
+            )
             return redirect(url_for("onglet2"))
         code_secret = generate_unique_code()
         uploaded_file = request.files["file"]
-        if uploaded_file.filename != '':
+        if uploaded_file.filename != "":
             filename = secure_filename(uploaded_file.filename)
             file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
             uploaded_file.save(file_path)
@@ -155,7 +190,9 @@ def mettre_en_vente():
         return redirect(url_for("onglet2"))
     return redirect(url_for("onglet2"))
 
+
 ## onglet 3
+
 
 @app.route("/onglet3")
 @login_required
@@ -165,23 +202,29 @@ def onglet3():
             (Ticket.nomUtilisateur == current_user.username) & (Ticket.en_vente == True)
         ).all()
         tickets_achetes = Ticket.query.filter(
-            (Ticket.nomUtilisateur == current_user.username) & (Ticket.en_vente == False)
+            (Ticket.nomUtilisateur == current_user.username) 
+            & (Ticket.en_vente == False)
         ).all()
-        return render_template("onglet3.html", tickets_en_vente=tickets_en_vente, tickets_achetes=tickets_achetes)
+        return render_template(
+            "onglet3.html",
+            tickets_en_vente=tickets_en_vente,
+            tickets_achetes=tickets_achetes
+        )
     else:
         flash("Veuillez vous connecter pour accéder à Onglet 3", "danger")
         return redirect(url_for("connexion"))
+
 
 @app.route("/download_pdf/<int:ticket_id>")
 @login_required
 def download_pdf(ticket_id):
     ticket = Ticket.query.get(ticket_id)
     if not ticket or ticket.nomUtilisateur != current_user.username:
-        flash("Vous n\'avez pas accès à ce ticket.", "danger")
+        flash("Vous n'avez pas accès à ce ticket.", "danger")
         return redirect(url_for("onglet3"))
     if not ticket.chemin_pdf:
         flash("Aucun PDF associé à ce ticket.", "danger")
-        return redirect(url_for('onglet3'))
+        return redirect(url_for("onglet3"))
     file_path = os.path.join(app.config["UPLOAD_FOLDER"], ticket.chemin_pdf)
 
     def generate():
@@ -191,8 +234,11 @@ def download_pdf(ticket_id):
                 if not chunk:
                     break
                 yield chunk
+
     response = Response(generate(), content_type="application/pdf")
-    response.headers["Content-Disposition"] = f"inline; filename={secure_filename(ticket.chemin_pdf)}"
+    response.headers[
+        "Content-Disposition"
+    ] = f"inline; filename={secure_filename(ticket.chemin_pdf)}"
     return response
 
 @app.route("/mettre_a_jour_solde", methods=["POST"])
@@ -204,7 +250,7 @@ def mettre_a_jour_solde():
         user.money += nouveau_solde
         db.session.commit()
         flash("Solde mis à jour avec succès !", "success")
-        return redirect(url_for('onglet3'))
+        return redirect(url_for("onglet3"))
     else:
         flash("Utilisateur introuvable.", "danger")
         return redirect(url_for("onglet3"))
@@ -223,6 +269,7 @@ def mettre_a_jour_Bio():
         flash("Utilisateur introuvable.", "danger")
         return redirect(url_for("onglet3"))
 
+
 @app.route("/check_username", methods=["POST"])
 def check_username():
     data = request.get_json()
@@ -234,13 +281,17 @@ def check_username():
         response = {"usernameExists": False}
     return jsonify(response)
 
+
 @app.route("/PageUser/<nom_utilisateur>", methods=["GET"])
 @login_required
 def PageUser(nom_utilisateur):
     Utilisateur = User.query.filter_by(username=nom_utilisateur).first()
     tickets = Ticket.query.filter_by(nomUtilisateur=Utilisateur.username, en_vente=True)
     if Utilisateur:
-        return render_template("PageUser.html", Utilisateur=Utilisateur, tickets=tickets)
+        return render_template(
+            "PageUser.html", Utilisateur=Utilisateur, tickets=tickets
+        )
+
 
 @app.route("/supprimer_ticket/<int:ticket_id>", methods=["POST"])
 def supprimer_ticket(ticket_id):
@@ -249,6 +300,7 @@ def supprimer_ticket(ticket_id):
         db.session.delete(ticket)
         db.session.commit()
     return redirect("/onglet3")
+
 
 @app.route("/remettre_vente/<int:ticket_id>", methods=["POST"])
 def remettre_vente(ticket_id):
@@ -260,6 +312,7 @@ def remettre_vente(ticket_id):
     else:
         return jsonify({"error": "Ticket non trouvé"}), 404
 
+
 @app.route("/retirer_vente/<int:ticket_id>", methods=["POST"])
 def retirer_vente(ticket_id):
     ticket = Ticket.query.get(ticket_id)
@@ -267,6 +320,7 @@ def retirer_vente(ticket_id):
         ticket.en_vente = False
         db.session.commit()
     return redirect(url_for("onglet3"))
+
 
 @app.route("/modifier_vente", methods=["POST"])
 def modifier_vente():
@@ -286,6 +340,7 @@ def modifier_vente():
             db.session.commit()
     return redirect(url_for("onglet3"))
 
+
 @app.route("/mettre_a_jour_mot_de_passe", methods=["POST"])
 @login_required
 def mettre_a_jour_mot_de_passe():
@@ -294,9 +349,11 @@ def mettre_a_jour_mot_de_passe():
         current_user.password = nouveau_mot_de_passe
         db.session.commit()
         flash("Mot de passe mis à jour avec succès.", "success")
-    return redirect(url_for('onglet3'))
+    return redirect(url_for("onglet3"))
+
 
 # login
+
 
 @app.route("/inscription", methods=["GET", "POST"])
 def inscription():
@@ -304,12 +361,13 @@ def inscription():
         username = request.form["username"]
         password = request.form["password"]
         Bio = request.form["Bio"]
-        new_user = User(username=username, password=password,Bio=Bio,money=0)
+        new_user = User(username=username, password=password, Bio=Bio, money=0)
         db.session.add(new_user)
         db.session.commit()
         flash("Inscription réussie ! Vous pouvez maintenant vous connecter.", "success")
         return redirect(url_for("connexion"))
     return render_template("inscription.html")
+
 
 @app.route("/connexion", methods=["GET", "POST"])
 def connexion():
@@ -317,11 +375,14 @@ def connexion():
         username = request.form["username"]
         Password = request.form["password"]
         user = User.query.filter_by(username=username).first()
-        if user and user.password==Password:
+        if user and user.password == Password:
             login_user(user)
             flash("Connexion réussie !", "success")
             return redirect(url_for("index"))
-        flash("La connexion a échoué. Veuillez vérifier votre nom d\'utilisateur.", "danger")
+        flash(
+            "La connexion a échoué. Veuillez vérifier votre nom d\'utilisateur.",
+            "danger"
+        )
     return render_template("connexion.html")
 
 @app.route("/deconnexion")
@@ -330,4 +391,3 @@ def deconnexion():
     logout_user()
     flash("Vous avez été déconnecté.", "info")
     return render_template("deconnexion.html")
-
