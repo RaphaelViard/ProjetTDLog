@@ -41,7 +41,8 @@ def onglet1():
                 tri_date = datetime.strptime(tri_date, "%Y-%m-%d").date()
             except ValueError:
                 flash(
-                    "La date doit être au format a-mm-jj (année-mois-jour).", "danger")
+                    "La date doit être au format a-mm-jj (année-mois-jour).", "danger"
+                )
                 return redirect(url_for("onglet1"))
             tickets = [
                 ticket for ticket in tickets if tri_date == ticket.date_evenement
@@ -165,7 +166,7 @@ def mettre_en_vente():
             flash(
                 "Le format de la date est incorrect. Utilisez le format YYYY-MM-DD.",
                 "danger"
-                  )
+            )
             return redirect(url_for("onglet2"))
         code_secret = generate_unique_code()
         uploaded_file = request.files["file"]
@@ -383,7 +384,7 @@ def connexion():
         flash(
             "La connexion a échoué. Veuillez vérifier votre nom d'utilisateur.",
             "danger",
-              )
+        )
     return render_template("connexion.html")
 
 
