@@ -8,6 +8,7 @@
         .custom-margin-bottom {
             margin-bottom: 10mm; /* Ajoute un espace de 10 mm entre chaque élément de la liste */
         }
+
         /* Style pour la fenêtre modale */
         .modal {
             display: none;
@@ -22,12 +23,14 @@
 
         .modal-content {
             background-color: #fefefe;
-            margin: 20% auto;
+            margin: auto; /* Modification pour centrer horizontalement */
             padding: 20px;
             border: 1px solid #888;
             width: 50%;
             text-align: center;
+            margin-top: 10%; /* Modification pour centrer verticalement */
         }
+
         /* Style pour les boutons */
         #confirmButton,
         #cancelButton {
@@ -134,7 +137,6 @@
         <button type="submit" class="btn btn-primary">Mettre à jour le mot de passe</button>
     </form>
 </div>
-        <!-- Liste des tickets en vente -->
         <div id="ticketsEnVente" class="mt-4">
             <h2>Tickets en vente par {{ current_user.username }}</h2>
             <ul>
@@ -150,7 +152,6 @@
                 {% endfor %}
             </ul>
         </div>
-        <!-- Liste des tickets possédés -->
         <div id="ticketsAchetes" class="mt-4">
             <h2>Tickets possédés par {{ current_user.username }}</h2>
             <ul>
@@ -174,7 +175,6 @@
         </div>
         <br>
     </div>
-    <!-- Ajout d'une fenêtre modale pour la modification de la vente -->
     <div id="modifierModal" class="modal">
         <div class="modal-content">
             <h3>Modifier le ticket en vente</h3>
@@ -205,125 +205,130 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-    // Récupération des éléments de la liste des tickets en vente
-    const supprimerAchatButtons = document.querySelectorAll('.supprimer-achat');
-    const retirerVenteButtons = document.querySelectorAll('.retirer-vente');
-    const remettreVenteButtons = document.querySelectorAll('.remettre-vente');
-    const modifierVenteButtons = document.querySelectorAll('.modifier-vente');
-    const modifierVenteForm = document.getElementById('modifierVenteForm');
-    const ticketIdInput = document.getElementById('ticketId');
-    const nomEvenementModifInput = document.getElementById('nomEvenementModif');
-    const lieuEvenementModifInput = document.getElementById('lieuEvenementModif');
-    const dateEvenementModifInput = document.getElementById('dateEvenementModif');
-    const prixTicketModifInput = document.getElementById('prixTicketModif');
+        // Récupération des éléments de la liste des tickets en vente
+        const supprimerAchatButtons = document.querySelectorAll('.supprimer-achat');
+        const retirerVenteButtons = document.querySelectorAll('.retirer-vente');
+        const remettreVenteButtons = document.querySelectorAll('.remettre-vente');
+        const modifierVenteButtons = document.querySelectorAll('.modifier-vente');
+        const modifierVenteForm = document.getElementById('modifierVenteForm');
+        const ticketIdInput = document.getElementById('ticketId');
+        const nomEvenementModifInput = document.getElementById('nomEvenementModif');
+        const lieuEvenementModifInput = document.getElementById('lieuEvenementModif');
+        const dateEvenementModifInput = document.getElementById('dateEvenementModif');
+        const prixTicketModifInput = document.getElementById('prixTicketModif');
 
-    // Écouteurs d'événements pour les boutons de suppression des tickets possédés
-    supprimerAchatButtons.forEach(button => {
-        button.addEventListener('click', function(event) {
-            const ticketId = event.target.getAttribute('data-ticket-id');
-            // On envoyer une demande de suppression du ticket avec l'ID ticketId
-            fetch('/supprimer_ticket/' + ticketId, {
-                method: 'POST',
-            })
-            .then(response => {
-                console.log('Ticket supprimé avec succès.');
-                window.location.reload(); // On recharger la page après la suppression
-            })
-            .catch(error => {
-                console.error('Erreur:', error);
+        // Écouteurs d'événements pour les boutons de suppression des tickets possédés
+        supprimerAchatButtons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                const ticketId = event.target.getAttribute('data-ticket-id');
+                fetch('/supprimer_ticket/' + ticketId, {
+                    method: 'POST',
+                })
+                .then(response => {
+                    console.log('Ticket supprimé avec succès.');
+                    window.location.reload();
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                });
             });
         });
-    });
 
-    // Écouteurs d'événements pour les boutons de remise en vente
-remettreVenteButtons.forEach(button => {
-    button.addEventListener('click', function(event) {
-        const ticketId = event.target.getAttribute('data-ticket-id');
-        remettreTicketEnVente(ticketId);
-    });
-});
-
-function remettreTicketEnVente(ticketId) {
-    // On envoyer une demande pour remettre le ticket en vente avec l'ID ticketId
-    fetch('/remettre_vente/' + ticketId, {
-        method: 'POST',
-    })
-    .then(response => {
-        console.log('Ticket remis en vente avec succès.');
-        window.location.reload(); // On recharger la page après la remise en vente
-    })
-    .catch(error => {
-        console.error('Erreur:', error);
-    });
-}
-
-    // Écouteurs d'événements pour les boutons de retrait de la vente
-    retirerVenteButtons.forEach(button => {
-        button.addEventListener('click', function(event) {
-            const ticketId = event.target.getAttribute('data-ticket-id');
-            // On envoie une demande pour retirer le ticket de la vente avec l'ID ticketId
-            fetch('/retirer_vente/' + ticketId, {
-                method: 'POST',
-            })
-            .then(response => {
-                console.log('Ticket retiré de la vente avec succès.');
-                window.location.reload(); // On recharge la page après le retrait
-            })
-            .catch(error => {
-                console.error('Erreur:', error);
+        // Écouteurs d'événements pour les boutons de remise en vente
+        remettreVenteButtons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                const ticketId = event.target.getAttribute('data-ticket-id');
+                remettreTicketEnVente(ticketId);
             });
         });
-    });
 
-    // Écouteurs d'événements pour les boutons de modification de la vente
-    modifierVenteButtons.forEach(button => {
-        button.addEventListener('click', function(event) {
-            const ticketId = event.target.getAttribute('data-ticket-id');
-            const ticketNom = event.target.getAttribute('data-ticket-nom');
-            const ticketLieu = event.target.getAttribute('data-ticket-lieu');
-            const ticketDate = event.target.getAttribute('data-ticket-date');
-            const ticketPrix = event.target.getAttribute('data-ticket-prix');
-
-            ticketIdInput.value = ticketId;
-            nomEvenementModifInput.value = ticketNom;
-            lieuEvenementModifInput.value = ticketLieu;
-            dateEvenementModifInput.value = ticketDate;
-            prixTicketModifInput.value = ticketPrix;
-
-            openModifierModal();
-        });
-    });
-
-    // Fonction pour ouvrir le modal de modification
-    function openModifierModal() {
-        document.getElementById('modifierModal').style.display = 'block';
-    }
-
-    // Fonction pour fermer le modal de modification
-    function closeModifierModal() {
-        document.getElementById('modifierModal').style.display = 'none';
-    }
-
-    // Écouteur d'événement pour le bouton de confirmation de modification
-    document.getElementById('confirmModifierButton').addEventListener('click', function() {
-        modifierVenteForm.submit(); // Soumettre le formulaire de modification
-        closeModifierModal(); // Fermer la fenêtre modale après la confirmation
-    });
-
-    function confirmerSuppression(ticketId) {
-        if (window.confirm("Êtes-vous sûr de vouloir supprimer ce ticket ?")) {
-            fetch('/supprimer_ticket/' + ticketId, {
+        function remettreTicketEnVente(ticketId) {
+            fetch('/remettre_vente/' + ticketId, {
                 method: 'POST',
             })
             .then(response => {
-                console.log('Ticket supprimé avec succès.');
-                window.location.reload(); // Rechargez la page après la suppression
+                console.log('Ticket remis en vente avec succès.');
+                window.location.reload();
             })
             .catch(error => {
                 console.error('Erreur:', error);
             });
         }
-    }
+
+        // Écouteurs d'événements pour les boutons de retrait de la vente
+        retirerVenteButtons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                const ticketId = event.target.getAttribute('data-ticket-id');
+                fetch('/retirer_vente/' + ticketId, {
+                    method: 'POST',
+                })
+                .then(response => {
+                    console.log('Ticket retiré de la vente avec succès.');
+                    window.location.reload();
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                });
+            });
+        });
+
+        // Écouteurs d'événements pour les boutons de modification de la vente
+        modifierVenteButtons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                const ticketId = event.target.getAttribute('data-ticket-id');
+                const ticketNom = event.target.getAttribute('data-ticket-nom');
+                const ticketLieu = event.target.getAttribute('data-ticket-lieu');
+                const ticketDate = event.target.getAttribute('data-ticket-date');
+                const ticketPrix = event.target.getAttribute('data-ticket-prix');
+
+                ticketIdInput.value = ticketId;
+                nomEvenementModifInput.value = ticketNom;
+                lieuEvenementModifInput.value = ticketLieu;
+                dateEvenementModifInput.value = ticketDate;
+                prixTicketModifInput.value = ticketPrix;
+
+                openModifierModal();
+            });
+        });
+
+        // Fonction pour ouvrir le modal de modification
+        function openModifierModal() {
+            document.getElementById('modifierModal').style.display = 'block';
+        }
+
+        // Fonction pour fermer le modal de modification
+        function closeModifierModal() {
+            document.getElementById('modifierModal').style.display = 'none';
+        }
+
+        // Écouteur d'événement pour le bouton de confirmation de modification
+        document.getElementById('confirmModifierButton').addEventListener('click', function() {
+            if (validateModifierForm()) {
+                modifierVenteForm.submit(); // Soumettre le formulaire de modification
+                closeModifierModal(); // Fermer la fenêtre modale après la confirmation
+            }
+        });
+
+        // Fonction de validation pour le formulaire de modification
+        function validateModifierForm() {
+            const dateEvenementModif = document.getElementById('dateEvenementModif').value;
+            const prixTicketModif = document.getElementById('prixTicketModif').value;
+
+            // Vérification de la date
+            const currentDate = new Date().toISOString().split('T')[0];
+            if (dateEvenementModif < currentDate) {
+                alert("La date de l'événement est déjà passée. Veuillez sélectionner une date future.");
+                return false;
+            }
+
+            // Vérification du prix
+            if (prixTicketModif < 0) {
+                alert("Le prix du ticket ne peut pas être négatif.");
+                return false;
+            }
+
+            return true;
+        }
     </script>
 </body>
 </html>

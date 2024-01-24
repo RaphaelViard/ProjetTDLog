@@ -27,11 +27,10 @@
     </div>
     <script>
         function checkUsername(event) {
-            event.preventDefault(); // Empêche la soumission du formulaire par défaut
+            event.preventDefault();
 
             var username = document.getElementById('username').value;
 
-            // Envoi de la demande au serveur pour vérifier le nom d'utilisateur
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "/check_username", true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -42,9 +41,8 @@
                         if (response.usernameExists) {
                             document.getElementById('usernameError').innerHTML = "Ce nom d'utilisateur est déjà utilisé.";
                         } else {
-                            // Si le nom d'utilisateur n'existe pas, vous pouvez soumettre le formulaire
                             document.getElementById('usernameError').innerHTML = "";
-                            event.target.submit(); // Soumettez le formulaire si le nom d'utilisateur est unique
+                            event.target.submit();
                         }
                     } else {
                         document.getElementById('usernameError').innerHTML = "Erreur de communication avec le serveur.";

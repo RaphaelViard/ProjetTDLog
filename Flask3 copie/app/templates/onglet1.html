@@ -94,7 +94,6 @@
     <div class="container mt-4">
         <h1 class="display-4">Trouvez votre ticket</h1>
         <br>
-        <!-- Formulaire de tri des tickets -->
         <form method="POST" action="/onglet1">
             <div class="form-row">
                 <div class="col">
@@ -117,7 +116,6 @@
         <div class="row mt-4">
             <div class="col-md-8">
                 {% if tickets %}
-                    <!-- Liste des tickets que l'utilisateur peut acheter -->
                     <ul>
                         {% for ticket in tickets %}
                             <li>
@@ -132,7 +130,6 @@
                         {% endfor %}
                     </ul>
                 {% else %}
-                    <!-- Si aucun ticket disponible -->
                     <div class="no-tickets">
                         Pas de tickets disponibles
                     </div>

@@ -71,11 +71,11 @@
         <ul>
             {% for ticket in tickets %}
                 <li>
-                    Événement: {{ ticket.nom_evenement }}, Date: {{ ticket.date_evenement }}, Lieu: {{ ticket.lieu_evenement }}, Prix: {{ ticket.prix_ticket }}€</a>
-                        <form method="POST" action="/acheter_ticket">
-                            <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
-                            <button type="submit" class="btn btn-primary acheter-button">Acheter</button>
-                        </form>
+                    Événement: {{ ticket.nom_evenement }}, Date: {{ ticket.date_evenement }}, Lieu: {{ ticket.lieu_evenement }}, Prix: {{ ticket.prix_ticket }}€
+                    <form method="POST" action="/acheter_ticket">
+                        <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+                        <button type="button" class="btn btn-primary acheter-button">Acheter</button>
+                    </form>
                 </li>
             {% endfor %}
         </ul>
@@ -85,5 +85,51 @@
         </div>
         {% endif %}
     </div>
+    <div class="modal" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="confirmationModalLabel">Confirmation d'achat</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Êtes-vous sûr de vouloir acheter ce ticket ?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+            <button type="button" class="btn btn-primary" id="confirmPurchaseButton">Confirmer l'achat</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var modal = document.getElementById('confirmationModal');
+            var acheterButtons = document.querySelectorAll('.acheter-button');
+            var confirmButton = document.getElementById('confirmPurchaseButton');
+
+            acheterButtons.forEach(function(button) {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    var ticketId = this.closest('li').querySelector('input[name="ticket_id"]').value;
+                    modal.setAttribute('data-ticket-id', ticketId);
+                    $('#confirmationModal').modal('show');
+                });
+            });
+
+            confirmButton.addEventListener('click', function() {
+                var ticketId = modal.getAttribute('data-ticket-id');
+                var form = document.querySelector('form[action="/acheter_ticket"]');
+                form.querySelector('input[name="ticket_id"]').value = ticketId;
+                form.submit();
+                $('#confirmationModal').modal('hide');
+            });
+        });
+    </script>
 </body>
 </html>
