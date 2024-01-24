@@ -138,7 +138,7 @@ def generate_unique_code():
         code_secret = secrets.token_urlsafe(16)
         existing_ticket = Ticket.query.filter_by(
             code_secret=code_secret
-        ).first() #On vérifie que le code secret n'existe pas déjà dans la base de donnée
+        ).first() # On vérifie que le code secret n'existe pas déjà dans la base de donnée
         if not existing_ticket:
             return code_secret
 
@@ -156,7 +156,8 @@ def mettre_en_vente():
             not nom_evenement
             or not date_evenement_str
             or not lieu_evenement
-            or not prix_ticket):
+            or not prix_ticket
+        ):
             flash("Veuillez remplir tous les champs obligatoires.", "danger")
             return redirect(url_for("onglet2"))
         try:
@@ -164,7 +165,7 @@ def mettre_en_vente():
         except ValueError:
             flash(
                 "Le format de la date est incorrect. Utilisez le format YYYY-MM-DD.",
-                "danger"
+                "danger",
             )
             return redirect(url_for("onglet2"))
         code_secret = generate_unique_code()
@@ -202,13 +203,13 @@ def onglet3():
             (Ticket.nomUtilisateur == current_user.username) & (Ticket.en_vente == True)
         ).all()
         tickets_achetes = Ticket.query.filter(
-            (Ticket.nomUtilisateur == current_user.username) 
+            (Ticket.nomUtilisateur == current_user.username)
             & (Ticket.en_vente == False)
         ).all()
         return render_template(
             "onglet3.html",
             tickets_en_vente=tickets_en_vente,
-            tickets_achetes=tickets_achetes
+            tickets_achetes=tickets_achetes,
         )
     else:
         flash("Veuillez vous connecter pour accéder à Onglet 3", "danger")
@@ -241,6 +242,7 @@ def download_pdf(ticket_id):
     ] = f"inline; filename={secure_filename(ticket.chemin_pdf)}"
     return response
 
+
 @app.route("/mettre_a_jour_solde", methods=["POST"])
 @login_required
 def mettre_a_jour_solde():
@@ -254,6 +256,7 @@ def mettre_a_jour_solde():
     else:
         flash("Utilisateur introuvable.", "danger")
         return redirect(url_for("onglet3"))
+
 
 @app.route("/mettre_a_jour_Bio", methods=["POST"])
 @login_required
@@ -381,9 +384,10 @@ def connexion():
             return redirect(url_for("index"))
         flash(
             "La connexion a échoué. Veuillez vérifier votre nom d\'utilisateur.",
-            "danger"
+            "danger",
         )
     return render_template("connexion.html")
+
 
 @app.route("/deconnexion")
 @login_required
