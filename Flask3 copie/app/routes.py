@@ -165,7 +165,7 @@ def mettre_en_vente():
         except ValueError:
             flash(
                 "Le format de la date est incorrect. Utilisez le format YYYY-MM-DD.",
-                "danger"
+                "danger",
             )
             return redirect(url_for("onglet2"))
         code_secret = generate_unique_code()
