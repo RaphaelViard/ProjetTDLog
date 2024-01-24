@@ -1,12 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, Response
+from flask import render_template, request, redirect, url_for, flash, Response
 from flask_login import login_user, login_required, logout_user, current_user
-from flask_sqlalchemy import SQLAlchemy
 from app import app, db
 from app.models import User, Ticket
 
 from datetime import datetime
-from flask import jsonify, send_from_directory
-from io import BytesIO
+from flask import jsonify
 import secrets
 import os
 from werkzeug.utils import secure_filename
@@ -17,7 +15,7 @@ def index():
     return render_template("index.html")
 
 
-## onglet 1
+# onglet 1
 
 
 @app.route("/onglet1", methods=["GET", "POST"])
