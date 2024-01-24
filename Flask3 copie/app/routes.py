@@ -153,10 +153,10 @@ def mettre_en_vente():
         lieu_evenement = request.form.get("lieuEvenement")
         prix_ticket = request.form.get("prixTicket")
         if (
-            not nom_evenement
-            or not date_evenement_str
-            or not lieu_evenement
-            or not prix_ticket
+            not nom_evenement or
+            not date_evenement_str or
+            not lieu_evenement or
+            not prix_ticket
         ):
             flash("Veuillez remplir tous les champs obligatoires.", "danger")
             return redirect(url_for("onglet2"))
