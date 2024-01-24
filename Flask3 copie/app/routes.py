@@ -138,7 +138,7 @@ def generate_unique_code():
         code_secret = secrets.token_urlsafe(16)
         existing_ticket = Ticket.query.filter_by(
             code_secret=code_secret
-        ).first() # On vérifie que le code secret n'existe pas déjà dans la base de donnée
+        ).first()  # On vérifie que le code secret n'existe pas déjà dans la base de donnée
         if not existing_ticket:
             return code_secret
 
@@ -383,7 +383,7 @@ def connexion():
             flash("Connexion réussie !", "success")
             return redirect(url_for("index"))
         flash(
-            "La connexion a échoué. Veuillez vérifier votre nom d\'utilisateur.",
+            "La connexion a échoué. Veuillez vérifier votre nom d'utilisateur.",
             "danger",
         )
     return render_template("connexion.html")
