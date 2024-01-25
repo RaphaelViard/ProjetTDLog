@@ -1,7 +1,7 @@
 """a
 
 Revision ID: 9e73ff12edd0
-Revises: 
+Revises:
 Create Date: 2024-01-25 11:29:49.889798
 
 """
