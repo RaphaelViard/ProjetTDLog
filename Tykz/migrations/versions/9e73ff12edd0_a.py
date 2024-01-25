@@ -30,7 +30,7 @@ def upgrade():
         sa.Column("en_vente", sa.Boolean(), nullable=True),
         sa.Column("chemin_pdf", sa.String(), nullable=True),
         sa.PrimaryKeyConstraint("id"),
-        sa.UniqueConstraint("code_secret")
+        sa.UniqueConstraint("code_secret"),
     )
     op.create_table(
         "user",
@@ -40,7 +40,7 @@ def upgrade():
         sa.Column("Bio", sa.String(length=9999), nullable=True),
         sa.Column("money", sa.Float(), nullable=True),
         sa.PrimaryKeyConstraint("id"),
-        sa.UniqueConstraint("username")
+        sa.UniqueConstraint("username"),
     )
     # ### end Alembic commands ###
 
