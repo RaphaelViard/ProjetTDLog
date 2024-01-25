@@ -14,4 +14,4 @@ jobs:
       - name: Installation des dépendances
         run: pip install black
       - name: Black Lint
-        run: black . --exclude env.py versions/9e73ff12edd0_a.py
+        run: black . --exclude env.py Tykz/migrations/versions/9e73ff12edd0_a.py
