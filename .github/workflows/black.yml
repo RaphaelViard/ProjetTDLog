@@ -14,4 +14,5 @@ jobs:
       - name: Installation des dépendances
         run: pip install black
       - name: Black Lint
-        run: black . --exclude env.py 'Tykz/migrations/versions/*.py'
+        run: |
+          find . -type f -name '*.py' ! -path './versions/*' ! -name 'a.py' -exec black {} \;

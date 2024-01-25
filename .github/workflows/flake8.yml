@@ -18,4 +18,4 @@ jobs:
         with:
           ignore : "E402,F401,E712,W503"
           max-line-length: "100"
-          exclude : "env.py,9e73ff12edd0_a.py"
+          exclude: "env.py,Tykz/migrations/versions/*.py"
