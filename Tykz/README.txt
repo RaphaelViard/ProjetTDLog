@@ -1,6 +1,6 @@
 Pour lancer notre application pour la première fois, vous devez lire ce .txt.
 
-1.Python
+1. Python
 
 Assurez-vous que Python est installé. Sinon, allez sur https://www.python.org/downloads/. Lors du développement de l'application, nous avons utilisé la version 3.11.4
 
