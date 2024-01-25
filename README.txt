@@ -2,7 +2,7 @@ To run our app for the first time, you have to read this .txt.
 First, go in git bash in the file "Tykz"
 then put in your terminal the following commands :
 rm -rf migrations
-rm -rf instances
+rm -rf instance
 flask db init
 flask db migrate -m "a"
 flask db upgrade
