@@ -18,7 +18,4 @@ jobs:
         with:
           ignore : "E402,F401,E712,W503"
           max-line-length: "100"
-          paths: |
-            ./*.py
-            !env.py
-            !Tykz/migrations/versions/*.py
+          exclude: "env.py,Tykz/migrations/versions/*.py"
