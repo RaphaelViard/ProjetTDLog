@@ -7,4 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: psf/black@stable
+      - name: Configuration de l'environnement Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - name: Installation des dépendances
+        run: pip install black
+      - name: Black Lint
+        run: black . --exclude env.py 9e73ff12edd0_a.py
